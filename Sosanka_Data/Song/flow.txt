@@ -1,0 +1,5 @@
+1. Paste the collected song to  "Raw_song.txt"
+2. Run the "Cleaning.py" to remove unwanted data
+3. This script will save the data to "After_cleaning_song.txt" 
+4. copy the entire data and paste to "song.txt" {below the existing lines}
+5. And rest txt files are in .gitignore only the song.txt are shown
