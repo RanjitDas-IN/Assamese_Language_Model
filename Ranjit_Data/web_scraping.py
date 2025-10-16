@@ -8,7 +8,7 @@ Behavior:
 - Loads the target URL using Firefox profile.
 - Scrolls the page until the last paragraph is visible (or gives up after MAX_FIND_ATTEMPTS).
 - Scrolls further until content stabilizes.
-- Appends new paragraphs every 20 scroll attempts (checkpointing).
+- Appends new paragraphs every 10 scroll attempts (checkpointing).
 - Finally appends any remaining new paragraphs.
 """
 
@@ -25,14 +25,15 @@ from bs4 import BeautifulSoup
 # ------------- User settings -------------
 profile_path = "/home/ranjit/.mozilla/firefox/luddqo6a.default-release"
 # url = "https://m.dailyhunt.in/news/india/assamese/tv9assamese-epaper-tvassame/baksat+163+dhava+javi+pvshasanvh+kvib+novave+pvtibad+dib+novave+shlogan+bibhinn+dishat+nishedhagya+-newsid-n685230825?listname=topicsList&index=1&topicIndex=0&mode=pwa&action=click"
-output_file = r"assamese_paragraphs.txt"
+output_file = r"Ranjit_Data/assamese_paragraphs.txt"
 
 HEADLESS = False
-WAIT_BETWEEN_SCROLLS = 10
-MAX_FIND_ATTEMPTS = 800000000000
-MAX_SCROLL_ATTEMPTS = 150
-STABLE_REQUIRED = 10
-CHECKPOINT_EVERY = 20  # checkpoint append interval
+WAIT_BETWEEN_SCROLLS = 5     # Just makes each scroll slower (waits 5 seconds before the next scroll). No effect on the logic.
+MAX_FIND_ATTEMPTS = 800000000     # Only affects how long it keeps searching for your last saved paragraph before giving up. Doesn’t affect checkpointing.
+MAX_SCROLL_ATTEMPTS = 300     # Sets the total possible scrolls before stopping. Checkpoints will still happen at every 10th scroll (so roughly 30 checkpoints max).
+STABLE_REQUIRED = 10     # Makes it more patient before deciding the page is “fully loaded.” Still unrelated to checkpointing.
+CHECKPOINT_EVERY = 10     # Works exactly as intended.
+
 # -----------------------------------------
 
 assamese_pattern = re.compile(r"[\u0980-\u09FF]")

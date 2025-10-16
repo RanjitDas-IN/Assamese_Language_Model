@@ -1,6 +1,6 @@
 import re
 
-input_path = r"Ranjit_Data/data.txt"
+input_path = r"Ranjit_Data/messy_data.txt"
 output_path = r"Ranjit_Data/cleaned.txt"
 
 
