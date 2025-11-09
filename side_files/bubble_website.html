@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ranjit Das - Bubble Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Satisfy&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style  >
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffd6e8, #b3e6e0);
+      font-family: "Kalam", cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+      transition: background 0.5s ease;
+    }
+
+    body.shake {
+      animation: shake 0.5s ease-in-out;
+    }
+
+    /* Refresh Button */
+    .refresh-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+       /* Make sure no animation or movement here */
+  animation: none !important;
+  transform: none !important;
+    }
+
+    .refresh-button:hover {
+      background: #ff1a66;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
+    }
+
+    .game-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      z-index: 100;
+      background: linear-gradient(135deg, #ffd6e8, #b3e6e0);
+      display: none;
+    }
+
+    .timer {
+      font-size: 3rem;
+      color: #ff4081;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      margin-top: 20px;
+      font-family: "Poppins", sans-serif;
+      font-weight: bold;
+      z-index: 101;
+    }
+
+    .instruction {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px 30px;
+      border-radius: 20px;
+      font-size: 1.8rem;
+      color: #ff4081;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 102;
+      border: 3px solid #ff99cc;
+      animation: fadeInOut 2s ease forwards; /* Changed from 5s to 2s */
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    }
+
+    h1 {
+      color: #fff;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      text-shadow: 2px 2px #ff4081;
+      margin: 2vh 0;
+      animation: pulse 2.5s infinite;
+      font-family: "Satisfy", cursive;
+      text-align: center;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 25px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+      padding: clamp(15px, 4vw, 25px);
+      width: clamp(300px, 90vw, 420px);
+      text-align: center;
+      border: 4px solid #ff99cc;
+      z-index: 10;
+    }
+
+    input {
+      width: 100%;
+      padding: clamp(8px, 2vw, 10px);
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      border: 3px solid #ffcce0;
+      border-radius: 15px;
+      outline: none;
+      background: #fff5f8;
+      font-family: "Poppins", sans-serif;
+      margin-bottom: 1vh;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #ff4081;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    button {
+      padding: clamp(8px, 2vw, 10px) clamp(15px, 3vw, 20px);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      position: relative;
+    }
+
+    button:hover {
+      background: #ff1a66;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .reset-button {
+      background: #ff6666;
+    }
+
+    .reset-button:hover {
+      background: #e60000;
+      box-shadow: 0 5px 15px rgba(255, 102, 102, 0.4);
+    }
+
+    .toggle-button {
+      background: #66ccff;
+    }
+
+    .toggle-button:hover {
+      background: #3399ff;
+      box-shadow: 0 5px 15px rgba(102, 204, 255, 0.4);
+    }
+
+    .download-button {
+      background: #ffcc66;
+    }
+
+    .download-button:hover {
+      background: #ff9900;
+      box-shadow: 0 5px 15px rgba(255, 204, 102, 0.4);
+    }
+
+    .share-button {
+      background: #99ff99;
+    }
+
+    .share-button:hover {
+      background: #66cc66;
+      box-shadow: 0 5px 15px rgba(153, 255, 153, 0.4);
+    }
+
+    .tooltip {
+      position: relative;
+    }
+
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff1a66;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .tooltip:hover::after {
+      opacity: 1;
+    }
+
+    .result {
+      margin-top: 2vh;
+      position: relative;
+      animation: fadeIn 0.8s ease;
+      z-index: 10;
+    }
+
+    .share-card {
+      background: linear-gradient(135deg, #fff0f5, #e6faff);
+      border: 6px solid #ff99cc;
+      border-radius: 20px;
+      padding: clamp(15px, 4vw, 20px);
+      width: clamp(220px, 80vw, 320px);
+      height: clamp(220px, 80vw, 320px);
+      margin: 10px auto;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 64, 129, 0.3);
+      background-image: url('https://media.tenor.com/2M1M1aDAcW4AAAAi/heart-cute.gif');
+      background-size: 60px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-opacity: 0.15;
+    }
+
+    .share-card::before {
+      content: "";
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 50px;
+      background: url('https://media.tenor.com/3h5q7N9Z0v8AAAAi/bow-cute.gif') center/contain no-repeat;
+    }
+
+    .share-card::after {
+      content: "Made with 💖 Bubble Game";
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      color: #ff4081;
+      font-family: "Kalam", cursive;
+      opacity: 0.8;
+    }
+
+    .share-card .gif-frame {
+      background: #fff;
+      border: 4px solid #ffccff;
+      border-radius: 12px;
+      padding: 8px;
+      width: 75%;
+      max-width: 200px;
+      margin: 15px auto 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .share-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .share-card .funny-text {
+      background: #ff80bf;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      text-shadow: 1px 1px #ff1a66;
+      font-family: "Satisfy", cursive;
+      margin: 10px auto;
+      max-width: 90%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .share-card .score-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #ff4081;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      font-family: "Kalam", cursive;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+
+    .sticker {
+      position: absolute;
+      width: clamp(30px, 10vw, 40px);
+      cursor: move;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .funny-text {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      color: #ff4081;
+      text-shadow: 1px 1px #ffe6f0;
+      animation: bounce 1.2s infinite;
+      font-family: "Satisfy", cursive;
+    }
+
+    .loading {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      color: #ff4081;
+      animation: spin 1s infinite linear;
+      display: none;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .share-options {
+      display: none;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    /* Increased bubble size */
+    .bubble {
+      position: absolute;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(173, 216, 230, 0.5));
+      border: 2px solid #87ceeb;
+      border-radius: 50%;
+      width: clamp(70px, 14vw, 100px); /* Increased from clamp(50px, 10vw, 80px) */
+      height: clamp(70px, 14vw, 100px); /* Increased from clamp(50px, 10vw, 80px) */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff4081;
+      font-family: "Kalam", cursive;
+      font-size: clamp(0.9rem, 2.5vw, 1.2rem); /* Slightly increased font size */
+      text-align: center;
+      cursor: pointer;
+      animation: floatBubble 5s linear infinite;
+      user-select: none;
+      z-index: 5;
+    }
+
+    .bubble:hover {
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(173, 216, 230, 0.7));
+    }
+
+    .bubble.popped {
+      animation: popBubble 0.3s ease forwards;
+    }
+
+    .water-splash {
+      position: absolute;
+      width: clamp(80px, 16vw, 120px); /* Increased from clamp(60px, 12vw, 100px) */
+      height: clamp(80px, 16vw, 120px); /* Increased from clamp(60px, 12vw, 100px) */
+      background: radial-gradient(circle, rgba(135, 206, 235, 0.7), rgba(135, 206, 235, 0));
+      border-radius: 50%;
+      animation: splash 0.5s ease forwards;
+      z-index: 6;
+    }
+
+    .score-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ff80bf;
+      color: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-family: "Satisfy", cursive;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      z-index: 20;
+      display: none;
+    }
+
+    .finger-pointer {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      z-index: 25;
+      pointer-events: none;
+      animation: pointBubble 2s infinite;
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-10px); }
+      40% { transform: translateX(10px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    @keyframes floatBubble {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.1); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes popBubble {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    @keyframes splash {
+      0% { transform: scale(0.5); opacity: 0.7; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    @keyframes pointBubble {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -60%) scale(1.1); }
+    }
+
+    .heart, .flower, .bow {
+      position: absolute;
+      animation: floatHeart 8s linear infinite;
+      opacity: 0.8;
+    }
+
+    .heart img, .flower img, .bow img {
+      width: clamp(40px, 8vw, 50px);
+      transform: rotate(15deg);
+    }
+
+    .cloud {
+      position: absolute;
+      animation: float 15s linear infinite;
+      opacity: 0.7;
+    }
+
+    .cloud img {
+      width: clamp(80px, 15vw, 100px);
+    }
+
+    @keyframes float {
+      from { left: -20vw; }
+      to { left: 100vw; }
+    }
+
+    @keyframes floatHeart {
+      from { left: -10vw; bottom: -10vh; transform: rotate(0deg); }
+      to { left: 100vw; bottom: 100vh; transform: rotate(360deg); }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: clamp(8px, 2vw, 10px);
+      height: clamp(8px, 2vw, 10px);
+      background: radial-gradient(circle, #fff 30%, #ffccff 70%);
+      border-radius: 50%;
+      animation: sparkle 1.5s infinite;
+      opacity: 0;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 0; transform: scale(0.3); }
+      50% { opacity: 1; transform: scale(0.7); }
+      100% { opacity: 0; transform: scale(0.3); }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
+      .container { padding: 15px; width: 90vw; }
+      .share-card { width: 80vw; height: 80vw; max-width: 280px; max-height: 280px; }
+      .share-card img { max-width: 160px; }
+      button { padding: 8px 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem); }
+      .bubble { width: clamp(60px, 12vw, 80px); height: clamp(60px, 12vw, 80px); font-size: clamp(0.8rem, 2.2vw, 1rem); }
+      .water-splash { width: clamp(70px, 14vw, 100px); height: clamp(70px, 14vw, 100px); }
+      .finger-pointer { width: 60px; height: 60px; }
+      .timer { font-size: 2.5rem; }
+      .instruction { font-size: 1.5rem; padding: 15px 25px; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: clamp(1.2rem, 4.5vw, 1.8rem); }
+      .container { padding: 12px; }
+      .share-card { width: 85vw; height: 85vw; max-width: 250px; max-height: 250px; }
+      .share-card img { max-width: 140px; }
+      .sticker { width: clamp(25px, 8vw, 35px); }
+      .button-group, .share-options { gap: 8px; }
+      .bubble { width: clamp(50px, 11vw, 70px); height: clamp(50px, 11vw, 70px); font-size: clamp(0.7rem, 2vw, 0.9rem); }
+      .water-splash { width: clamp(60px, 13vw, 90px); height: clamp(60px, 13vw, 90px); }
+      .finger-pointer { width: 50px; height: 50px; }
+      .timer { font-size: 2rem; }
+      .instruction { font-size: 1.2rem; padding: 12px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Refresh Button -->
+  <button class="refresh-button" onclick="refreshPage()">
+    🔄 Refresh All
+  </button>
+
+  <!-- Game Screen (shown during bubble game) -->
+  <div class="game-screen" id="gameScreen">
+    <div class="timer" id="timer">2s</div>
+    <div class="instruction" id="instruction" style="display: none;">
+      Click bubbles to score! 💕
+    </div>
+  </div>
+
+  <!-- Floating decorative elements -->
+  <div class="cloud" style="top: 10%; animation-delay: 0s;">
+    <img src="https://media.tenor.com/9eY7p0u5t8AAAAi/kawaii-cloud.gif" alt="cloud" loading="lazy" />
+  </div>
+  <div class="cloud" style="top: 50%; animation-delay: 5s;">
+    <img src="https://media.tenor.com/9eY7p0u5t8AAAAi/kawaii-cloud.gif" alt="cloud" loading="lazy" />
+  </div>
+  <div class="heart" style="animation-delay: 2s;">
+    <img src="https://media.tenor.com/2M1M1aDAcW4AAAAi/heart-cute.gif" alt="heart" loading="lazy" />
+  </div>
+  <div class="flower" style="animation-delay: 4s;">
+    <img src="https://media.tenor.com/2u4In18N_E0AAAAi/flower-cute.gif" alt="flower" loading="lazy" />
+  </div>
+  <div class="bow" style="animation-delay: 6s;">
+    <img src="https://media.tenor.com/3h5q7N9Z0v8AAAAi/bow-cute.gif" alt="bow" loading="lazy" />
+  </div>
+  <div class="sparkle" style="top: 20%; left: 30%; animation-delay: 0s;"></div>
+  <div class="sparkle" style="top: 60%; left: 70%; animation-delay: 0.8s;"></div>
+  <div class="sparkle" style="top: 40%; left: 15%; animation-delay: 1.2s;"></div>
+
+  <!-- Finger pointer for bubble game -->
+  <div class="finger-pointer" id="fingerPointer">
+    <img src="https://media.tenor.com/3h5q7N9Z0v8AAAAi/bow-cute.gif" alt="point to bubbles" style="width: 100%; height: 100%; transform: rotate(-30deg);" />
+  </div>
+
+  <!-- Main Interface (shown after game) -->
+  <h1>🌷 Bubble Game! 🌷</h1>
+  <h1 style="font-size: 2.5em; color: #c0107c; text-align: center; border-bottom: 2px solid #0c0108; padding-bottom: 10px; margin-bottom: 30px;">🌷 Created By Ranjit Das 🌷</h1>
+
+  <div class="container">
+    <input id="nameInput" type="text" placeholder="Your adorable name 😘" maxlength="20" />
+    <div class="button-group">
+      <button id="makeItCuteButton" class="tooltip" onclick="startBubbleGame()" data-tooltip="Start the bubble game!">Start Bubble Game! 💕</button>
+      <button class="reset-button tooltip" onclick="resetNames()" data-tooltip="Clear all names">Reset Names 😿</button>
+      <button class="toggle-button tooltip" onclick="toggleAudio()" data-tooltip="Toggle music">Music 🎶</button>
+    </div>
+    
+<h1 style="font-size: 2.5em; color: #4a4a8a; text-align: center; border-bottom: 2px solid #4a4a8a; padding-bottom: 10px; margin-bottom: 30px;">Ranjit Das</h1>
+    <div id="result" class="result">
+      <p id="loading" class="loading">♥ Loading cuteness...</p>
+    </div>
+    <div id="controls" class="button-group" style="display: none;">
+      <button class="download-button tooltip" onclick="downloadResult()" data-tooltip="Download your card">Download 📥</button>
+      <button class="share-button tooltip" onclick="showShareOptions()" data-tooltip="Share your card">Share 📱</button>
+      <button id="stickerButton" class="tooltip" onclick="addSticker()" data-tooltip="Add a cute sticker">Add Sticker ✨</button>
+    </div>
+    <div id="shareOptions" class="share-options">
+      <button class="tooltip" onclick="shareToWhatsApp()" data-tooltip="Share via WhatsApp">WhatsApp 📲</button>
+      <button class="tooltip" onclick="shareToInstagram()" data-tooltip="Share to Instagram">Instagram 📸</button>
+      <button class="tooltip" onclick="shareToFacebook()" data-tooltip="Share to Facebook">Facebook 👥</button>
+      <button class="tooltip" onclick="shareToTwitter()" data-tooltip="Share to Twitter">Twitter 🐦</button>
+      <button class="tooltip" onclick="shareWithNative()" data-tooltip="Share with image and link">Share Image+Link 📤</button>
+    </div>
+  </div>
+  <div id="scorePopup" class="score-popup"></div>
+
+  <!-- Audio elements -->
+  <audio id="bgMusic" loop>
+    <source src="https://assets.mixkit.co/music/preview/mixkit-cute-happy-kids-354678.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <audio id="bubblePopSound">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-3003.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    const gifs = [
+      "https://media.tenor.com/iW4UWHDwhOoAAAAi/aze-sigma.gif",
+      "https://media.tenor.com/BF38pWMv5ysAAAAi/accept-knowing.gif"
+    ];
+
+    const lines = [
+      "My Boss Ranjit Das 🫡",
+      "My Boss Ranjit Das 🫡",
+      "My Boss Ranjit Das 🫡",
+      "My Boss Ranjit Das 🫡"
+    ];
+
+    const stickers = [
+      "https://media.tenor.com/2u4In18N_E0AAAAi/flower-cute.gif",
+      "https://media.tenor.com/2M1M1aDAcW4AAAAi/heart-cute.gif",
+      "https://media.tenor.com/9eY7p0u5t8AAAAi/kawaii-cloud.gif"
+    ];
+
+    const audio = document.getElementById("bgMusic");
+    const bubblePopSound = document.getElementById("bubblePopSound");
+    const loading = document.getElementById("loading");
+    const resultDiv = document.getElementById("result");
+    const controlsDiv = document.getElementById("controls");
+    const shareOptionsDiv = document.getElementById("shareOptions");
+    const stickerButton = document.getElementById("stickerButton");
+    const scorePopup = document.getElementById("scorePopup");
+    const fingerPointer = document.getElementById("fingerPointer");
+    const gameScreen = document.getElementById("gameScreen");
+    const timerDisplay = document.getElementById("timer");
+    const instruction = document.getElementById("instruction");
+    const makeItCuteButton = document.getElementById("makeItCuteButton");
+    let shareableCanvas = null;
+    let stickerCount = 0;
+    const maxStickers = 3;
+    let staticGifUrl = null;
+    let bubbleScore = 0;
+    let gameActive = false;
+    let bubbleInterval = null;
+    let pointerInterval = null;
+    let timerInterval = null;
+    let gameTimeLeft = 30;
+
+    // Refresh page function
+    function refreshPage() {
+      location.reload();
+    }
+
+    // Audio persistence
+    if (sessionStorage.getItem("audioPlaying") !== "false") {
+      audio.play().catch(err => console.error("Audio playback failed:", err));
+      sessionStorage.setItem("audioPlaying", "true");
+    }
+
+    // Toggle audio
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        sessionStorage.setItem("audioPlaying", "true");
+      } else {
+        audio.pause();
+        sessionStorage.setItem("audioPlaying", "false");
+      }
+    }
+
+    // Start bubble game
+    async function startBubbleGame() {
+      const name = document.getElementById("nameInput").value.trim();
+
+      if (name === "") {
+        resultDiv.innerHTML = `<p class="funny-text">😘 Hey cutie, type your name first!</p>`;
+        return;
+      }
+
+      if (name.length > 20) {
+        resultDiv.innerHTML = `<p class="funny-text">😿 Name too long, keep it cute!</p>`;
+        return;
+      }
+
+      // Initialize game
+      bubbleScore = 0;
+      gameActive = true;
+      gameTimeLeft = 30;
+      loading.style.display = "none";
+      resultDiv.innerHTML = "";
+      controlsDiv.style.display = "none";
+      shareOptionsDiv.style.display = "none";
+      stickerCount = 0;
+      stickerButton.disabled = false;
+      staticGifUrl = null;
+      makeItCuteButton.disabled = true;
+
+      // Show game screen and hide main interface
+       document.querySelector(".refresh-button").style.display = "none";
+      gameScreen.style.display = "flex";
+      document.querySelector(".container").style.display = "none";
+      document.querySelector("h1").style.display = "none";
+
+      // Show instruction
+      instruction.style.display = "block";
+      // Hide instruction after 2 seconds (changed from 5 seconds)
+      setTimeout(() => {
+        instruction.style.display = "none";
+      }, 2000);
+
+      // Start timer
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+
+      // Trigger screen shake
+      document.body.classList.add("shake");
+      setTimeout(() => document.body.classList.remove("shake"), 500);
+
+      // Show finger pointer
+      fingerPointer.style.display = "block";
+      startPointerAnimation();
+
+      // Spawn bubbles continuously
+      bubbleInterval = setInterval(() => {
+        if (!gameActive) return;
+        // Spawn 1-2 bubbles per interval
+        const bubbleCount = Math.floor(Math.random() * 2) + 1; // Randomly 1 or 2
+        for (let i = 0; i < bubbleCount; i++) {
+          spawnBubble(name);
+        }
+      }, 700);
+
+      // End game after 30 seconds
+      setTimeout(() => {
+        endGame(name);
+      }, 300);
+    }
+
+    // Update timer display
+    function updateTimer() {
+      gameTimeLeft--;
+      timerDisplay.textContent = `${gameTimeLeft}s`;
+      
+      if (gameTimeLeft <= 0) {
+        clearInterval(timerInterval);
+      }
+    }
+
+    // End the game
+    function endGame(name) {
+      gameActive = false;
+      clearInterval(bubbleInterval);
+      clearInterval(pointerInterval);
+      clearInterval(timerInterval);
+      
+      document.querySelectorAll(".bubble").forEach(bubble => bubble.remove());
+      document.querySelectorAll(".water-splash").forEach(splash => splash.remove());
+      
+      fingerPointer.style.display = "none";
+      
+      // Show score popup
+      scorePopup.style.display = "block";
+      scorePopup.textContent = `🎉 Your Score: 999+ 🎉`;
+      
+      setTimeout(() => {
+        scorePopup.style.display = "none";
+        
+        // Hide game screen and show main interface
+        gameScreen.style.display = "none";
+         document.querySelector(".refresh-button").style.display = "";
+
+        document.querySelector(".container").style.display = "block";
+        document.querySelector("h1").style.display = "block";
+        
+        makeItCuteButton.disabled = false;
+        generateFun(name);
+      }, 2000);
+    }
+
+    // Animate finger pointer to point at bubbles
+    function startPointerAnimation() {
+      pointerInterval = setInterval(() => {
+        if (!gameActive) return;
+        
+        const bubbles = document.querySelectorAll(".bubble:not(.popped)");
+        if (bubbles.length > 0) {
+          // Point to a random bubble
+          const randomBubble = bubbles[Math.floor(Math.random() * bubbles.length)];
+          const bubbleRect = randomBubble.getBoundingClientRect();
+          
+          fingerPointer.style.left = `${bubbleRect.left + bubbleRect.width / 2}px`;
+          fingerPointer.style.top = `${bubbleRect.top - 40}px`;
+        }
+      }, 1500);
+    }
+
+    // Spawn a single bubble
+    function spawnBubble(name) {
+      const bubbleSize = clamp(70, 14, 100); // Increased bubble size
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = name;
+      bubble.style.left = `${Math.random() * (window.innerWidth - bubbleSize)}px`;
+      bubble.style.top = `${Math.random() * (window.innerHeight - bubbleSize)}px`;
+      bubble.style.animationDelay = `${Math.random() * 2}s`;
+      bubble.addEventListener("click", () => popBubble(bubble));
+      bubble.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        popBubble(bubble);
+      });
+      gameScreen.appendChild(bubble);
+    }
+
+    // Pop bubble and show water splash
+    function popBubble(bubble) {
+      if (!gameActive) return;
+      bubble.classList.add("popped");
+      bubbleScore++;
+
+      // Play bubble pop sound
+      bubblePopSound.currentTime = 0;
+      bubblePopSound.play();
+
+      // Create water splash
+      const splash = document.createElement("div");
+      splash.className = "water-splash";
+      splash.style.left = bubble.style.left;
+      splash.style.top = bubble.style.top;
+      gameScreen.appendChild(splash);
+      setTimeout(() => splash.remove(), 500);
+
+      setTimeout(() => bubble.remove(), 300);
+    }
+
+    // Generate GIF and text
+    async function generateFun(name) {
+      loading.style.display = "block";
+      resultDiv.innerHTML = "";
+      controlsDiv.style.display = "none";
+      shareOptionsDiv.style.display = "none";
+
+      const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+      const randomLine = lines[Math.floor(Math.random() * lines.length)];
+
+      resultDiv.innerHTML = `
+        <div class="share-card" id="resultContent">
+          <div class="score-badge">Aura: 999+</div>
+          <div class="gif-frame">
+            <img src="${randomGif}" alt="cute gif" id="gifImage" />
+          </div>
+          <p class="funny-text"><b style="color: black;">${name}, ${randomLine}</b></p>
+        </div>
+      `;
+      loading.style.display = "none";
+      controlsDiv.style.display = "flex";
+      generateShareableCard(randomGif);
+      saveName(name);
+    }
+
+    // Generate shareable card (full webpage)
+    function generateShareableCard(gifUrl) {
+      // Capture the entire body
+      html2canvas(document.body, {
+        scale: 2,
+        backgroundColor: null,
+        useCORS: true,
+        logging: false,
+        width: window.innerWidth,
+        height: window.innerHeight
+      }).then(canvas => {
+        shareableCanvas = canvas;
+      }).catch(err => console.error("Failed to capture webpage:", err));
+    }
+
+    // Convert GIF to static image
+    async function convertGifToStatic(gifUrl) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = gifUrl;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL("image/png"));
+        };
+        img.onerror = () => resolve(gifUrl);
+      });
+    }
+
+    // Save name to backend
+    async function saveName(name) {
+      const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
+      localStorage.setItem("deviceId", deviceId);
+
+      const payload = {
+        name,
+        deviceId,
+        phone: null
+      };
+
+      try {
+        await fetch("https://cute.codeshop.in/api/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.error("Error saving name:", err);
+      }
+    }
+
+    // Reset names
+    async function resetNames() {
+      try {
+        const response = await fetch("https://cute.codeshop.in/api/reset", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" }
+        });
+        if (response.ok) {
+          // Refresh the page to reset all UI and state
+          location.reload();
+        } else {
+          resultDiv.innerHTML = `<p class="funny-text">😿 Failed to reset names!</p>`;
+        }
+      } catch (err) {
+        console.error("Error resetting names:", err);
+        resultDiv.innerHTML = `<p class="funny-text">😿 Error resetting names!</p>`;
+      }
+    }
+
+    // Add draggable sticker
+    function addSticker() {
+      const resultContent = document.getElementById("resultContent");
+      if (!resultContent || stickerCount >= maxStickers) {
+        if (stickerCount >= maxStickers) {
+          stickerButton.disabled = true;
+          resultDiv.innerHTML += `<p class="funny-text">😺 Max stickers added!</p>`;
+          setTimeout(() => {
+            resultDiv.innerHTML = `<div class="share-card" id="resultContent">${resultContent.innerHTML}</div>`;
+          }, 1000);
+        }
+        return;
+      }
+
+      const sticker = document.createElement("img");
+      sticker.src = stickers[Math.floor(Math.random() * stickers.length)];
+      sticker.className = "sticker";
+      sticker.style.left = "50%";
+      sticker.style.top = "50%";
+      resultContent.appendChild(sticker);
+      stickerCount++;
+
+      let isDragging = false;
+      let currentX = 0, currentY = 0, initialX, initialY;
+      const rect = resultContent.getBoundingClientRect();
+
+      sticker.addEventListener("mousedown", startDragging);
+      sticker.addEventListener("touchstart", startDragging);
+
+      function startDragging(e) {
+        e.preventDefault();
+        initialX = (e.clientX || e.touches[0].clientX) - currentX;
+        initialY = (e.clientY || e.touches[0].clientY) - currentY;
+        isDragging = true;
+      }
+
+      document.addEventListener("mousemove", drag);
+      document.addEventListener("touchmove", drag);
+
+      function drag(e) {
+        if (isDragging) {
+          const clientX = e.clientX || e.touches[0].clientX;
+          const clientY = e.clientY || e.touches[0].clientY;
+          currentX = clientX - initialX;
+          currentY = clientY - initialY;
+
+          const stickerRect = sticker.getBoundingClientRect();
+          currentX = Math.max(0, Math.min(currentX, rect.width - stickerRect.width));
+          currentY = Math.max(0, Math.min(currentY, rect.height - stickerRect.height));
+
+          sticker.style.left = `${currentX}px`;
+          sticker.style.top = `${currentY}px`;
+        }
+      }
+
+      document.addEventListener("mouseup", stopDragging);
+      document.addEventListener("touchend", stopDragging);
+
+      function stopDragging() {
+        isDragging = false;
+        generateShareableCard(staticGifUrl || document.getElementById("gifImage").src);
+      }
+    }
+
+    // Download result
+    function downloadResult() {
+      if (!shareableCanvas) return;
+
+      const link = document.createElement("a");
+      link.download = "bubble-game-card.png";
+      link.href = shareableCanvas.toDataURL("image/png");
+      link.click();
+    }
+
+    // Show share options and convert GIF to static image
+    async function showShareOptions() {
+      const gifImage = document.getElementById("gifImage");
+      if (!gifImage || !shareableCanvas) return;
+
+      shareOptionsDiv.style.display = "flex";
+
+      if (!staticGifUrl) {
+        staticGifUrl = await convertGifToStatic(gifImage.src);
+        const resultContent = document.getElementById("resultContent");
+        resultContent.innerHTML = `
+          <div class="score-badge">Score: ${bubbleScore}</div>
+          <div class="gif-frame">
+            <img src="${staticGifUrl}" alt="cute image" id="gifImage" />
+          </div>
+          <p class="funny-text">${resultContent.querySelector(".funny-text").textContent}</p>
+          ${Array.from(resultContent.querySelectorAll(".sticker")).map(s => `<img src="${s.src}" class="sticker" style="left: ${s.style.left}; top: ${s.style.top}; width: ${s.style.width};">`).join("")}
+        `;
+        generateShareableCard(staticGifUrl);
+      }
+    }
+
+    // Enhanced share function that sends both image and link
+    async function shareWithNative() {
+      if (!shareableCanvas) {
+        alert("Please wait while we prepare your image...");
+        return;
+      }
+
+      try {
+        // Convert canvas to blob
+        shareableCanvas.toBlob(async (blob) => {
+          const file = new File([blob], 'bubble-game-card.png', { type: 'image/png' });
+          const text = `I scored ${bubbleScore} in the Bubble Game! 🌸 Play it here: https://cute.codeshop.in`;
+
+          if (navigator.share && navigator.canShare) {
+            try {
+              await navigator.share({
+                title: 'My Bubble Game Score',
+                text: text,
+                files: [file]
+              });
+            } catch (err) {
+              console.error('Error sharing:', err);
+              // Fallback: Download image and show link
+              downloadResult();
+              setTimeout(() => {
+                alert(`Image downloaded! You can now share it along with this link: https://cute.codeshop.in`);
+              }, 500);
+            }
+          } else {
+            // Fallback for browsers that don't support sharing files
+            downloadResult();
+            setTimeout(() => {
+              const shareText = `Check out my Bubble Game score! I got ${bubbleScore} points! 🎉 Play the game here: https://cute.codeshop.in`;
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareText).then(() => {
+                  alert('Image downloaded and link copied to clipboard! Share both with your friends!');
+                });
+              } else {
+                alert(`Image downloaded! Share it with this link: https://cute.codeshop.in`);
+              }
+            }, 500);
+          }
+        });
+      } catch (err) {
+        console.error('Share error:', err);
+        // Ultimate fallback
+        downloadResult();
+        const shareText = `I scored ${bubbleScore} in the Bubble Game! 🌸 Play it here: https://cute.codeshop.in`;
+        prompt('Copy this link to share along with your downloaded image:', shareText);
+      }
+    }
+
+    // Share to WhatsApp with both image and link suggestion
+    function shareToWhatsApp() {
+      if (!shareableCanvas) {
+        alert("Please wait while we prepare your image...");
+        return;
+      }
+
+      // First download the image
+      downloadResult();
+      
+      // Then share the link with instructions
+      setTimeout(() => {
+        const text = encodeURIComponent(`I scored ${bubbleScore} in the Bubble Game! 🌸\n\nI've downloaded my score card image - check it out!\n\nPlay the game here: https://cute.codeshop.in\n\nAfter sending this message, attach the downloaded image to share both!`);
+        window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank");
+      }, 1000);
+    }
+
+    // Share to Instagram
+    function shareToInstagram() {
+      if (!shareableCanvas) {
+        alert("Please wait while we prepare your image...");
+        return;
+      }
+
+      downloadResult();
+      setTimeout(() => {
+        alert("Your image has been downloaded! 📸\n\nNow open Instagram and:\n1. Create a new post\n2. Select the downloaded image\n3. Add this caption:\n\n" + 
+              `'I scored ${bubbleScore} in the Bubble Game! 🌸 Play it here: https://cute.codeshop.in'`);
+      }, 500);
+    }
+
+    // Share to Facebook
+    function shareToFacebook() {
+      const text = encodeURIComponent(`I scored ${bubbleScore} in the Bubble Game! 🌸`);
+      const url = encodeURIComponent("https://cute.codeshop.in");
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, "_blank");
+      
+      // Also download the image for them to share separately
+      setTimeout(() => {
+        downloadResult();
+        alert("Link shared! Your image has also been downloaded - you can upload it to your Facebook post too!");
+      }, 1000);
+    }
+
+    // Share to Twitter
+    function shareToTwitter() {
+      const text = encodeURIComponent(`I scored ${bubbleScore} in the Bubble Game! 🌸 Play it here:`);
+      const url = encodeURIComponent("https://cute.codeshop.in");
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
+      
+      // Download image as well
+      setTimeout(() => {
+        downloadResult();
+        alert("Tweet shared! Your image has been downloaded too - you can add it to your tweet!");
+      }, 1000);
+    }
+
+    // Convert data URL to Blob
+    function dataURLtoBlob(dataURL) {
+      const [header, data] = dataURL.split(",");
+      const mime = header.match(/:(.*?);/)[1];
+      const binary = atob(data);
+      const array = [];
+      for (let i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], { type: mime });
+    }
+
+    // Utility for clamp calculation
+    function clamp(min, vw, max) {
+      return Math.min(Math.max(window.innerWidth * (vw / 100), min), max);
+    }
+  </script>
+</body>
+</html>
