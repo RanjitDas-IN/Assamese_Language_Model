@@ -23,8 +23,7 @@ from bs4 import BeautifulSoup
 # ------------- User settings -------------
 profile_path = "/home/ranjit/.mozilla/firefox/luddqo6a.default-release"
 url = "https://m.dailyhunt.in/news/india/assamese/news?mode=pwa&action=click"
-# url = "https://cute.codeshop.in/"
-# 
+
 output_file = r"Ranjit_Data/assamese_paragraphs.txt"
 
 HEADLESS = False

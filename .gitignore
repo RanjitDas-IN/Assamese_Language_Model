@@ -6,13 +6,18 @@ Sosanka_Data/Story/After_cleaning_Story.txt
 
 
 
+
+cleaned.txt
+temporary.txt
 rules_for_GPT/
+assamese_test.txt
 main_goal_of_model.mdc
+Ranjit_Data/data_2.txt
 type_of_data_screap.mdc
+assamese_paragraphs.txt
 rules_for_Data_Cleaning.mdc
 rules_for_Data_Screaping.mdc
 what_type_of_data_i want.mdc
 rules_for_Data_Preparation.mdc
 rules_for_ML_training_logic.mdc
 rules_for_CNN_training_logic.mdc
-Ranjit_Data/assamese_paragraphs.txt
