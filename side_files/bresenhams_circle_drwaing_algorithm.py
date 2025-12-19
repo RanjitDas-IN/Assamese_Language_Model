@@ -11,6 +11,27 @@ def plot_circle(x, y, filename="aa.png"):
     plt.close()
     print(f"Saved plot to {filename}")
 
+def plot_circle_coordinates(x, y, filename="aa.png"):
+    plt.figure(figsize=(5,5))
+    plt.scatter(x, y, s=5, edgecolors="black", c="red")
+
+    # Label each point using annotate
+    for xi, yi in zip(x, y):
+        plt.annotate(
+            f"({xi}, {yi})",
+            xy=(xi, yi),
+            xytext=(3, 3),           # small offset so label doesn't sit on top
+            textcoords="offset points",
+            fontsize=8
+        )
+
+    plt.xlabel("X-axis")
+    plt.ylabel("Y-axis")
+    plt.title("Bresenham's Circle Drawing Algorithm")
+    plt.savefig(filename)
+    plt.show()
+    plt.close()
+    print(f"Saved plot to {filename}")
 
 
 def get_circle_ohter_points_after_algorithm(xc, yc, x_list, y_list):
@@ -59,22 +80,25 @@ def bresenhams_circle(r):
 
 if __name__ == "__main__":
     center_x, center_y = 0, 0
-    radius = 25
+    radius = 8
     x_c, y_c = bresenhams_circle(radius)
-    x_points, y_points = get_circle_ohter_points_after_algorithm(center_x, center_y, x_c, y_c)
+    plot_circle_coordinates(x_c,y_c)
+    
+    
+    # x_points, y_points = get_circle_ohter_points_after_algorithm(center_x, center_y, x_c, y_c)
 
     
-    seen = set()
-    uniq_x = []
-    uniq_y = []
-    for xp, yp in zip(x_points, y_points):
-        if (xp, yp) not in seen:
-            seen.add((xp, yp))
-            uniq_x.append(xp)
-            uniq_y.append(yp)
+    # seen = set()
+    # uniq_x = []
+    # uniq_y = []
+    # for xp, yp in zip(x_points, y_points):
+    #     if (xp, yp) not in seen:
+    #         seen.add((xp, yp))
+    #         uniq_x.append(xp)
+    #         uniq_y.append(yp)
 
-    print("Number of plotted points:", len(uniq_x))
-    # print("x_points =", uniq_x)
-    # print("y_points =", uniq_y)
-    plot_circle(uniq_x, uniq_y)
+    # print("Number of plotted points:", len(uniq_x))
+    # # print("x_points =", uniq_x)
+    # # print("y_points =", uniq_y)
+    # plot_circle(uniq_x, uniq_y)
     
