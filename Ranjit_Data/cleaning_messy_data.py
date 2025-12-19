@@ -46,7 +46,7 @@ except:
 
 
 try:
-    with open(output_path,"w",encoding="utf-8") as f:
+    with open(output_path,"a",encoding="utf-8") as f:
         f.write(final_text)
     print(f"\nCleaning process done\nAnd saved to {output_path}")
 except:

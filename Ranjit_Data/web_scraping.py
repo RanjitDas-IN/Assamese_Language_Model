@@ -1,5 +1,3 @@
-url = "https://m.dailyhunt.in/news/india/assamese/news?mode=pwa&action=click"
-
 """
 Assamese paragraph scraper with resume & checkpointing.
 
@@ -24,8 +22,9 @@ from bs4 import BeautifulSoup
 
 # ------------- User settings -------------
 profile_path = "/home/ranjit/.mozilla/firefox/luddqo6a.default-release"
-# url = "https://m.dailyhunt.in/news/india/assamese/tv9assamese-epaper-tvassame/baksat+163+dhava+javi+pvshasanvh+kvib+novave+pvtibad+dib+novave+shlogan+bibhinn+dishat+nishedhagya+-newsid-n685230825?listname=topicsList&index=1&topicIndex=0&mode=pwa&action=click"
+url = "https://m.dailyhunt.in/news/india/assamese/news?mode=pwa&action=click"
 # url = "https://cute.codeshop.in/"
+# 
 output_file = r"Ranjit_Data/assamese_paragraphs.txt"
 
 HEADLESS = False
