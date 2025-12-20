@@ -1,4 +1,3 @@
-temp.py
 Sosanka_Data/Song/raw_song.txt
 Sosanka_Data/Story/raw_story.txt
 Sosanka_Data/Song/After_cleaning_Song.txt
@@ -7,15 +6,18 @@ Sosanka_Data/Story/After_cleaning_Story.txt
 
 
 
-cleaned.txt
-temporary.txt
+temp.py
+backup_data.zip
+Ranjit_Data/temporary_data
+Ranjit_Data/real_data/cleaned.txt
+
+
+
+
+
 rules_for_GPT/
-assamese_test.txt
-Ranjit_Data_backup
 main_goal_of_model.mdc
-Ranjit_Data/data_2.txt
 type_of_data_screap.mdc
-assamese_paragraphs.txt
 rules_for_Data_Cleaning.mdc
 rules_for_Data_Screaping.mdc
 what_type_of_data_i want.mdc
