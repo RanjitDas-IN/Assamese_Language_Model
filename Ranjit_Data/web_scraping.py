@@ -1,15 +1,3 @@
-"""
-Assamese paragraph scraper with resume & checkpointing.
-
-Behavior:
-- Reads last saved paragraph from assamese_paragraphs.txt (if any).
-- Loads the target URL using Firefox profile.
-- Scrolls the page until the last paragraph is visible (or gives up after MAX_FIND_ATTEMPTS).
-- Scrolls further until content stabilizes.
-- Appends new paragraphs every 10 scroll attempts (checkpointing).
-- Finally appends any remaining new paragraphs.
-"""
-
 import os
 import re
 import time
