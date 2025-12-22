@@ -15,7 +15,8 @@ except:
 
 try:
     # remove English letters, digits, and symbols
-    cleaned = re.sub(r"[A-Za-z@#$%':\-]", "", text)
+    cleaned = re.sub(r"[A-Za-z0-9…@#$+%':\-]", "", text)
+    
     # Remove all invisible unicode characters
     cleaned = re.sub(r"[‎]", "", cleaned)
     # remove empty parentheses like (), ( ), (   ) remove empty brackets and any space before them
@@ -48,7 +49,7 @@ except:
 try:
     think append mode or write mode 
     # with open(output_path,"w",encoding="utf-8") as f:
-        f.write("\n\nnext cleaning\n\n"+final_text+"\n\nnext cleaning\n\n")
+        f.write("\n\nnext cleaning\n\n"+final_text+"\n\nnext part\n\n")
     print(f"\nCleaning process done\nAnd saved to \"{output_path}\"")
 except:
     print("\nChange File name.       -Ranjit Das\n")
