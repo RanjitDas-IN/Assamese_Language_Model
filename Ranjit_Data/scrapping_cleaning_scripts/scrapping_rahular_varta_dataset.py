@@ -13,7 +13,7 @@
 #         text = row.get("text")
 
 #         if text:
-#             f.write(text.strip() + "\n\n")
+#             f.write(text.strip() + "\n")
 
 #         count += 1
 
@@ -23,31 +23,3 @@
 
 # print("Done.")
 
-
-
-from datasets import load_dataset
-
-dataset = load_dataset("rahular/varta", split="train", streaming=True)
-
-output_file = "scrapped_text.txt"
-
-resume_from = 740000
-count = 0
-
-with open(output_file, "a", encoding="utf-8") as f:
-    for row in dataset:
-        if count < resume_from:
-            count += 1
-            continue
-
-        text = row.get("text")
-
-        if text:
-            f.write(text.strip() + "\n\n")
-
-        count += 1
-
-        if count % 10000 == 0:
-            print(f"Processed {count} rows...", flush=True)
-
-print("Done.")
