@@ -94,8 +94,12 @@
 ## 📞 Ph No: +91-9387480826
 
 
+### Large file copy command: 
+`rsync -ah --progress /home/ranjit/Downloads/as.txt /home/ranjit/Desktop/projects/Laguage_Model/`
+
+### Then remove the original after confirming:
+`rm /home/ranjit/Downloads/as.txt`
 
 
-i need to remove this
-`‎`, it is invisible, but visible by the model
+i need to remove this `‎`, it is invisible, but visible by the model
 `[U+200E]`
