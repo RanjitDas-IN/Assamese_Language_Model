@@ -103,3 +103,37 @@
 
 i need to remove this `‎`, it is invisible, but visible by the model
 `[U+200E]`
+
+
+```bash
+
+tar -cf - -P \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/1B_as_tokens_unfiltered.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/cc-100_assamese_text_corpora.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/filtered_cc-100_assamese_text_corpora.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/IndicCorpV2_AIBharat/as.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/nenow_preprocessed.csv" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/news18_preprocessed.csv" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/MWire-Labs-assamese-monolingual-corpus/assamese_monolingual_sentences_final_cleaned.csv" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/rahular_varta_DailyHuntDataset/scrapped_text.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cleaned.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day2_data.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day3_day3.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/poem.txt" \
+| pv -s "$(du -cb \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/1B_as_tokens_unfiltered.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/cc-100_assamese_text_corpora.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/filtered_cc-100_assamese_text_corpora.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/IndicCorpV2_AIBharat/as.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/nenow_preprocessed.csv" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/news18_preprocessed.csv" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/MWire-Labs-assamese-monolingual-corpus/assamese_monolingual_sentences_final_cleaned.csv" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/rahular_varta_DailyHuntDataset/scrapped_text.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cleaned.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day2_data.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day3_day3.txt" \
+"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/poem.txt" | awk '/total$/ {print $1}')" \
+| gzip > backup_data.tar.gz && sync && shutdown
+```
