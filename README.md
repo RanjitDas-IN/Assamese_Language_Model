@@ -105,6 +105,55 @@ i need to remove this `‎`, it is invisible, but visible by the model
 `[U+200E]`
 
 
+
+
+* **Poem Dataset** → 92.6k tokens
+  Source: Kaggle & Sosanko Sarmah (Contributor)
+
+* **Song Lyrics Dataset** → 4.5M tokens
+  Source: Kaggle (Spotify API)
+
+* **Story Dataset** → 52.6B tokens
+  Source: HuggingFace Dataset
+
+* **Crawled Data** → 7T tokens
+  Source: Various web sources
+
+* **CC-100 Dataset** → 5.9M tokens
+  Source: Common Crawl
+
+* **Qwen3 Tokens** → 2B tokens
+  Source: Kaggle
+
+* **Kaggle News Articles Dataset** → 49.6B tokens
+  Source: Kaggle
+
+* **IndicCorp v2** → 37.8T tokens
+  Source: AI4Bharat Dataset
+
+* **Assamese Monolingual Corpus** → 38.7B tokens
+  Source: MWire-Labs
+
+* **DailyHunt Dataset** → 184.2B tokens
+  Source: Rahular Varta Dataset
+
+* **Wikipedia Dump (2019–2025)** → 0.2T tokens
+  Source: Wikipedia
+
+---
+
+# Total Dataset Size
+
+* **45.3 Trillion Tokens**
+* **45,333,004,592,600 total tokens**
+
+
+
+
+
+
+
+
 ```bash
 
 tar -cf - -P \

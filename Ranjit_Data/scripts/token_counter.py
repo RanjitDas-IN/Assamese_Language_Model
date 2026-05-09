@@ -9,16 +9,19 @@ from tqdm import tqdm
 
 # FILE_PATH = "Ranjit_Data/real_data/IndicCorpV2_AIBharat/as.txt"
 
-FILE_PATHS = ["Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/cleaned.txt", 
-              "Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/poem.txt",
-              "Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/day2_data.txt",
-              "Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/day3_data.txt",
+# FILE_PATHS = ["Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/cleaned.txt", 
+#               "Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/poem.txt",
+#               "Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/day2_data.txt",
+#               "Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/day3_data.txt",
             #   "Ranjit_Data/real_data/rahular_varta_DailyHuntDataset/scrapped_text.txt",
             #   "Ranjit_Data/real_data/MWire-Labs-assamese-monolingual-corpus/assamese_monolingual_sentences_final_cleaned.csv",
             #   "Ranjit_Data/real_data/IndicCorpV2_AIBharat/as.txt",
             #   "Ranjit_Data/real_data/cc-100/filtered_cc-100_assamese_text_corpora.txt",
             #   "Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt"             
-              ]
+            #   ]
+            
+            
+            
 CHUNK_SIZE = 8 * 1024 * 1024  # 8 MB
 
 def count_words(path):
@@ -122,3 +125,13 @@ if __name__ == "__main__":
 # ----------------------------------------
 
 # TOTAL → 425.0M (424,998,282 Tokens)
+
+
+
+
+
+# human_readable(1_200)                # 1.2K
+# human_readable(5_000_000)            # 5.0M
+# human_readable(3_200_000_000)        # 3.2B
+# human_readable(7_000_000_000_000)    # 7.0T
+# human_readable(9_000_000_000_000_000)# 9.0P
