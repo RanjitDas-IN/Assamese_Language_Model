@@ -1,0 +1,31 @@
+topic----Tokens-----source
+poems dataset: 92.6k Tokens
+songs lyrics dataset: 4.5M
+story dataset: 52.6B
+crawled data: 7T
+CC-100 dataset: 5.9M
+Qwen3 Tokens: 2B
+kaggel News Articles dataset: 49.6B
+Indic Crop v2 (AI Bharat) dataset: 37.8T
+assamese monolingual corpus by MWire-Labs: 38.7B
+DailyHunt dataset (rahular varta): 184.2B
+wikipedia dump(2019-2025): 0.2T
+
+`Total: 45.3T`
+or `45333004592600 Tokens`
+
+
+
+
+sources:
+Poem Dataset → 92.6k tokens Source: Kaggle & Sosanko Sarmah (Contributor)
+Song Lyrics Dataset → 4.5M tokens Source: Kaggle (Spotify API)
+Story Dataset → 52.6B tokens Source: HuggingFace Dataset
+Crawled Data → 7T tokens Source: Various web sources
+CC-100 Dataset → 5.9M tokens Source: Common Crawl
+Qwen3 Tokens → 2B tokens Source: Kaggle
+Kaggle News Articles Dataset → 49.6B tokens Source: Kaggle
+IndicCorp v2 → 37.8T tokens Source: AI4Bharat Dataset
+Assamese Monolingual Corpus → 38.7B tokens Source: MWire-Labs
+DailyHunt Dataset → 184.2B tokens Source: Rahular Varta Dataset
+Wikipedia Dump (2019–2025) → 0.2T tokens Source: Wikipedia

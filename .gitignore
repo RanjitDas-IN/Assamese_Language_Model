@@ -1,14 +1,15 @@
+cc-100
+raw_song.txt
+raw_story.txt
+temporary_data
+IndicCorpV2_AIBharat
+After_cleaning_Song.txt
 1B_assamese_Tokens_Quwn3
-Ranjit_Data/temporary_data
-Ranjit_Data/real_data/cc-100
+After_cleaning_Story.txt
 rahular_varta_DailyHuntDataset
-Sosanka_Data/Song/raw_song.txt
-Sosanka_Data/Story/raw_story.txt
+kaggel_Assamese_News_Article_Dataset
+data/DailyHunt_Assamese_News_Dataset
 MWire-Labs-assamese-monolingual-corpus
-Sosanka_Data/Song/After_cleaning_Song.txt
-Ranjit_Data/real_data/IndicCorpV2_AIBharat
-Sosanka_Data/Story/After_cleaning_Story.txt
-Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset
 
 
 
@@ -16,7 +17,6 @@ Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset
 backup_data.tar.gz
 
 
-temp.txt
 main_goal_of_model.mdc
 type_of_data_screap.mdc
 rules_for_Data_Cleaning.mdc
