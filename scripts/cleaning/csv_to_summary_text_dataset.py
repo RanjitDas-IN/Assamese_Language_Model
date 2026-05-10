@@ -5,8 +5,8 @@ class AssameseNewsDatasetBuilder:
 
     def __init__(
         self,
-        csv_path="data/kaggel_Assamese_News_Article_Dataset/news18_preprocessed.csv",
-        output_txt="data/kaggel_Assamese_News_Article_Dataset/news18_preprocessed.txt"
+        csv_path="Assamese Sentiments file.csv",
+        output_txt="Assamese Sentiments file.txt"
     ):
 
         self.csv_path = csv_path
@@ -24,14 +24,17 @@ class AssameseNewsDatasetBuilder:
 
             for _, row in df.iterrows():
 
-                summary = str(row["summary"]).strip()
-                text = str(row["text"]).strip()
+                summary = str(row["Assamese Text"]).strip()
+                # text = str(row["text"]).strip()
 
-                # Skip empty rows
-                if not summary or not text:
-                    continue
+                # # Skip empty rows
+                # if not summary or not text:
+                    # continue
+                    
+                
+                # line = f"{summary}:{text}\n"
+                line = f"{summary}\n"
 
-                line = f"{summary}:{text}\n"
 
                 file.write(line)
 

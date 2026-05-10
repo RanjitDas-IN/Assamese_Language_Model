@@ -17,5 +17,11 @@
 
 
 
+#-------------------------parquet to txt-----------------------------
+# import pandas as pd
 
+# df = pd.read_parquet("as-00000-of-00001.parquet")
 
+# with open("nuralnets_multingual_tinystories.txt", "w", encoding="utf-8") as f:
+#     for row in df["text"]:
+#         f.write(str(row) + "\n")

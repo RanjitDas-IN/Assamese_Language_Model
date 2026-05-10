@@ -16,8 +16,8 @@
 
 import unicodedata,re
 from tqdm import tqdm
-# INPUT_FILE = r"Ranjit_Data/real_data/MWire-Labs-assamese-monolingual-corpus/MWire-Labs-assamese-monolingual-corpus.txt"
-# OUTPUT_FILE = r"Ranjit_Data/real_data/MWire-Labs-assamese-monolingual-corpus/MWire-Labs-assamese-monolingual-corpus.txt"
+# INPUT_FILE = r""
+OUTPUT_FILE = r""
 
 # Assamese/Bengali Unicode block
 def is_assamese(char):

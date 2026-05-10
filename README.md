@@ -1,4 +1,4 @@
-# Assamese Conversational Language Model
+# Assamese Language Model (This README file isn't fully constructed yet)
 
 
 ## Dateset Type:
@@ -6,139 +6,51 @@
 2. Any data. it can be story, song lyrics, nursery poem, story (can be from any class)
 3. It can be Song lyrics, Folk tails, Hathor `(সাথঁৰ)`, Hadhu kotha `(সাধুকথা)`
 
-##### Goal: Just collecct data
-## How to contribute: 
-### Steps
-1. Clone the repository
-2. Create a folder with your name `(eg: <your_name>_data)`
-3. Inside that folder add the `txt` files as shown below
-4. Now all set, just blindly add data from various sources
 
 ## Dateset Example:
 
+# I have massive Assamese Dataset nearly about **45.3T (45333004592600) Tokens​**
 
-### 🧩 **1. Raw Text Format ( multiple big text files `(wikipedia.txt`, `raddit_data.txt`,`news.txt`, `conversation.txt`,`story.txt`, `poem.txt`, `assamese_slang_words.txt` etc etc ):**
+### It has a lots of Assamese sentances from various sources, 99.9999% cleanned
 
+### it is in Hugging Face url: `https://huggingface.co/datasets/Ranjit89/Assamese_Language_model`
 
-### Example: `(story.txt)`:
-```html
-    এইখন বৃষ্টিৰ পুৱাত মই একেলগে কফি খাইছিলোঁ।
-    মই ভাবিলোঁ, জীৱনটো কিমান ধুনীয়া!
-    তোমাৰ আজিৰ দিনটো কেনেকৈ গ’ল?
-    অতি ধুনীয়া কাব্য এটা লিখিছোঁ — শুনিবা নে?
+### just download the `backup_data.tar.gz` file and start using it.
 
-    এদিন এটা গাঁওত এজনী ছোৱালী আছিল।
-    তেওঁ অতি সাহসী আৰু বুদ্ধিমতী আছিল।
-    ....
-    ....
-```
+### happy training....
 
-✅ **Use case:** Masked language modeling or next-token prediction.
-✅ **Easy to preprocess:** Just split into sentences and tokenize.
-
----
-
-### 💬 **2. Conversation-style Format `(conversation.txt)`**
-
-```html
-    নমস্কাৰ, আপুনি কেনে আছেন?,
-    মই ভাল আছোঁ, ধন্যবাদ। আপুনি কেনে আছে?,
-    আজিৰ বতৰটো বৰ সুন্দৰ নহয় নে?,
-    হয়, অলপ বৰষুণ আহিছে, কিন্তু বতাহটো একেবাৰে সতেজ।
-
-    মানুহ: আপুনি কি কাম কৰে?
-    সহায়ক: মই এখন AI মডেল, যি অসমীয়া ভাষাত কথা ক’ব পাৰে।
-```
+| Topic / Dataset                              | Tokens            | Approx. Scale | Source |
+|----------------------------------------------|------------------:|---------------|--------|
+| Poems Dataset                                | 92.6K             | 0.0000926B    | Kaggle & Sosanko Sarmah (Contributor) |
+| Song Lyrics Dataset                          | 4.5M              | 0.0045B       | Kaggle (Spotify API) |
+| Story Dataset                                | 52.6B             | 52.6 Billion  | HuggingFace Dataset |
+| Crawled Data                                 | 7T                | 7 Trillion    | Various Web Sources |
+| CC-100 Dataset                               | 5.9M              | 0.0059B       | Common Crawl |
+| Qwen3 Tokens                                 | 2B                | 2 Billion     | Kaggle |
+| Kaggle News Articles Dataset                 | 49.6B             | 49.6 Billion  | Kaggle |
+| IndicCorp v2 (AI4Bharat)                     | 37.8T             | 37.8 Trillion | AI4Bharat Dataset |
+| Assamese Monolingual Corpus (MWire-Labs)     | 38.7B             | 38.7 Billion  | MWire-Labs |
+| DailyHunt Dataset                            | 184.2B            | 184.2 Billion | Rahular Varta Dataset |
+| Wikipedia Dump (2019–2025)                   | 0.2T              | 200 Billion   | Wikipedia |
+|                                    |         || |
+| **Total**                                    | **45.3T**         | **45.333 Trillion** | |
 
 ---
-
-### 📚 **3. Poem `(poem.txt)`**
-```html
-    বতাহ আহে, মন উৰে,
-    স্বপ্নৰ দিশে ওলমে চৰে।
-    ....
-    ....
-
-    বতাহ আহে, মন উৰে,
-    স্বপ্নৰ দিশে ওলমে চৰে।
-    ....
-    ....
-```
-
-
-
-### 4. Wikipedia `(wikipedia.txt)`
-```html
-    অসম ভাৰতৰ উত্তৰ-পূৰ্বাঞ্চলৰ এটা ৰাজ্য।
-    ইতিহাস, সংস্কৃতি আৰু সংগীতত ই অত্যন্ত সমৃদ্ধ।
-....
-....
-```
-
-### 5. Assamese slang words `(assamese_slang_words.txt)`:
-```html
-<!-- This will help model to distinguish betwwen the phonetics -->
-মাকচদু
-বনিৰ/বুনৰী/ৰনিদ
-কলা
-চদুৰভাই
-জহিৰী
-গদা
-
-```
-# Goal: Just collect data from various sources. (Language: only Assamese)
-## Your Goal: Contribute with 7GB dataset
-
-# Contant me at: 
-## 📧 Ranjit: ranjitdax89@gmail.com
-## 📞 Ph No: +91-9387480826
-
+---
+---
+---
+---
 
 ### Large file copy command: 
 `rsync -ah --progress /home/ranjit/Downloads/as.txt /home/ranjit/Desktop/projects/Laguage_Model/`
 
-### Then remove the original after confirming:
-`rm /home/ranjit/Downloads/as.txt`
 
 
-i need to remove this `‎`, it is invisible, but visible by the model
-`[U+200E]`
+### i need to remove this `‎`, it is invisible, but visible by the model `[U+200E]`
 
 
 
 
-* **Poem Dataset** → 92.6k tokens
-  Source: Kaggle & Sosanko Sarmah (Contributor)
-
-* **Song Lyrics Dataset** → 4.5M tokens
-  Source: Kaggle (Spotify API)
-
-* **Story Dataset** → 52.6B tokens
-  Source: HuggingFace Dataset
-
-* **Crawled Data** → 7T tokens
-  Source: Various web sources
-
-* **CC-100 Dataset** → 5.9M tokens
-  Source: Common Crawl
-
-* **Qwen3 Tokens** → 2B tokens
-  Source: Kaggle
-
-* **Kaggle News Articles Dataset** → 49.6B tokens
-  Source: Kaggle
-
-* **IndicCorp v2** → 37.8T tokens
-  Source: AI4Bharat Dataset
-
-* **Assamese Monolingual Corpus** → 38.7B tokens
-  Source: MWire-Labs
-
-* **DailyHunt Dataset** → 184.2B tokens
-  Source: Rahular Varta Dataset
-
-* **Wikipedia Dump (2019–2025)** → 0.2T tokens
-  Source: Wikipedia
 
 ---
 
@@ -148,11 +60,11 @@ i need to remove this `‎`, it is invisible, but visible by the model
 * **45,333,004,592,600 total tokens**
 
 
-
-
-
-
-
+---
+---
+---
+---
+---
 
 ```bash
 
@@ -186,3 +98,7 @@ tar -cf - -P \
 "/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/poem.txt" | awk '/total$/ {print $1}')" \
 | gzip > backup_data.tar.gz && sync && shutdown
 ```
+
+# Contant me at: 
+## 📧 Ranjit: ranjitdax89@gmail.com
+## 📞 Ph No: +91-9387480826
