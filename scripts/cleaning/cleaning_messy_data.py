@@ -16,7 +16,7 @@
 
 import unicodedata,re
 from tqdm import tqdm
-# INPUT_FILE = r""
+INPUT_FILE = r"data/ai4bharat_sangraha_dataset/synthetic/wiki_asm_Beng_0001_of_0063.txt"
 OUTPUT_FILE = r""
 
 # Assamese/Bengali Unicode block
