@@ -41,7 +41,7 @@
 # from tqdm import tqdm
 
 # # Folder containing parquet files
-# input_dir = Path("/home/ranjit/Downloads")
+# input_dir = Path("/home/ranjit/Downloads/sangrah_parquet")
 
 # # Output folder
 # output_dir = Path("data/ai4bharat_sangraha_dataset/synthetic2")

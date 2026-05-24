@@ -2,10 +2,9 @@
 test_assamese_tokenizer.py  v0.1.2
 -----------------------------------
 Usage:
-    pip install rich transformers
-    python test_assamese_tokenizer.py \
+    python temporary_files/test_assamese_tokenizer.py \
         --tokenizer_dir ./assamese_tokenizer \
-        --sample_file   ./data/sample.txt
+        --sample_file   data/ai4bharat_sangraha_dataset/synthetic2/wiki_asm_Beng_0000_of_0063.txt
 """
 
 import argparse, os, sys, time

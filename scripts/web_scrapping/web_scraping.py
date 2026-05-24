@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 profile_path = "/home/ranjit/.mozilla/firefox/luddqo6a.default-release"
 url = "https://m.dailyhunt.in/news/india/assamese/news?mode=pwa&action=click"
 
-output_file = r"Ranjit_Data/assamese_paragraphs.txt"
+output_file = r"assamese_paragraphs.txt"
 
 HEADLESS = False
 WAIT_BETWEEN_SCROLLS = 5     # Just makes each scroll slower (waits 5 seconds before the next scroll). No effect on the logic.
