@@ -7,7 +7,7 @@ import os
 import codecs
 from tqdm import tqdm
 
-# FILE_PATH = "Ranjit_Data/real_data/IndicCorpV2_AIBharat/as.txt"
+FILE_PATH = "asm_wikipedia_2021_10K-sentences.txt"
 
 # FILE_PATHS = ["Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/cleaned.txt", 
 #               "Ranjit_Data/real_data/DailyHunt_Assamese_News_Dataset/poem.txt",
@@ -88,25 +88,25 @@ def making_tokens_human_readable(n):
     
     
 #---------------------------------- For single file ---------------------------------------------------
-# if __name__ == "__main__":
-#     total = count_words(FILE_PATH)
-    # print(f"Total Tokens: {making_tokens_human_readable(total)} ({total:,})")
+if __name__ == "__main__":
+    total = count_words(FILE_PATH)
+    print(f"Total Tokens: {making_tokens_human_readable(total)} ({total:,})")
     
     
     
 #---------------------------------- For multiple files ---------------------------------------------------
 
-if __name__ == "__main__":
-    grand_total = 0
+# if __name__ == "__main__":
+#     grand_total = 0
 
-    for path in FILE_PATHS:
-        total = count_words(path)
-        grand_total += total
+#     for path in FILE_PATHS:
+#         total = count_words(path)
+#         grand_total += total
 
-        print(f"{path} → {making_tokens_human_readable(total)} ({total:,} Tokens)")
+#         print(f"{path} → {making_tokens_human_readable(total)} ({total:,} Tokens)")
 
-    print("-" * 40)
-    print(f"\nTOTAL → {making_tokens_human_readable(grand_total)} ({grand_total:,} Tokens)")
+#     print("-" * 40)
+#     print(f"\nTOTAL → {making_tokens_human_readable(grand_total)} ({grand_total:,} Tokens)")
     
     
     
