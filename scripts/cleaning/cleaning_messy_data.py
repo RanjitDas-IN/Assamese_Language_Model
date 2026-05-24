@@ -16,8 +16,8 @@
 
 import unicodedata,re
 from tqdm import tqdm
-INPUT_FILE = r"data/ai4bharat_sangraha_dataset/synthetic/wiki_asm_Beng_0001_of_0063.txt"
-OUTPUT_FILE = r""
+INPUT_FILE = r"data/ai4bharat_sangraha_dataset/synthetic2/wiki_asm_Beng_0017_of_0063.txt"
+OUTPUT_FILE = r"data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0017_of_0063.txt"
 
 # Assamese/Bengali Unicode block
 def is_assamese(char):
@@ -71,7 +71,7 @@ with open(INPUT_FILE, "r", encoding="utf-8") as infile, \
             removed += 1
 
 print(f"Done. Kept: {kept}, Removed: {removed}")
-
+print(f"cleanned --> {INPUT_FILE}\nto --> {OUTPUT_FILE}")
 
 
 #-------------------------------------------------------blind cleaning Script----------------------------------------------------------------------------------
