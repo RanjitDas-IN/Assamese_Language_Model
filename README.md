@@ -67,38 +67,44 @@
 ---
 
 ```bash
-
 tar -cf - -P \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/1B_as_tokens_unfiltered.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/cc-100_assamese_text_corpora.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/filtered_cc-100_assamese_text_corpora.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/IndicCorpV2_AIBharat/as.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/nenow_preprocessed.csv" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/news18_preprocessed.csv" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/MWire-Labs-assamese-monolingual-corpus/assamese_monolingual_sentences_final_cleaned.csv" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/rahular_varta_DailyHuntDataset/scrapped_text.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cleaned.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day2_data.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day3_day3.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/poem.txt" \
-| pv -s "$(du -cb \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/1B_as_tokens_unfiltered.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/cc-100_assamese_text_corpora.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cc-100/filtered_cc-100_assamese_text_corpora.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/IndicCorpV2_AIBharat/as.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/nenow_preprocessed.csv" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/kaggel_Assamese_News_Article_Dataset/news18_preprocessed.csv" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/MWire-Labs-assamese-monolingual-corpus/assamese_monolingual_sentences_final_cleaned.csv" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/rahular_varta_DailyHuntDataset/scrapped_text.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/cleaned.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day2_data.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/day3_day3.txt" \
-"/home/ranjit/Desktop/projects/Laguage_Model/Ranjit_Data/real_data/poem.txt" | awk '/total$/ {print $1}')" \
-| gzip > backup_data.tar.gz && sync && shutdown
+"/home/ranjit/Desktop/projects/Laguage_Model/data" \
+| pv -s "$(du -sb "/home/ranjit/Desktop/projects/Laguage_Model/data" | awk '{print $1}')" \
+| zstd -10 -T0 > backup_data.tar.zst \
+&& sync \
+&& shutdown now
 ```
 
 # Contant me at: 
 ## 📧 Ranjit: ranjitdax89@gmail.com
 ## 📞 Ph No: +91-9387480826
+
+
+
+
+```text
+হ্যাঁ মই সদায় কৈছিলো যদি মই ভালদৰে মৰিম তেন্তে মই সদায় কৈছিলো যদি মই মৰিম তেন্তে মই কুকুৰ হিচাপে ঘূৰি আহিব পাৰিম যদি মই মৰিম তেন্তে মই সদায়ে বিশ্বাস কৰিম যে মই কুকুৰ হিচাপে পুনৰুত্থিত হ ম।  যদি মই মৰিম তেন্তে মই সদায়ে বিশ্বাস কৰিম যে মই কুকুৰ হিচাপে পুনৰুত্থিত হ'ম। 
+আৰু মই ক ব লাগিছিল যে আন কিছুমান ক্ষেত্ৰ আছে যিবোৰে তোমালোকক কাটিব পাৰে মই জানো তেওঁলোকক তাৰ পৰা কাটিব লাগিব নালাগে মই আন কেইবাটাও প্ৰস্তাৱ দিবলৈ আহিছিলোঁ। মই আন কেইবাটাও প্ৰস্তাৱ দিবলৈ আহিছিলোঁ।
+শেহতীয়া চুক্তি যি প্ৰদান কৰা হৈছিল নিৰ্মাণ বন্ধ কৰিবলৈ ৰ বিৰুদ্ধে এক গোচৰ পাইছে কাৰণ ই অন্যায়ভাৱে প্ৰাপ্ত কৰা হৈছিল বা আপুনি জানে চুক্তিবোৰ অতি বেয়া হৈ পৰিছে। চুক্তিবোৰ অতি বেয়া হৈ পৰিছে।
+এস্পিনোছাই ১৯২০ চনত কেলিফ্ৰিনিঅ ৰ পৰা বহুতো ৰোমান্স সংগ্ৰহ কৰিছিল। এস্পিনোছা ৰোমান্স সংগ্ৰহ কৰিবলৈ আগ্ৰহী আছিল। এস্পিনোছা ৰোমান্স সংগ্ৰহ কৰিবলৈ আগ্ৰহী আছিল।
+আণৱিক ডিভাইচসমূহৰ এই উচ্চক্ৰমিক জটিল সৃষ্টি হয় কাৰণ প্ৰাকৃতিক নিৰ্বাচন এনেকুৱা আণৱিক সমষ্টিসমূহৰ সমষ্টিগত বৈশিষ্ট্যসমূহৰ ওপৰত কাৰ্য্য কৰিবলৈ সক্ষম হয় যেতিয়া সেই সমষ্টিগত বৈশিষ্ট্যসমূহে অভিযোজক যোগ্যতাক বৃদ্ধি কৰে। কিছু পৰিস্থিতিত অধিক জটিল আণৱিক যন্ত্ৰৰ উদ্ভৱ হব পাৰে। কিছু পৰিস্থিতিত অধিক জটিল আণৱিক যন্ত্ৰৰ উদ্ভৱ হব পাৰে।
+কিন্তু মই বিশ্বাস নকৰো যে এনে কোনো এলগৰিদমিক সঁজুলি সম্পূৰ্ণ হব পাৰে। এই সমস্যাৰ সম্পূৰ্ণৰূপে সমাধান কৰিব পৰা কোনো সঁজুলি নাই। এই সমস্যাৰ সম্পূৰ্ণৰূপে সমাধান কৰিব পৰা কোনো সঁজুলি নাই।
+এই বিধেয়কখনে কোনো ব্যক্তিৰ ওচৰত নহয় সমষ্টিৰ ওচৰত বা সমষ্টিৰ ওচৰত বিচাৰে। এই বিধেয়কখনে দেশ আৰু লোকসকলক সুৰক্ষা প্ৰদান কৰিব। এই বিধেয়কখনে দেশ আৰু লোকসকলক সুৰক্ষা প্ৰদান কৰিব।
+১৭৮৭ চনৰ সাংবিধানিক পাঠত মুক্ত অঞ্চললৈ পলাই যোৱা দাসসকলক উদ্ধাৰ কৰিবলৈ দাসৰ মালিকসকলৰ অধিকাৰ নিৰ্ধাৰণ কৰা হৈছিল। ১৭৮৭ চনত সংবিধান লিখিছিল। ১৭৮৭ চনত সংবিধান লিখিছিল।
+ইয়াৰ ওপৰিও তেওঁ এইদৰে কৈছিলঃ মই যিহোৱাৰ সাক্ষীসকলৰ সৈতে বাইবেল অধ্যয়ন কৰিছিলোঁ। স্টিভ চহৰৰ বাহিৰৰ এজন জীৱবিজ্ঞানী আছিল। স্টিভ চহৰৰ বাহিৰৰ এজন জীৱবিজ্ঞানী আছিল।
+সদস্যপদত প্ৰতি অধ্যায়ত তিরিশপঞ্চাশ জন পুৰুষৰ মাজত (মোৰাডাছ বুলি কোৱা হয়) অন্তৰ্ভুক্ত আছিল আৰু তেওঁলোকক দুজন সাধাৰণ সদস্যত বিভক্ত কৰা হৈছিল যাৰ নাম আছিল হাৰ্মানোছ শিষ্য (অনুশাসন কৰা ভায়েক) আৰু বিষয়াসকল আছিল হাৰ্মানোছ দে লুজ (পোহৰৰ ভায়েক)। এই অধ্যায়বোৰত সাধাৰণ সদস্য আৰু বিষয়া উভয়ই অন্তৰ্ভুক্ত আছিল। এই অধ্যায়বোৰত সাধাৰণ সদস্য আৰু বিষয়া উভয়ই অন্তৰ্ভুক্ত আছিল।
+৪ আৰু ৫ বছৰীয়া ল ৰাছোৱালীৰ ক্ষেত্ৰত সঁচাকৈয়ে প্ৰশ্নবোৰে আখ্যানমূলক সংগঠনক সম্বোধন কৰে তাৰ পিছত কি হব? পাঁচ বছৰীয়া ল ৰাছোৱালীয়ে তাৰ পিছত কি হব তাক লৈ চিন্তিত হৈ পৰে। পাঁচ বছৰীয়া ল ৰাছোৱালীয়ে তাৰ পিছত কি হব তাক লৈ চিন্তিত হৈ পৰে।
+স্বতঃস্ফূৰ্তভাৱে ৰাজ্যৰ স্থানত অলপ পৰিৱৰ্তনশীল প্ৰবাহ শ্ৰেণীবদ্ধকৰণৰ অনুমতি দিয়ে কাৰণ যেতিয়া দুখন ৰাজ্য এটা পৰৱৰ্তী অৱস্থাত একত্ৰিত হয় তেতিয়া সেই দুয়োখন ৰাজ্যক নেটৱাৰ্কে সমতুল্য হিচাপে শ্রেণীবদ্ধ কৰিছে। পৰিবৰ্তনশীল প্ৰবাহ শ্ৰেণীবিন্যাসৰ অনুমতি দিয়ে। পৰিবৰ্তনশীল প্ৰবাহ শ্ৰেণীবিন্যাসৰ অনুমতি দিয়ে।
+গতিকে তেওঁলোকে অবিৰামভাৱে এক অস্থায়ী বিশ্ব সৃষ্টি কৰে য ত কেৱল তুলনামূলকভাৱে শেহতীয়াভাৱে অতীতত বৈধ তথ্য আছে। উদাহৰণস্বৰূপে কিছুমান লোকৰ বাবে এক অস্থায়ী জগতৰ বিষয়ে বিবেচনা কৰাটো অসম্ভৱ। উদাহৰণস্বৰূপে কিছুমান লোকৰ বাবে এক অস্থায়ী জগতৰ বিষয়ে বিবেচনা কৰাটো অসম্ভৱ।
+অন্তিম অধ্যায়ত মই স্বশাসিত এজেন্টসকলৰ সৈতে কেন্দ্ৰীয় চিন্তাৰ পৰা অলপ আগুৱাই গৈ বিশ্বব্ৰহ্মাণ্ডক বিবেচনা কৰিম। শেষ অধ্যায়ত মই বিশ্বব্ৰহ্মাণ্ডৰ বিষয়ে বিবেচনা কৰিছিলো। শেষ অধ্যায়ত মই বিশ্বব্ৰহ্মাণ্ডৰ বিষয়ে বিবেচনা কৰিছিলো।
+সেয়েহে শ্বেতাঙ্গ নাগৰিকসকলক সামাজিক অধিকাৰ প্ৰত্যাহাৰ কৰা ব্যক্তিসকলৰ বাবে ৰাজ্য দায়ী নাছিল। কিছুমান ব্যক্তিগত ব্যক্তিয়ে শ্বেতাঙ্গ নাগৰিকক সামাজিক অধিকাৰ দিবলৈ অস্বীকাৰ কৰিছিল। কিছুমান ব্যক্তিগত ব্যক্তিয়ে শ্বেতাঙ্গ নাগৰিকক সামাজিক অধিকাৰ দিবলৈ অস্বীকাৰ কৰিছিল।
+কৃতিত্ব পৰীক্ষাৰ নম্বৰত যুৱ আৰু বৃদ্ধ সহপাঠীসকলৰ মাজত কোনো পাৰ্থক্য নাই। যুৱ আৰু বৃদ্ধ সহপাঠীসকলে পৰীক্ষাৰ নম্বৰবোৰত একেই ফলাফল লাভ কৰে। যুৱ আৰু বৃদ্ধ সহপাঠীসকলে পৰীক্ষাৰ নম্বৰবোৰত একেই ফলাফল লাভ কৰে।
+পোস্টবেলাম আইনী আদেশত ফেডাৰেল সাংবিধানিক নীতিসমূহৰ পৰা প্ৰাপ্ত ফলাফল। যুক্তৰাষ্ট্ৰীয় সংবিধানৰ মূলনীতি হল পোষ্টবেলাম আইনী আদেশৰ দৰে একই ফলাফল সৃষ্টি কৰিছে। যুক্তৰাষ্ট্ৰীয় সংবিধানৰ মূলনীতি হল পোষ্টবেলাম আইনী আদেশৰ দৰে একই ফলাফল সৃষ্টি কৰিছে।
+ডাৰ্বিনে ইয়াৰ পৰা জীৱনৰ আৰম্ভ কৰিছিল। ডাৰ্উইন ইতিমধ্যে অস্তিত্বত থকা জীৱনৰ সৈতে আৰম্ভ কৰিছিল। ডাৰ্উইন ইতিমধ্যে অস্তিত্বত থকা জীৱনৰ সৈতে আৰম্ভ কৰিছিল।
+সৰ্বাধিক সাধাৰণ কাৰণটো হৈছে শিশুকাল আৰু প্ৰাকবিদ্যালয় বছৰত পুনৰাবৃত্তি হোৱা ওটিটিছ মিডিয়া বা মাজৰ কানিৰ সংক্ৰমণ। মাজৰ কানাত সংক্ৰমণ শিশুৰ বাবে সৰ্বাধিক প্ৰভাৱিত কাৰণ। মাজৰ কানাত সংক্ৰমণ শিশুৰ বাবে সৰ্বাধিক প্ৰভাৱিত কাৰণ।
+যেতিয়া নাগৰিকত্ব সমাজৰ কথা শুনা নাযায় তেতিয়া পাগলামি মনোবৃত্তিবোৰে তেওঁলোকৰ প্ৰাণ হেৰুৱায়। অসামৰিক সমাজৰ দ্বাৰা অস্বীকাৰ কৰিলে পাগলামি কম হয়। অসামৰিক সমাজৰ দ্বাৰা অস্বীকাৰ কৰিলে পাগলামি কম হয়।
+মেককিমে কেৱল হেৰুৱাই নাই কিন্তু হাৱাৰ্ড আৰু এম্প এম্পৰ পিছত তৃতীয় স্থানত আছে কাৰ্ডৱেল। মেক্কিম অপদস্থ হৈছিল কাৰণ তেওঁ তৃতীয় স্থান লাভ কৰিছিল। মেক্কিম অপদস্থ হৈছিল কাৰণ তেওঁ তৃতীয় স্থান লাভ কৰিছিল।
+বাস্তৱতে আমাৰ প্ৰয়োজনীয়তাৰ এটা অংশ হল অসমতুলনহীন জগতত প্ৰকৃত প্ৰক্ৰিয়াসমূহৰ সংগঠনৰ বৈশিষ্ট্যকৰণ কৰা। আমি সংগঠনটোকলেবেল দিব লাগিব। আমি সংগঠনটোকলেবেল দিব লাগিব।
+তিনিজন বা চাৰিজন পুৰুষৰ মূল অংশৰ সৈতে কেইবাটাও সীমাবদ্ধ সদস্যৰে গঠিত পেলোমিলা এক গুৰুত্বপূৰ্ণ সমাজকৰণ একক আছিল যি যুৱ পুৰুষসকলক কৌতুক আৰু নিজৰ অভিব্যক্তি প্ৰকাশ কৰিবলৈ এক সুৰক্ষিত স্থান প্ৰদান কৰিছিল। পালোমিলাই যুৱকযুৱতীসকলক নিজৰ মতামত প্ৰকাশ কৰিবলৈ সুযোগ দিছিল। পালোমিলাই যুৱকযুৱতীসকলক নিজৰ মতামত প্ৰকাশ কৰিবলৈ সুযোগ দিছিল।
+কিন্তু আহাৰ আৰু মাটিৰ বিষয়ে বিবেচনা কৰক। ভাত আৰু মাটিৰ বিষয়ে চিন্তা কৰক। ভাত আৰু মাটিৰ বিষয়ে চিন্তা কৰক।
+```
