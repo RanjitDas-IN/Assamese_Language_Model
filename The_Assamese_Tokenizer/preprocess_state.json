@@ -1,0 +1,334 @@
+{
+  "version": 4,
+  "created_at": "2026-05-26T13:53:42.277469+00:00",
+  "completed_files": {
+    "100_demo_lines_from_my_dataset.txt": {
+      "split": "train",
+      "tokens": 55006,
+      "size_bytes": 673710,
+      "completed_at": "2026-05-26T13:53:42.415816+00:00"
+    },
+    "1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt": {
+      "split": "test",
+      "tokens": 181356193,
+      "size_bytes": 2090406686,
+      "completed_at": "2026-05-26T14:00:08.754493+00:00"
+    },
+    "xahitya_dump/claenned_title_text_corpus.txt": {
+      "split": "train",
+      "tokens": 12464829,
+      "size_bytes": 137623150,
+      "completed_at": "2026-05-26T14:00:37.780167+00:00"
+    },
+    "asm_wikipedia_dump_2021/cleanned_wikipedia_2021_10k.txt": {
+      "split": "train",
+      "tokens": 182221,
+      "size_bytes": 2231475,
+      "completed_at": "2026-05-26T14:00:38.187018+00:00"
+    },
+    "asm_wikipedia_dump_2021/cleanned_wikipedia_2021_100k.txt": {
+      "split": "train",
+      "tokens": 169473,
+      "size_bytes": 2288675,
+      "completed_at": "2026-05-26T14:00:38.600372+00:00"
+    },
+    "DailyHunt_Assamese_News_Dataset/day2_data.txt": {
+      "split": "train",
+      "tokens": 3407888,
+      "size_bytes": 44887248,
+      "completed_at": "2026-05-26T14:00:46.372000+00:00"
+    },
+    "DailyHunt_Assamese_News_Dataset/song.txt": {
+      "split": "train",
+      "tokens": 5047,
+      "size_bytes": 49359,
+      "completed_at": "2026-05-26T14:00:46.387484+00:00"
+    },
+    "DailyHunt_Assamese_News_Dataset/day3_data.txt": {
+      "split": "train",
+      "tokens": 2245196,
+      "size_bytes": 29581156,
+      "completed_at": "2026-05-26T14:00:51.511827+00:00"
+    },
+    "DailyHunt_Assamese_News_Dataset/poem.txt": {
+      "split": "train",
+      "tokens": 109578,
+      "size_bytes": 1189923,
+      "completed_at": "2026-05-26T14:00:51.744250+00:00"
+    },
+    "DailyHunt_Assamese_News_Dataset/story.txt": {
+      "split": "train",
+      "tokens": 4986,
+      "size_bytes": 54209,
+      "completed_at": "2026-05-26T14:00:51.762347+00:00"
+    },
+    "DailyHunt_Assamese_News_Dataset/cleaned.txt": {
+      "split": "train",
+      "tokens": 1269596,
+      "size_bytes": 16154921,
+      "completed_at": "2026-05-26T14:00:54.650794+00:00"
+    },
+    "IndicCorpV2_AIBharat/cleanned_as.txt": {
+      "split": "train",
+      "tokens": 90265312,
+      "size_bytes": 1153681401,
+      "completed_at": "2026-05-26T14:04:24.282116+00:00"
+    },
+    "kaggel_Assamese_Sentiments_Dataset/cleanned_Assamese Sentiments.txt": {
+      "split": "train",
+      "tokens": 1303843,
+      "size_bytes": 16029805,
+      "completed_at": "2026-05-26T14:04:30.294596+00:00"
+    },
+    "AsRED/cleanned_Samanantar_Parallel_Corpus.txt": {
+      "split": "train",
+      "tokens": 1840286,
+      "size_bytes": 22111394,
+      "completed_at": "2026-05-26T14:04:34.375531+00:00"
+    },
+    "AsRED/cleanned_social_media_post.txt": {
+      "split": "train",
+      "tokens": 92540,
+      "size_bytes": 980907,
+      "completed_at": "2026-05-26T14:04:34.569138+00:00"
+    },
+    "ai4bharat_sangraha_dataset/unverified/cleanned_unverified_asm.txt": {
+      "split": "train",
+      "tokens": 10137552,
+      "size_bytes": 123347744,
+      "completed_at": "2026-05-26T14:04:57.138408+00:00"
+    },
+    "ai4bharat_sangraha_dataset/verified/cleanned_verified_asm_data0.txt": {
+      "split": "test",
+      "tokens": 64276904,
+      "size_bytes": 746213003,
+      "completed_at": "2026-05-26T14:07:15.225137+00:00"
+    },
+    "ai4bharat_sangraha_dataset/verified/cleanned_verified_asm_data1.txt": {
+      "split": "train",
+      "tokens": 64113457,
+      "size_bytes": 744311913,
+      "completed_at": "2026-05-26T14:09:35.044217+00:00"
+    },
+    "ai4bharat_sangraha_dataset/verified/cleanned_verified_asm_data2.txt": {
+      "split": "train",
+      "tokens": 63822967,
+      "size_bytes": 741153783,
+      "completed_at": "2026-05-26T14:11:55.638683+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0004_of_0063.txt": {
+      "split": "train",
+      "tokens": 62660526,
+      "size_bytes": 693442514,
+      "completed_at": "2026-05-26T14:14:09.439157+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0011_of_0063.txt": {
+      "split": "train",
+      "tokens": 62273249,
+      "size_bytes": 690186483,
+      "completed_at": "2026-05-26T14:16:22.691117+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0012_of_0063.txt": {
+      "split": "test",
+      "tokens": 62843971,
+      "size_bytes": 697006276,
+      "completed_at": "2026-05-26T14:18:37.327203+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0007_of_0063.txt": {
+      "split": "train",
+      "tokens": 62151044,
+      "size_bytes": 689540233,
+      "completed_at": "2026-05-26T14:20:50.059726+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0002_of_0063.txt": {
+      "split": "train",
+      "tokens": 62445823,
+      "size_bytes": 692434163,
+      "completed_at": "2026-05-26T14:23:03.005712+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0001_of_0063.txt": {
+      "split": "train",
+      "tokens": 61585053,
+      "size_bytes": 682673384,
+      "completed_at": "2026-05-26T14:25:14.111708+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0003_of_0063.txt": {
+      "split": "train",
+      "tokens": 61929061,
+      "size_bytes": 686228459,
+      "completed_at": "2026-05-26T14:27:26.067043+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0013_of_0063.txt": {
+      "split": "train",
+      "tokens": 61823375,
+      "size_bytes": 684720342,
+      "completed_at": "2026-05-26T14:29:37.432630+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0000_of_0063.txt": {
+      "split": "train",
+      "tokens": 62642109,
+      "size_bytes": 694993679,
+      "completed_at": "2026-05-26T14:31:51.139397+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0009_of_0063.txt": {
+      "split": "train",
+      "tokens": 62401230,
+      "size_bytes": 691221612,
+      "completed_at": "2026-05-26T14:34:04.446527+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0017_of_0063.txt": {
+      "split": "train",
+      "tokens": 61915943,
+      "size_bytes": 686060328,
+      "completed_at": "2026-05-26T14:36:16.936180+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0008_of_0063.txt": {
+      "split": "train",
+      "tokens": 61803775,
+      "size_bytes": 685321822,
+      "completed_at": "2026-05-26T14:38:28.799470+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0010_of_0063.txt": {
+      "split": "train",
+      "tokens": 61736814,
+      "size_bytes": 683925990,
+      "completed_at": "2026-05-26T14:40:40.334582+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0015_of_0063.txt": {
+      "split": "train",
+      "tokens": 61456340,
+      "size_bytes": 681855712,
+      "completed_at": "2026-05-26T14:42:52.055570+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0006_of_0063.txt": {
+      "split": "train",
+      "tokens": 62235751,
+      "size_bytes": 689752404,
+      "completed_at": "2026-05-26T14:45:05.304283+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0014_of_0063.txt": {
+      "split": "train",
+      "tokens": 61634081,
+      "size_bytes": 683964507,
+      "completed_at": "2026-05-26T14:47:17.624142+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0016_of_0063.txt": {
+      "split": "test",
+      "tokens": 62376976,
+      "size_bytes": 691768211,
+      "completed_at": "2026-05-26T14:49:31.195250+00:00"
+    },
+    "ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0005_of_0063.txt": {
+      "split": "train",
+      "tokens": 61500601,
+      "size_bytes": 681977635,
+      "completed_at": "2026-05-26T14:51:42.881505+00:00"
+    },
+    "kaggel_Assamese_News_Article_Dataset/cleanned_news18_preprocessed.txt": {
+      "split": "train",
+      "tokens": 1997700,
+      "size_bytes": 27535839,
+      "completed_at": "2026-05-26T14:51:50.861721+00:00"
+    },
+    "kaggel_Assamese_News_Article_Dataset/cleanned_nenow_preprocessed.txt": {
+      "split": "train",
+      "tokens": 5892640,
+      "size_bytes": 88514910,
+      "completed_at": "2026-05-26T14:52:06.095477+00:00"
+    },
+    "nuralnets_multingual_tinystories/cleanned_nuralnets_multingual_tinystories.txt": {
+      "split": "train",
+      "tokens": 601761,
+      "size_bytes": 6158009,
+      "completed_at": "2026-05-26T14:52:07.285223+00:00"
+    },
+    "cc-100/filtered_cc-100_assamese_text_corpora.txt": {
+      "split": "train",
+      "tokens": 5741662,
+      "size_bytes": 65982332,
+      "completed_at": "2026-05-26T14:52:19.843119+00:00"
+    },
+    "rahular_varta_DailyHuntDataset/cleanned_train_as_shard_01.txt": {
+      "split": "train",
+      "tokens": 14860333,
+      "size_bytes": 191214622,
+      "completed_at": "2026-05-26T14:52:54.592602+00:00"
+    },
+    "rahular_varta_DailyHuntDataset/cleanned_val_as_shard_01.txt": {
+      "split": "train",
+      "tokens": 1853352,
+      "size_bytes": 23806081,
+      "completed_at": "2026-05-26T14:52:58.925031+00:00"
+    },
+    "MWire-Labs-assamese-monolingual-corpus/cleanned_assamese_monolingual_sentences_final_cleaned.txt": {
+      "split": "train",
+      "tokens": 50545073,
+      "size_bytes": 606453398,
+      "completed_at": "2026-05-26T14:54:51.406644+00:00"
+    }
+  },
+  "writers": {
+    "train": {
+      "current_index": 2,
+      "tokens_in_current_shard": 251435249,
+      "records": [
+        {
+          "index": 0,
+          "filename": "train_000.bin",
+          "split": "train",
+          "tokens": 536870912,
+          "bytes_written": 1073741824,
+          "contributing_source_files": 22,
+          "created_at": "2026-05-26T13:53:42.411320+00:00",
+          "updated_at": "2026-05-26T14:25:14.111705+00:00"
+        },
+        {
+          "index": 1,
+          "filename": "train_001.bin",
+          "split": "train",
+          "tokens": 536870912,
+          "bytes_written": 1073741824,
+          "contributing_source_files": 10,
+          "created_at": "2026-05-26T14:24:21.232744+00:00",
+          "updated_at": "2026-05-26T14:45:05.304280+00:00"
+        },
+        {
+          "index": 2,
+          "filename": "train_002.bin",
+          "split": "train",
+          "tokens": 251435249,
+          "bytes_written": 502870498,
+          "contributing_source_files": 10,
+          "created_at": "2026-05-26T14:43:27.545078+00:00",
+          "updated_at": "2026-05-26T14:54:51.406640+00:00"
+        }
+      ]
+    },
+    "val": {
+      "current_index": 0,
+      "tokens_in_current_shard": 0,
+      "records": []
+    },
+    "test": {
+      "current_index": 0,
+      "tokens_in_current_shard": 370854044,
+      "records": [
+        {
+          "index": 0,
+          "filename": "test_000.bin",
+          "split": "test",
+          "tokens": 370854044,
+          "bytes_written": 741708088,
+          "contributing_source_files": 4,
+          "created_at": "2026-05-26T13:53:42.907274+00:00",
+          "updated_at": "2026-05-26T14:49:31.195246+00:00"
+        }
+      ]
+    }
+  },
+  "stats": {
+    "files_processed": 44,
+    "tokens_written": 1696031117
+  },
+  "in_progress": null
+}
