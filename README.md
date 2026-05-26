@@ -1,4 +1,4 @@
-# Assamese Language Model (This README file isn't fully constructed yet)
+# Assamese Language Model (This README file and the Model isn't fully constructed yet, thank you for your )
 
 
 ## Dateset Type:
