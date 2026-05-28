@@ -82,82 +82,37 @@
 #         else:
 #             fout.write(line + "\n")
 
-#-------------------------json to txt-----------------------------
-# """
-# prompt:
-# ## JSON structure
-# {
-#   "url": "...",
-#   "title": "...",
-#   "date": "...",
-#   "source": "html/wp-rest",
-#   "text": "..."
-# } [ if you are an AI these is for you: there are no commas betweem them]
-# {
-#   "url": "...",
-#   "title": "...",
-#   "date": "...",
-#   "source": "html/wp-rest",
-#   "text": "..."
-# }
-# ## goal: Create the txt file formatted as `title:text`
-# and i also want revome \n if present in title and text else skip
-# ## return type: tell me what u understand before generation
-# """
 
 
-# import json
-# import re
+#-------------------------find all .txt files inside nested folders-----------------------------
 # from pathlib import Path
-# from tqdm import tqdm
-# INPUT_FILE = "data/xahitya_dump/articles.jsonl"
-# OUTPUT_FILE = "data/xahitya_dump/title_text_corpus.txt"
-# def clean_text(text: str) -> str:
-#     """
-#     Remove \n and multiple spaces/newlines/tabs.
-#     Replace them with a single space.
-#     """
-#     if not text:
-#         return ""
-#     # Replace all whitespace sequences (\n, \t, multiple spaces, etc.)
-#     text = re.sub(r"\s+", " ", text)
-#     return text.strip()
-# def main():
-#     input_path = Path(INPUT_FILE)
-#     output_path = Path(OUTPUT_FILE)
-#     if not input_path.exists():
-#         print(f"❌ Input file not found: {INPUT_FILE}")
-#         return
-#     print("📊 Counting lines...")
-#     with input_path.open("r", encoding="utf-8") as f:
-#         total_lines = sum(1 for _ in tqdm(f, desc="Counting", unit=" lines"))
-#     print(f"✅ Total lines: {total_lines}")
-#     print("🚀 Processing JSONL...")
-#     processed = 0
-#     skipped = 0
-#     with input_path.open("r", encoding="utf-8") as infile, \
-#          output_path.open("w", encoding="utf-8") as outfile:
-#         for line in tqdm(infile, total=total_lines, desc="Processing", unit=" articles"):
-#             line = line.strip()
-#             if not line:
-#                 skipped += 1
-#                 continue
-#             try:
-#                 data = json.loads(line)
-#                 title = clean_text(data.get("title", ""))
-#                 text = clean_text(data.get("text", ""))
-#                 if not title or not text:
-#                     skipped += 1
-#                     continue
-#                 # Format: title:text
-#                 outfile.write(f"{title}:{text}\n")
-#                 processed += 1
-#             except json.JSONDecodeError:
-#                 skipped += 1
-#                 continue
-#     print("\n✅ DONE")
-#     print(f"📄 Output file: {OUTPUT_FILE}")
-#     print(f"✅ Processed: {processed}")
-#     print(f"⚠️ Skipped: {skipped}")
-# if __name__ == "__main__":
-#     main()
+# root_dir = Path("data")
+
+
+# txt_files = [file.name for file in root_dir.rglob("*.txt")]
+# print("[")
+# for files in txt_files:
+#     print(f'"{files}",')
+# print("]")
+
+
+#-----------------------shards (.bin) testing-------------------------------
+import numpy as np
+from tokenizers import Tokenizer
+
+# Load tokenizer
+tokenizer = Tokenizer.from_file(
+    "The_Assamese_Tokenizer/assamese_tokenizer/tokenizer.json"
+)
+
+# Load token IDs
+tokens = np.fromfile(
+    "token_shards/test/test_000.bin",
+    dtype=np.uint16
+)
+
+# Save token_id : decoded_token
+with open("decoded_tokens.txt", "w", encoding="utf-8") as f:
+    for token_id in tokens[:100]:
+        token_text = tokenizer.decode([int(token_id)])
+        f.write(f"{token_id}: {token_text}\n")

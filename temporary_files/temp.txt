@@ -1,34 +1,93 @@
-topic----Tokens-----source
-poems dataset: 92.6k Tokens
-songs lyrics dataset: 4.5M
-story dataset: 52.6B
-crawled data: 7T
-CC-100 dataset: 5.9M
-Qwen3 Tokens: 2B
-kaggel News Articles dataset: 49.6B
-Indic Crop v2 (AI Bharat) dataset: 37.8T
-assamese monolingual corpus by MWire-Labs: 38.7B
-DailyHunt dataset (rahular varta): 184.2B
-wikipedia dump(2019-2025): 0.2T
-
-`Total: 45.3T`
-or `45333004592600 Tokens`
-
-
-
-
-sources:
-Poem Dataset → 92.6k tokens Source: Kaggle & Sosanko Sarmah (Contributor)
-Song Lyrics Dataset → 4.5M tokens Source: Kaggle (Spotify API)
-Story Dataset → 52.6B tokens Source: HuggingFace Dataset
-Crawled Data → 7T tokens Source: Various web sources
-CC-100 Dataset → 5.9M tokens Source: Common Crawl
-Qwen3 Tokens → 2B tokens Source: Kaggle
-Kaggle News Articles Dataset → 49.6B tokens Source: Kaggle
-IndicCorp v2 → 37.8T tokens Source: AI4Bharat Dataset
-Assamese Monolingual Corpus → 38.7B tokens Source: MWire-Labs
-DailyHunt Dataset → 184.2B tokens Source: Rahular Varta Dataset
-Wikipedia Dump (2019–2025) → 0.2T tokens Source: Wikipedia
-
+(venv) [ranjit@arch Laguage_Model]$ python -u "/home/ranjit/Desktop/projects/Laguage_Model/scripts/token_counter.py"
+Counting 100_demo_lines_from_my_dataset.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 674k/674k [00:00<00:00, 91.9MB/s]
+data/100_demo_lines_from_my_dataset.txt → 39.2K (39,198 Tokens)
+Counting cleanned_1B_Quwn_tokens.txt: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 2.09G/2.09G [00:17<00:00, 120MB/s]
+data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt → 124.7M (124,658,768 Tokens)
+Counting claenned_title_text_corpus.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 138M/138M [00:01<00:00, 70.1MB/s]
+data/xahitya_dump/claenned_title_text_corpus.txt → 8.3M (8,345,359 Tokens)
+Counting cleanned_wikipedia_2021_10k.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 2.23M/2.23M [00:00<00:00, 87.3MB/s]
+data/asm_wikipedia_dump_2021/cleanned_wikipedia_2021_10k.txt → 128.6K (128,627 Tokens)
+Counting cleanned_wikipedia_2021_100k.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 2.29M/2.29M [00:00<00:00, 100MB/s]
+data/asm_wikipedia_dump_2021/cleanned_wikipedia_2021_100k.txt → 134.0K (133,995 Tokens)
+Counting day2_data.txt: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 44.9M/44.9M [00:00<00:00, 73.7MB/s]
+data/DailyHunt_Assamese_News_Dataset/day2_data.txt → 2.6M (2,593,961 Tokens)
+Counting song.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 49.4k/49.4k [00:00<00:00, 18.0MB/s]
+data/DailyHunt_Assamese_News_Dataset/song.txt → 3.4K (3,370 Tokens)
+Counting day3_data.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 29.6M/29.6M [00:00<00:00, 167MB/s]
+data/DailyHunt_Assamese_News_Dataset/day3_data.txt → 1.7M (1,710,903 Tokens)
+Counting poem.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1.19M/1.19M [00:00<00:00, 207MB/s]
+data/DailyHunt_Assamese_News_Dataset/poem.txt → 79.6K (79,627 Tokens)
+Counting story.txt: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 54.2k/54.2k [00:00<00:00, 88.9MB/s]
+data/DailyHunt_Assamese_News_Dataset/story.txt → 3.4K (3,353 Tokens)
+Counting cleaned.txt: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16.2M/16.2M [00:00<00:00, 150MB/s]
+data/DailyHunt_Assamese_News_Dataset/cleaned.txt → 937.2K (937,156 Tokens)
+Counting cleanned_as.txt: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1.15G/1.15G [00:07<00:00, 159MB/s]
+data/IndicCorpV2_AIBharat/cleanned_as.txt → 65.6M (65,615,792 Tokens)
+Counting cleanned_Assamese Sentiments.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 16.0M/16.0M [00:00<00:00, 160MB/s]
+data/kaggel_Assamese_Sentiments_Dataset/cleanned_Assamese Sentiments.txt → 962.3K (962,265 Tokens)
+Counting cleanned_Samanantar_Parallel_Corpus.txt: 100%|███████████████████████████████████████████████████████████████████████████████████████| 22.1M/22.1M [00:00<00:00, 168MB/s]
+data/AsRED/cleanned_Samanantar_Parallel_Corpus.txt → 1.3M (1,346,850 Tokens)
+Counting cleanned_social_media_post.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 981k/981k [00:00<00:00, 200MB/s]
+data/AsRED/cleanned_social_media_post.txt → 63.1K (63,147 Tokens)
+Counting cleanned_unverified_asm.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 123M/123M [00:00<00:00, 140MB/s]
+data/ai4bharat_sangraha_dataset/unverified/cleanned_unverified_asm.txt → 7.2M (7,156,754 Tokens)
+Counting cleanned_verified_asm_data0.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 746M/746M [00:04<00:00, 151MB/s]
+data/ai4bharat_sangraha_dataset/verified/cleanned_verified_asm_data0.txt → 44.3M (44,323,053 Tokens)
+Counting cleanned_verified_asm_data1.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 744M/744M [00:04<00:00, 163MB/s]
+data/ai4bharat_sangraha_dataset/verified/cleanned_verified_asm_data1.txt → 44.2M (44,174,688 Tokens)
+Counting cleanned_verified_asm_data2.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 741M/741M [00:04<00:00, 149MB/s]
+data/ai4bharat_sangraha_dataset/verified/cleanned_verified_asm_data2.txt → 44.0M (44,007,090 Tokens)
+Counting cleanned_wiki_asm_Beng_0004_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 693M/693M [00:04<00:00, 170MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0004_of_0063.txt → 39.9M (39,900,290 Tokens)
+Counting cleanned_wiki_asm_Beng_0011_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 690M/690M [00:04<00:00, 166MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0011_of_0063.txt → 39.7M (39,714,208 Tokens)
+Counting cleanned_wiki_asm_Beng_0012_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 697M/697M [00:04<00:00, 169MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0012_of_0063.txt → 40.1M (40,080,775 Tokens)
+Counting cleanned_wiki_asm_Beng_0007_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 690M/690M [00:04<00:00, 172MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0007_of_0063.txt → 39.6M (39,649,743 Tokens)
+Counting cleanned_wiki_asm_Beng_0002_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 692M/692M [00:05<00:00, 128MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0002_of_0063.txt → 39.8M (39,839,663 Tokens)
+Counting cleanned_wiki_asm_Beng_0001_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 683M/683M [00:03<00:00, 177MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0001_of_0063.txt → 39.3M (39,254,863 Tokens)
+Counting cleanned_wiki_asm_Beng_0003_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 686M/686M [00:03<00:00, 182MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0003_of_0063.txt → 39.5M (39,469,585 Tokens)
+Counting cleanned_wiki_asm_Beng_0013_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 685M/685M [00:05<00:00, 128MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0013_of_0063.txt → 39.4M (39,399,485 Tokens)
+Counting cleanned_wiki_asm_Beng_0000_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 695M/695M [00:04<00:00, 166MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0000_of_0063.txt → 40.0M (39,972,318 Tokens)
+Counting cleanned_wiki_asm_Beng_0009_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 691M/691M [00:04<00:00, 146MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0009_of_0063.txt → 39.8M (39,751,574 Tokens)
+Counting cleanned_wiki_asm_Beng_0017_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 686M/686M [00:04<00:00, 142MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0017_of_0063.txt → 39.4M (39,447,381 Tokens)
+Counting cleanned_wiki_asm_Beng_0008_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 685M/685M [00:05<00:00, 131MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0008_of_0063.txt → 39.4M (39,410,271 Tokens)
+Counting cleanned_wiki_asm_Beng_0010_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 684M/684M [00:04<00:00, 168MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0010_of_0063.txt → 39.3M (39,329,429 Tokens)
+Counting cleanned_wiki_asm_Beng_0015_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 682M/682M [00:04<00:00, 139MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0015_of_0063.txt → 39.2M (39,194,633 Tokens)
+Counting cleanned_wiki_asm_Beng_0006_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 690M/690M [00:04<00:00, 156MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0006_of_0063.txt → 39.7M (39,674,763 Tokens)
+Counting cleanned_wiki_asm_Beng_0014_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 684M/684M [00:04<00:00, 160MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0014_of_0063.txt → 39.3M (39,307,079 Tokens)
+Counting cleanned_wiki_asm_Beng_0016_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 692M/692M [00:03<00:00, 173MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0016_of_0063.txt → 39.8M (39,790,745 Tokens)
+Counting cleanned_wiki_asm_Beng_0005_of_0063.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 682M/682M [00:04<00:00, 162MB/s]
+data/ai4bharat_sangraha_dataset/synthetic2/cleanned_wiki_asm_Beng_0005_of_0063.txt → 39.2M (39,214,345 Tokens)
+Counting cleanned_news18_preprocessed.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 27.5M/27.5M [00:00<00:00, 161MB/s]
+data/kaggel_Assamese_News_Article_Dataset/cleanned_news18_preprocessed.txt → 1.5M (1,528,585 Tokens)
+Counting cleanned_nenow_preprocessed.txt: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 88.5M/88.5M [00:00<00:00, 162MB/s]
+data/kaggel_Assamese_News_Article_Dataset/cleanned_nenow_preprocessed.txt → 4.8M (4,756,184 Tokens)
+Counting cleanned_nuralnets_multingual_tinystories.txt: 100%|█████████████████████████████████████████████████████████████████████████████████| 6.16M/6.16M [00:00<00:00, 165MB/s]
+data/nuralnets_multingual_tinystories/cleanned_nuralnets_multingual_tinystories.txt → 393.3K (393,321 Tokens)
+Counting filtered_cc-100_assamese_text_corpora.txt: 100%|█████████████████████████████████████████████████████████████████████████████████████| 66.0M/66.0M [00:00<00:00, 118MB/s]
+data/cc-100/filtered_cc-100_assamese_text_corpora.txt → 3.9M (3,923,910 Tokens)
+Counting cleanned_train_as_shard_01.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 191M/191M [00:01<00:00, 165MB/s]
+data/rahular_varta_DailyHuntDataset/cleanned_train_as_shard_01.txt → 10.5M (10,474,093 Tokens)
+Counting cleanned_val_as_shard_01.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████| 23.8M/23.8M [00:00<00:00, 196MB/s]
+data/rahular_varta_DailyHuntDataset/cleanned_val_as_shard_01.txt → 1.3M (1,306,910 Tokens)
+Counting cleanned_assamese_monolingual_sentences_final_cleaned.txt: 100%|███████████████████████████████████████████████████████████████████████| 606M/606M [00:05<00:00, 119MB/s]
+data/MWire-Labs-assamese-monolingual-corpus/cleanned_assamese_monolingual_sentences_final_cleaned.txt → 35.5M (35,538,640 Tokens)
+--------------------------------------------------
+TOTAL → 1.1B (1,116,606,749 Tokens)
 
 hf token: token has been saved to /home/ranjit/.cache/huggingface/token
