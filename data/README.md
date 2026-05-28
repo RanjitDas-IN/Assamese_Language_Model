@@ -2,7 +2,7 @@
 
 ### It has a lots of Assamese sentances from various sources, 99.9999% cleanned
 
-### it is in Hugging Face url: `https://huggingface.co/datasets/Ranjit89/Assamese_Language_model`
+### it is in Hugging Face url: `https://huggingface.co/datasets/Ranjit89/Assamese-Text-Dataset-45T-Tokens`
 
 ### just download the `backup_data.tar.gz` file and start using it.
 

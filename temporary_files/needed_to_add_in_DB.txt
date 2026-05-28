@@ -1,6 +1,0 @@
-need to add in DB:
-
-1. data/asm_wikipedia_dump_2021
-2. data/nuralnets_multingual_tinystories
-3. data/kaggel_Assamese_Sentiments_Dataset
-4. data/rahular_varta_DailyHuntDataset  (it has re-added cleans data)

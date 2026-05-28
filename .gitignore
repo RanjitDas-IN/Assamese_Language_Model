@@ -7,6 +7,7 @@ raw_story.txt
 temporary_data
 data/xahitya_dump
 IndicCorpV2_AIBharat
+token_shards.tar.zst
 After_cleaning_Song.txt
 asm_wikipedia_dump_2021
 After_cleaning_Story.txt
@@ -18,7 +19,6 @@ data/DailyHunt_Assamese_News_Dataset
 data/nuralnets_multingual_tinystories
 MWire-Labs-assamese-monolingual-corpus
 data/kaggel_Assamese_Sentiments_Dataset
-
 
 
 backup_data.tar.zst
