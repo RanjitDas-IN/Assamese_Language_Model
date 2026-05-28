@@ -97,22 +97,54 @@
 
 
 #-----------------------shards (.bin) testing-------------------------------
-import numpy as np
-from tokenizers import Tokenizer
+# import numpy as np
+# from tokenizers import Tokenizer
 
-# Load tokenizer
-tokenizer = Tokenizer.from_file(
-    "The_Assamese_Tokenizer/assamese_tokenizer/tokenizer.json"
-)
+# # Load tokenizer
+# tokenizer = Tokenizer.from_file(
+#     "The_Assamese_Tokenizer/assamese_tokenizer/tokenizer.json"
+# )
 
-# Load token IDs
-tokens = np.fromfile(
-    "token_shards/test/test_000.bin",
-    dtype=np.uint16
-)
+# # Load token IDs
+# tokens = np.fromfile(
+#     "token_shards/test/test_000.bin",
+#     dtype=np.uint16
+# )
 
-# Save token_id : decoded_token
-with open("decoded_tokens.txt", "w", encoding="utf-8") as f:
-    for token_id in tokens[:100]:
-        token_text = tokenizer.decode([int(token_id)])
-        f.write(f"{token_id}: {token_text}\n")
+# # Save token_id : decoded_token
+# with open("decoded_tokens.txt", "w", encoding="utf-8") as f:
+#     for token_id in tokens[:100]:
+#         token_text = tokenizer.decode([int(token_id)])
+#         f.write(f"{token_id}: {token_text}\n")
+        
+        
+#-----------------------count(.bin) the num of tokens-------------------------------
+# import numpy as np
+# from pathlib import Path
+
+# base = Path("token_shards")
+
+# total_tokens = 0
+
+# for split in ["train", "test", "val"]:
+#     split_path = base / split
+
+#     if not split_path.exists():
+#         continue
+
+#     print(f"\n[{split.upper()}]")
+
+#     split_total = 0
+
+#     for bin_file in sorted(split_path.glob("*.bin")):
+#         tokens = np.fromfile(bin_file, dtype=np.uint16)
+
+#         count = len(tokens)
+#         split_total += count
+#         total_tokens += count
+
+#         print(f"{bin_file.name}: {count:,} tokens")
+
+#     print(f"Total {split}: {split_total:,} tokens")
+
+# print(f"\nGRAND TOTAL: {total_tokens:,} tokens")
