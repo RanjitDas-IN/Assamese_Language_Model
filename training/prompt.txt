@@ -1,0 +1,259 @@
+Create a single production-quality train.py file for training a decoder-only Assamese language model from scratch using Hugging Face Transformers and PyTorch.
+
+The script must be heavily commented, robust, Kaggle-friendly, resume-safe, and optimized for NVIDIA T4 16GB GPUs.
+
+Core Requirements
+
+Use:
+
+LlamaForCausalLM
+Hugging Face Trainer
+PyTorch
+SDPA attention backend (attn_implementation="sdpa")
+
+DO NOT implement:
+
+transformer blocks
+attention
+RoPE
+FFN
+residuals
+causal masking
+
+Use Hugging Face built-in implementations.
+
+Hyperparameters
+
+All hyperparameters and architecture values must be loaded from the uploaded hparams.txt file.
+
+Do NOT hardcode architecture/training values unless necessary defaults are needed.
+
+The script should parse:
+
+architecture config
+optimizer config
+LR scheduler config
+training config
+precision config
+initialization config
+
+from the file.
+
+Tokenizer
+
+Tokenizer already exists in Hugging Face tokenizer JSON format:
+
+The_Assamese_Tokenizer/assamese_tokenizer/tokenizer.json
+
+Load it properly using Hugging Face tokenizer APIs.
+
+Tokenizer already contains:
+
+BOS
+EOS
+PAD
+UNK
+
+Do not recreate tokenizer.
+
+Dataset Structure
+
+Dataset structure:
+
+train/
+ ├── train_000.bin
+ ├── train_001.bin
+ ├── train_002.bin
+
+val/
+ ├── val_000.bin
+
+test/
+ ├── test_000.bin
+Dataset Details
+
+Token dtype:
+
+np.uint16
+
+Each shard:
+
+treated independently
+memory mapped
+sequential reading inside shard
+reshuffle shard order every epoch
+
+Context strategy:
+
+context length = 1024
+stride = 1024
+non-overlapping chunks
+
+Discard tail tokens that do not fit full chunk size.
+
+The dataloader must:
+
+memory map .bin
+avoid loading full shard into RAM
+create causal next-token prediction pairs
+
+Example:
+
+input_ids = chunk[:-1]
+labels = chunk[1:]
+
+Return format:
+
+{
+    "input_ids": tensor,
+    "labels": tensor
+}
+Model Requirements
+
+Use:
+
+LlamaConfig
+LlamaForCausalLM
+
+Initialize:
+
+random weights if no checkpoint exists
+automatically resume from latest checkpoint if found
+
+Enable:
+
+gradient checkpointing
+SDPA attention
+FP16 mixed precision
+optional torch.compile flag (disabled by default)
+Trainer Requirements
+
+Use Hugging Face Trainer.
+
+The script must support:
+
+automatic checkpointing
+automatic checkpoint resume
+optimizer state restore
+scheduler restore
+RNG restore
+graceful crash recovery
+Checkpointing
+
+Use:
+
+save_strategy="steps"
+save every 10 steps
+keep only latest 2 checkpoints
+standard Hugging Face checkpoint naming
+
+Example:
+
+checkpoint-10
+checkpoint-20
+
+Use:
+
+safetensors
+
+The script must:
+
+automatically detect latest checkpoint
+automatically resume without asking
+Validation
+
+Run validation periodically.
+
+Choose a sensible validation frequency appropriate for Kaggle T4 training.
+
+Track:
+
+validation loss
+perplexity
+Logging
+
+Create structured folders:
+
+logs/
+checkpoints/
+outputs/
+
+Requirements:
+
+console logging every 10 steps
+save logs to files
+save training metrics
+save validation metrics
+Optimization Requirements
+
+Optimize specifically for:
+
+Kaggle free GPU sessions
+NVIDIA T4 16GB
+
+Include:
+
+gradient accumulation
+gradient clipping
+efficient dataloading
+auto CPU worker detection
+pinned memory
+persistent workers where appropriate
+Robustness Requirements
+
+Include:
+
+CUDA availability checks
+SDPA support checks
+package/version checks
+reproducibility setup
+random seed setup
+graceful error messages
+informative startup summary
+Scheduler
+
+Use:
+
+cosine LR scheduler
+warmup ratio from hparams.txt
+Precision
+
+Use:
+
+FP16 mixed precision
+Multi-GPU
+
+The script should be written in a way that can later support:
+
+multi-GPU
+distributed training
+
+even though current target is single Kaggle T4.
+
+Code Style
+
+Requirements:
+
+production quality
+heavily commented
+clean structure
+readable
+explain important sections
+avoid unnecessary abstractions
+keep everything inside one giant train.py
+Additional Requirements
+
+The generated code must:
+
+print total parameter count
+print trainable parameter count
+print estimated model size
+print detected GPU information
+print current precision mode
+print checkpoint resume status
+Deliverable
+
+Generate ONLY the final complete train.py code.
+Do not explain.
+Do not summarize.
+Do not omit sections.

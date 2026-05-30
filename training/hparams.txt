@@ -1,0 +1,49 @@
+
+# Architecture
+model_type = GPT Decoder Only
+n_layer = 12
+n_embd = 768
+n_head = 12
+head_dim = 64
+context_length = 1024
+vocab_size = 50000
+ffn_hidden = 3072
+activation = GELU
+normalization = LayerNorm
+layer_norm_eps = 1e-5
+positional_embedding = RoPE
+weight_tying = True
+bias = True
+
+# Precision
+dtype = FP16
+mixed_precision = True
+
+# Optimizer
+optimizer = AdamW
+beta1 = 0.9
+beta2 = 0.95
+weight_decay = 0.1
+eps = 1e-8
+
+# Learning Rate
+max_lr = 3e-4
+min_lr = 3e-5
+warmup_ratio = 0.01
+
+# plateform:
+kaggle free GPU's
+
+# Training
+gradient_clip = 1.0
+batch_strategy = Gradient Accumulation
+effective_batch_size = 32
+micro_batch_size =
+    2  (T4 16GB)
+
+# Initialization
+init_std = 0.02
+
+# Loss
+CrossEntropyLoss
+ignore_index = -100
