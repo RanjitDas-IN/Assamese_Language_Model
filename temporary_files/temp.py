@@ -70,18 +70,6 @@
 
 # print("✅ All parquet files converted to txt.")
 
-#-------------------------strip the leading index before the first tab on each line-----------------------------
-# input_file = "asm_wikipedia_2021_10K-sentences.txt"
-# output_file = "output.txt"
-
-# with open(input_file, "r", encoding="utf-8") as fin, open(output_file, "w", encoding="utf-8") as fout:
-#     for line in fin:
-#         line = line.rstrip("\n")
-#         if "\t" in line:
-#             fout.write(line.split("\t", 1)[1] + "\n")
-#         else:
-#             fout.write(line + "\n")
-
 
 
 #-------------------------find all .txt files inside nested folders-----------------------------
@@ -97,7 +85,7 @@
 
 
 #-----------------------shards (.bin) testing (converting to original words)-------------------------------
-import numpy as np
+# import numpy as np
 # from tokenizers import Tokenizer
 
 # # Load tokenizer
@@ -148,3 +136,32 @@ import numpy as np
 #     print(f"Total {split}: {split_total:,} tokens")
 
 # print(f"\nGRAND TOTAL: {total_tokens:,} tokens")
+
+
+
+# ------------------------------------words to tokens shards------------------------------------------
+
+from pathlib import Path
+import numpy as np
+from tokenizers import Tokenizer
+
+
+# ===== HARD CODED PATHS =====
+INPUT_FILE = "data/personal_cards.txt"
+TOKENIZER_JSON = "The_Assamese_Tokenizer/assamese_tokenizer/tokenizer.json"
+OUTPUT_FILE = "token_shards/train/train_003.bin"
+
+
+# Load tokenizer
+tokenizer = Tokenizer.from_file(TOKENIZER_JSON)
+
+# Read text
+text = Path(INPUT_FILE).read_text(encoding="utf-8")
+
+# Convert text to token ids
+ids = tokenizer.encode(text).ids
+
+# Save tokens as binary
+np.array(ids, dtype=np.uint16).tofile(OUTPUT_FILE)
+
+print(f"Saved {len(ids)} tokens -> {OUTPUT_FILE}")
