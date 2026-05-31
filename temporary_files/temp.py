@@ -96,8 +96,8 @@
 # print("]")
 
 
-#-----------------------shards (.bin) testing-------------------------------
-# import numpy as np
+#-----------------------shards (.bin) testing (converting to original words)-------------------------------
+import numpy as np
 # from tokenizers import Tokenizer
 
 # # Load tokenizer
@@ -107,10 +107,10 @@
 
 # # Load token IDs
 # tokens = np.fromfile(
-#     "token_shards/test/test_000.bin",
+#     "token_shards/test/test_001.bin",
 #     dtype=np.uint16
 # )
-
+# print(tokens[:100])
 # # Save token_id : decoded_token
 # with open("decoded_tokens.txt", "w", encoding="utf-8") as f:
 #     for token_id in tokens[:100]:

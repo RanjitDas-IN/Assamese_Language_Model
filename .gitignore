@@ -5,11 +5,13 @@ token_shards
 raw_song.txt
 raw_story.txt
 temporary_data
+test_val.tar.zst
 data/xahitya_dump
 IndicCorpV2_AIBharat
 token_shards.tar.zst
-After_cleaning_Song.txt
 asm_wikipedia_dump_2021
+data/personal_cards.txt
+After_cleaning_Song.txt
 After_cleaning_Story.txt
 1B_assamese_Tokens_Quwn3
 rahular_varta_DailyHuntDataset
