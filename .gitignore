@@ -9,6 +9,7 @@ test_val.tar.zst
 data/xahitya_dump
 IndicCorpV2_AIBharat
 token_shards.tar.zst
+detail_about_model.md
 asm_wikipedia_dump_2021
 data/personal_cards.txt
 After_cleaning_Song.txt
@@ -22,6 +23,7 @@ data/DailyHunt_Assamese_News_Dataset
 data/nuralnets_multingual_tinystories
 MWire-Labs-assamese-monolingual-corpus
 data/kaggel_Assamese_Sentiments_Dataset
+temporary_files/assamese_llm_project_report_prompt.md
 
 
 backup_data.tar.zst
