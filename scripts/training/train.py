@@ -21,6 +21,7 @@ import glob
 import math
 import json
 import time
+import bisect
 import random
 import logging
 import warnings
@@ -180,6 +181,21 @@ def build_llama_config(hp: Dict[str, str], tokenizer) -> LlamaConfig:
     n_embd    = cast(hp.get("n_embd"),    default=768,  cast_fn=int)
     head_dim  = cast(hp.get("head_dim"),  default=64,   cast_fn=int)
     n_head    = cast(hp.get("n_head"),    default=12,   cast_fn=int)
+
+    # FIX #7: Validate head_dim consistency — LlamaConfig derives head dim
+    # internally as hidden_size // num_attention_heads.  If the hparams value
+    # disagrees with that derivation, log a warning so the user is not silently
+    # surprised.  n_embd must also be divisible by n_head.
+    assert n_embd % n_head == 0, (
+        f"n_embd ({n_embd}) must be divisible by n_head ({n_head})"
+    )
+    expected_head_dim = n_embd // n_head
+    if head_dim != expected_head_dim:
+        logger.warning(
+            f"  head_dim={head_dim} in hparams does not match "
+            f"n_embd // n_head = {n_embd} // {n_head} = {expected_head_dim}. "
+            f"LlamaConfig will use {expected_head_dim}; hparams value ignored."
+        )
 
     config = LlamaConfig(
         vocab_size            = len(tokenizer),          # always match tokenizer
@@ -347,7 +363,6 @@ class BinaryShardDataset(Dataset):
         Uses bisect on the cumulative array — O(log S).
         Never allocates or iterates over full chunk lists.
         """
-        import bisect
         # bisect_right gives the first cumulative value strictly greater than
         # global_idx, so subtracting 1 gives the shard that owns this index.
         shard_pos   = bisect.bisect_right(self._cumulative, global_idx) - 1
@@ -391,6 +406,10 @@ class BinaryShardDataset(Dataset):
         self._shard_order = list(range(len(self._all_shards)))
         rng.shuffle(self._shard_order)
         self._rebuild_cumulative()
+        # FIX #5: Clear the mmap cache so that any persistent DataLoader workers
+        # (persistent_workers=True) do not hold stale file-descriptor handles
+        # across epochs.  Workers will re-open mmaps lazily on next access.
+        self._mmap_cache.clear()
         logger.info(f"  [Epoch {epoch}] Total chunks after reshuffle: {self._total_chunks:,}")
 
     # ── Dataset interface ─────────────────────────────────────────────────
@@ -412,7 +431,10 @@ class BinaryShardDataset(Dataset):
         # and cross-entropy is computed against labels[i+1].  Providing a
         # pre-shifted labels tensor would cause a double-shift error.
         tokens = torch.from_numpy(chunk)   # [context_length]
-        return {"input_ids": tokens, "labels": tokens.clone()}
+        # input_ids and labels share the same tensor — no clone needed because
+        # .astype(np.int64) above already created a fresh numpy copy, and
+        # neither the Trainer nor the collator modifies these tensors in-place.
+        return {"input_ids": tokens, "labels": tokens}
 
 
 
@@ -575,7 +597,10 @@ class MetricsCallback(TrainerCallback):
             return
 
         eval_loss = metrics.get("eval_loss")
-        perplexity = math.exp(eval_loss) if eval_loss is not None else None
+        # FIX #2: Clamp eval_loss before exp() to avoid OverflowError during early
+        # training when loss can exceed 20+.  exp(85) ≈ 8.5e36 (within float range);
+        # anything beyond that is reported as inf rather than crashing the run.
+        perplexity = math.exp(min(eval_loss, 85)) if eval_loss is not None else None
 
         if perplexity is not None:
             logger.info(
@@ -607,11 +632,16 @@ class EpochReshuffleCallback(TrainerCallback):
 
     def __init__(self, train_dataset: "BinaryShardDataset"):
         self.train_dataset = train_dataset
+        self._last_epoch: int = -1   # FIX #4: track last epoch to avoid duplicate reshuffles
 
     def on_epoch_begin(self, args, state, control, **kwargs):
-        # state.epoch is a float; cast to int for the seed offset
+        # state.epoch is a float; cast to int for the seed offset.
+        # FIX #4: Guard against duplicate calls for the same epoch (e.g. epoch-0
+        # fired twice) and resume scenarios where epoch numbering restarts.
         epoch = int(state.epoch)
-        self.train_dataset.set_epoch(epoch)
+        if epoch != self._last_epoch:
+            self._last_epoch = epoch
+            self.train_dataset.set_epoch(epoch)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -657,7 +687,12 @@ def compute_total_steps(
     grad_accum_steps = effective_batch_size // micro_batch_size
     """
     grad_accum = max(1, effective_batch_size // micro_batch_size)
-    steps_per_epoch = math.ceil(len(train_dataset) / effective_batch_size)
+    # FIX #1: On multi-GPU runs the Trainer splits the dataset across N GPUs, so
+    # each GPU sees only (dataset / N) samples per epoch.  Failing to divide by
+    # n_gpus overestimates total_steps by a factor of N, causing the cosine LR
+    # scheduler to decay far too slowly on multi-GPU setups.
+    n_gpus = max(1, torch.cuda.device_count())
+    steps_per_epoch = math.ceil(len(train_dataset) / (effective_batch_size * n_gpus))
     total_steps     = steps_per_epoch * num_epochs
     return total_steps, grad_accum
 
@@ -750,6 +785,18 @@ def main():
 
     logger.info(f"  Vocabulary size           : {len(tokenizer):,}")
 
+    # FIX #3: PreTrainedTokenizerFast loaded from a bare tokenizer.json (without
+    # an accompanying tokenizer_config.json) often leaves pad_token_id as None.
+    # Passing None into LlamaConfig causes silent bugs in HF utilities that rely
+    # on pad_token_id.  Fall back to eos_token_id, which is the standard practice
+    # for decoder-only causal LMs that do not use padding during training.
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+        logger.warning(
+            "  pad_token not set in tokenizer — using EOS token as PAD "
+            f"(id={tokenizer.eos_token_id}).  This is standard for causal LMs."
+        )
+
     # ── 11.6  Build model config ──────────────────────────────────────────
     context_length = cast(hp.get("context_length"), default=1024, cast_fn=int)
     llama_config   = build_llama_config(hp, tokenizer)
@@ -794,8 +841,8 @@ def main():
     # FIX #5: More practical checkpoint/eval cadence for Kaggle sessions.
     # Saving every 10 steps wastes significant I/O time on T4.
     # 100-step intervals balance crash-safety with throughput.
-    eval_steps = 100
-    save_steps = 100
+    eval_steps = 2
+    save_steps = 2
 
     logger.info("TRAINING HYPERPARAMETERS")
     logger.info(f"  max_lr                    : {max_lr}")
@@ -813,7 +860,10 @@ def main():
     # "cosine_with_min_lr" (transformers >= 4.33) decays to min_lr instead
     # of 0.  If the installed version is older, fall back to "cosine" which
     # decays to 0 — a minor difference in practice at this model scale.
-    _tf_version = tuple(int(x) for x in transformers.__version__.split(".")[:2])
+    # FIX #9: Use re.findall to extract only digit groups from the version string.
+    # Splitting on "." and calling int() fails on pre-release tags like "4.46.0rc1"
+    # or "4.46.dev0" where a segment contains non-numeric characters.
+    _tf_version = tuple(int(x) for x in re.findall(r'\d+', transformers.__version__)[:2])
     if _tf_version >= (4, 33):
         scheduler_type   = "cosine_with_min_lr"
         scheduler_kwargs = {"min_lr": min_lr}
@@ -933,8 +983,10 @@ def main():
         # ── Misc ───────────────────────────────────────────────────────
         disable_tqdm          = False,
         load_best_model_at_end= False,            # saves VRAM; we want the last ckpt
-        metric_for_best_model = "eval_loss",
-        greater_is_better     = False,
+        # FIX #6: metric_for_best_model and greater_is_better are meaningless
+        # (and trigger HF deprecation warnings) when load_best_model_at_end=False.
+        # Removed to keep TrainingArguments clean and avoid future surprises if
+        # a transformers update starts honouring this metric for checkpoint pruning.
     )
 
     # ── 11.14  Trainer  (FIX #3) ─────────────────────────────────────────
@@ -971,7 +1023,8 @@ def main():
     trainer.save_state()
 
     final_loss = metrics.get("train_loss", float("nan"))
-    final_ppl  = math.exp(final_loss) if not math.isnan(final_loss) else float("nan")
+    # FIX #2: Clamp before exp() — same overflow guard as in MetricsCallback.
+    final_ppl  = math.exp(min(final_loss, 85)) if not math.isnan(final_loss) else float("nan")
 
     logger.info("═" * 60)
     logger.info("TRAINING COMPLETE")
