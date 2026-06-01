@@ -186,9 +186,11 @@ def build_llama_config(hp: Dict[str, str], tokenizer) -> LlamaConfig:
     # internally as hidden_size // num_attention_heads.  If the hparams value
     # disagrees with that derivation, log a warning so the user is not silently
     # surprised.  n_embd must also be divisible by n_head.
-    assert n_embd % n_head == 0, (
-        f"n_embd ({n_embd}) must be divisible by n_head ({n_head})"
-    )
+    if n_embd % n_head != 0:
+        raise ValueError(
+            f"n_embd ({n_embd}) must be divisible by n_head ({n_head})"
+        )
+    
     expected_head_dim = n_embd // n_head
     if head_dim != expected_head_dim:
         logger.warning(
@@ -311,14 +313,36 @@ class BinaryShardDataset(Dataset):
             )
 
         logger.info(f"  Found {len(self._all_shards)} shard(s) in '{shard_dir}'")
+        
+        # Initialize chunk-count storage
+        self._chunks_per_shard: List[int] = []
 
         # ── Compute per-shard chunk counts once at startup ────────────────
-        # We mmap each shard briefly just to read its length (no data loaded).
-        self._chunks_per_shard: List[int] = []
+        # We mmap each shard briefly just to read its length (no data loaded).            
+            
         for p in self._all_shards:
             mm = np.memmap(p, dtype=np.uint16, mode="r")
-            self._chunks_per_shard.append(len(mm) // context_length)
+        
+            total_tokens = len(mm)
+            full_chunks  = total_tokens // context_length
+            remainder    = total_tokens % context_length
+        
+            if remainder != 0:
+                logger.warning(
+                    f"Shard '{p.name}' has {remainder} leftover tokens "
+                    f"(not divisible by context_length={context_length}). "
+                    f"These tokens will be ignored."
+                )
+        
+            if full_chunks == 0:
+                raise ValueError(
+                    f"Shard '{p.name}' is too small for one full chunk. "
+                    f"Tokens: {total_tokens}, context_length: {context_length}"
+                )
+        
+            self._chunks_per_shard.append(full_chunks)
             del mm
+
 
         # ── Build the initial epoch-0 ordering ───────────────────────────
         # _shard_order is an array of indices into self._all_shards.
@@ -409,7 +433,7 @@ class BinaryShardDataset(Dataset):
         # FIX #5: Clear the mmap cache so that any persistent DataLoader workers
         # (persistent_workers=True) do not hold stale file-descriptor handles
         # across epochs.  Workers will re-open mmaps lazily on next access.
-        self._mmap_cache.clear()
+        # self._mmap_cache.clear()
         logger.info(f"  [Epoch {epoch}] Total chunks after reshuffle: {self._total_chunks:,}")
 
     # ── Dataset interface ─────────────────────────────────────────────────
@@ -418,8 +442,13 @@ class BinaryShardDataset(Dataset):
         return self._total_chunks
 
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
+        # Auto-correct invalid indices instead of crashing
+        if idx < 0:
+            idx = 0
+        elif idx >= self._total_chunks:
+            idx = self._total_chunks - 1
         shard_path, token_offset = self._global_to_local(idx)
-
+        
         # Retrieve (or open) the cached mmap for this shard.
         # Reading a slice from a mmap returns a numpy view backed by the
         # OS page cache — no Python-level copy until .astype() is called.
@@ -683,17 +712,29 @@ def compute_total_steps(
     """
     Returns (total_steps, grad_accum_steps).
 
-    total_steps      = ceil(len(train_dataset) / effective_batch_size) * num_epochs
-    grad_accum_steps = effective_batch_size // micro_batch_size
+    effective_batch_size = GLOBAL batch size across ALL processes.
     """
-    grad_accum = max(1, effective_batch_size // micro_batch_size)
-    # FIX #1: On multi-GPU runs the Trainer splits the dataset across N GPUs, so
-    # each GPU sees only (dataset / N) samples per epoch.  Failing to divide by
-    # n_gpus overestimates total_steps by a factor of N, causing the cosine LR
-    # scheduler to decay far too slowly on multi-GPU setups.
-    n_gpus = max(1, torch.cuda.device_count())
-    steps_per_epoch = math.ceil(len(train_dataset) / (effective_batch_size * n_gpus))
-    total_steps     = steps_per_epoch * num_epochs
+
+    world_size = int(os.environ.get("WORLD_SIZE", "1"))
+
+    # Global batch processed per optimizer micro-step
+    base_global_batch = micro_batch_size * world_size
+
+    if effective_batch_size % base_global_batch != 0:
+        raise ValueError(
+            f"effective_batch_size ({effective_batch_size}) must be divisible by "
+            f"micro_batch_size * world_size "
+            f"({micro_batch_size} * {world_size} = {base_global_batch})"
+        )
+
+    grad_accum = effective_batch_size // base_global_batch
+
+    steps_per_epoch = math.ceil(
+        len(train_dataset) / effective_batch_size
+    )
+
+    total_steps = steps_per_epoch * num_epochs
+
     return total_steps, grad_accum
 
 
@@ -756,9 +797,10 @@ def main():
     logger.info(f"Loading hyperparameters from: {args.hparams}")
     hp = parse_hparams(args.hparams)
     logger.info(f"  Parsed {len(hp)} key-value pairs")
-
+   
     # ── 11.5  Load tokenizer ──────────────────────────────────────────────
     logger.info(f"Loading tokenizer from      : {args.tokenizer_path}")
+
     if not Path(args.tokenizer_path).exists():
         raise FileNotFoundError(
             f"Tokenizer not found at '{args.tokenizer_path}'.  "
@@ -767,23 +809,39 @@ def main():
 
     tokenizer = PreTrainedTokenizerFast(tokenizer_file=args.tokenizer_path)
 
-    # Validate that special tokens exist
-    for tok_name, tok_attr in [
-        ("BOS", "bos_token_id"),
-        ("EOS", "eos_token_id"),
-        ("PAD", "pad_token_id"),
-        ("UNK", "unk_token_id"),
-    ]:
-        tok_id = getattr(tokenizer, tok_attr, None)
-        if tok_id is None:
-            logger.warning(
-                f"  Tokenizer {tok_name} token not set — "
-                "some HF utilities may misbehave."
-            )
-        else:
-            logger.info(f"  {tok_name} token id : {tok_id}")
+    # ── REQUIRED TOKENS ───────────────────────────────────────────────────
+    # EOS is mandatory for causal LMs.
+    if tokenizer.eos_token_id is None:
+        raise ValueError(
+            "Tokenizer is missing eos_token_id. "
+            "Your tokenizer must define an EOS token."
+        )
 
-    logger.info(f"  Vocabulary size           : {len(tokenizer):,}")
+    # BOS fallback
+    if tokenizer.bos_token_id is None:
+        tokenizer.bos_token = tokenizer.eos_token
+        logger.warning(
+            f"  BOS token missing — using EOS as BOS (id={tokenizer.eos_token_id})"
+        )
+
+    # PAD fallback
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        logger.warning(
+            f"  PAD token missing — using EOS as PAD (id={tokenizer.eos_token_id})"
+        )
+
+    # Optional UNK warning
+    if tokenizer.unk_token_id is None:
+        logger.warning("  UNK token missing.")
+
+    # Final verification
+    logger.info(f"  BOS token id : {tokenizer.bos_token_id}")
+    logger.info(f"  EOS token id : {tokenizer.eos_token_id}")
+    logger.info(f"  PAD token id : {tokenizer.pad_token_id}")
+    logger.info(f"  UNK token id : {tokenizer.unk_token_id}")
+    logger.info(f"  Vocabulary size : {len(tokenizer):,}")
+
 
     # FIX #3: PreTrainedTokenizerFast loaded from a bare tokenizer.json (without
     # an accompanying tokenizer_config.json) often leaves pad_token_id as None.
@@ -841,8 +899,8 @@ def main():
     # FIX #5: More practical checkpoint/eval cadence for Kaggle sessions.
     # Saving every 10 steps wastes significant I/O time on T4.
     # 100-step intervals balance crash-safety with throughput.
-    eval_steps = 2
-    save_steps = 2
+    eval_steps = 200
+    save_steps = 200
 
     logger.info("TRAINING HYPERPARAMETERS")
     logger.info(f"  max_lr                    : {max_lr}")
@@ -947,7 +1005,7 @@ def main():
         save_safetensors      = True,             # use safetensors format
 
         # ── Evaluation  (FIX #5) ───────────────────────────────────────
-        eval_strategy         = "steps",
+        evaluation_strategy         = "steps",
         eval_steps            = eval_steps,       # every 100 steps
 
         # ── Logging ────────────────────────────────────────────────────
@@ -959,7 +1017,7 @@ def main():
         # ── DataLoader ─────────────────────────────────────────────────
         dataloader_num_workers        = num_workers,
         dataloader_pin_memory         = torch.cuda.is_available(),
-        dataloader_persistent_workers = (num_workers > 0),
+        dataloader_persistent_workers = False,
 
         # ── FIX #7: Prevent Trainer dropping dataset columns ───────────
         # Without this, Trainer inspects model.forward() signature and
@@ -994,15 +1052,32 @@ def main():
     # The replacement is processing_class= which accepts tokenizers,
     # feature extractors, and processors uniformly, and still saves the
     # tokenizer alongside every checkpoint.
-    trainer = Trainer(
-        model               = model,
-        args                = training_args,
-        train_dataset       = train_dataset,
-        eval_dataset        = val_dataset,
-        data_collator       = default_data_collator,
-        callbacks           = [MetricsCallback(), EpochReshuffleCallback(train_dataset)],
-        processing_class    = tokenizer,          # replaces deprecated tokenizer=
-    )
+    try:
+        trainer = Trainer(
+            model               = model,
+            args                = training_args,
+            train_dataset       = train_dataset,
+            eval_dataset        = val_dataset,
+            data_collator       = default_data_collator,
+            callbacks           = [MetricsCallback(), EpochReshuffleCallback(train_dataset)],
+            processing_class    = tokenizer,
+        )
+    except TypeError:
+        logger.warning(
+            "processing_class not supported by this transformers version. "
+            "Falling back to tokenizer=."
+        )
+
+        trainer = Trainer(
+            model               = model,
+            args                = training_args,
+            train_dataset       = train_dataset,
+            eval_dataset        = val_dataset,
+            data_collator       = default_data_collator,
+            callbacks           = [MetricsCallback(), EpochReshuffleCallback(train_dataset)],
+            tokenizer           = tokenizer,
+        )
+
 
     # ── 11.15  Train ──────────────────────────────────────────────────────
     logger.info("═" * 60)
