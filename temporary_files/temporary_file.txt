@@ -70,3 +70,8 @@ Total test: 370,854,044 tokens
 Total val: 0 tokens
 
 GRAND TOTAL → 1,696,031,117 tokens  
+
+
+
+
+  0%|                                    | 33/40443 [09:10<190:59:30, 17.01s/it]

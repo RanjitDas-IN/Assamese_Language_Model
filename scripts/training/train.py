@@ -770,22 +770,22 @@ def main():
     )
     parser.add_argument(
         "--hparams",
-        default="hparams.txt",
+        default="/kaggle/working/hparams.txt",
         help="Path to the hparams.txt config file  (default: hparams.txt)",
     )
     parser.add_argument(
         "--train_dir",
-        default="train",
+        default="/kaggle/working/token_shards/train",
         help="Directory of training .bin shards  (default: train/)",
     )
     parser.add_argument(
         "--val_dir",
-        default="val",
+        default="/kaggle/working/token_shards/val",
         help="Directory of validation .bin shards  (default: val/)",
     )
     parser.add_argument(
         "--tokenizer_path",
-        default="The_Assamese_Tokenizer/assamese_tokenizer/tokenizer.json",
+        default="/kaggle/working/tokenizer.json",
         help="Path to the HF tokenizer JSON  (default: The_Assamese_Tokenizer/…)",
     )
     parser.add_argument(
@@ -830,6 +830,14 @@ def main():
         )
 
     tokenizer = PreTrainedTokenizerFast(tokenizer_file=args.tokenizer_path)
+    if tokenizer.eos_token_id is None:
+        tokenizer.add_special_tokens({"eos_token": "</s>"})
+    
+    if tokenizer.bos_token_id is None:
+        tokenizer.bos_token = tokenizer.eos_token
+    
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token = tokenizer.eos_token
 
     # ── REQUIRED TOKENS ───────────────────────────────────────────────────
     # EOS is mandatory for causal LMs.

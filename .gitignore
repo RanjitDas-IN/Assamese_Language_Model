@@ -1,4 +1,5 @@
 DB
+.env
 cc-100
 data/AsRED
 token_shards
@@ -9,6 +10,7 @@ test_val.tar.zst
 data/xahitya_dump
 IndicCorpV2_AIBharat
 token_shards.tar.zst
+train_folder.tar.zst
 detail_about_model.md
 asm_wikipedia_dump_2021
 data/personal_cards.txt
