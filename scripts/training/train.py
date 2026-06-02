@@ -430,10 +430,9 @@ class BinaryShardDataset(Dataset):
         self._shard_order = list(range(len(self._all_shards)))
         rng.shuffle(self._shard_order)
         self._rebuild_cumulative()
-        # FIX #5: Clear the mmap cache so that any persistent DataLoader workers
-        # (persistent_workers=True) do not hold stale file-descriptor handles
-        # across epochs.  Workers will re-open mmaps lazily on next access.
-        # self._mmap_cache.clear()
+        # Clear the mmap cache so workers do not hold stale file-descriptor
+        # handles after the shard order changes.  Workers re-open lazily.
+        self._mmap_cache.clear()
         logger.info(f"  [Epoch {epoch}] Total chunks after reshuffle: {self._total_chunks:,}")
 
     # ── Dataset interface ─────────────────────────────────────────────────
@@ -460,10 +459,10 @@ class BinaryShardDataset(Dataset):
         # and cross-entropy is computed against labels[i+1].  Providing a
         # pre-shifted labels tensor would cause a double-shift error.
         tokens = torch.from_numpy(chunk)   # [context_length]
-        # input_ids and labels share the same tensor — no clone needed because
-        # .astype(np.int64) above already created a fresh numpy copy, and
-        # neither the Trainer nor the collator modifies these tensors in-place.
-        return {"input_ids": tokens, "labels": tokens}
+        # input_ids and labels must be independent tensors.  .astype() above
+        # already created a fresh numpy copy, but both dict values pointing to
+        # the same Tensor object is unsafe if any in-place op touches one key.
+        return {"input_ids": tokens, "labels": tokens.clone()}
 
 
 
@@ -527,22 +526,35 @@ def build_model(config: LlamaConfig, init_std: float = 0.02) -> LlamaForCausalLM
     logger.info("  use_cache                 : False  (required for grad checkpointing)")
 
     # ── Custom weight initialisation ─────────────────────────────────────
-    # Re-initialise all Linear and Embedding layers with the specified std.
-    # The Llama default is also ~0.02 but we override explicitly for clarity.
-    def _init_weights(module):
-        if isinstance(module, (nn.Linear, nn.Embedding)):
-            nn.init.normal_(module.weight, mean=0.0, std=init_std)
-            if hasattr(module, "bias") and module.bias is not None:
-                nn.init.zeros_(module.bias)
+    # Residual projection layers (o_proj, down_proj) use scaled init
+    # std / sqrt(2 * n_layers) per GPT-2/LLaMA to prevent gradient
+    # explosion in deep networks.  All other Linear/Embedding layers
+    # use the base init_std.
+    n_layers = config.num_hidden_layers
+    scaled_std = init_std / math.sqrt(2 * n_layers)
+    _residual_proj_names = {"o_proj", "down_proj"}
 
-    model.apply(_init_weights)
+
+    # Two-pass init: first all layers with base std, then residual projections
+    # with scaled std.
+    for name, module in model.named_modules():
+        if isinstance(module, nn.Embedding):
+            nn.init.normal_(module.weight, mean=0.0, std=init_std)
+        elif isinstance(module, nn.Linear):
+            layer_name = name.split(".")[-1]
+            std = scaled_std if layer_name in _residual_proj_names else init_std
+            nn.init.normal_(module.weight, mean=0.0, std=std)
+            if module.bias is not None:
+                nn.init.zeros_(module.bias)
     logger.info(f"  Weight initialisation std : {init_std}")
 
     # ── Gradient checkpointing ────────────────────────────────────────────
-    # Trades compute for memory: only stores activations at layer boundaries
-    # and recomputes intermediate activations during backward pass.
-    model.gradient_checkpointing_enable()
-    logger.info("  Gradient checkpointing    : ENABLED")
+    # Enabled via TrainingArguments(gradient_checkpointing=True) so that
+    # Trainer manages it correctly under DDP/FSDP.  Do NOT call
+    # model.gradient_checkpointing_enable() here — Trainer does it after
+    # wrapping the model, and calling it twice causes a no-op at best and
+    # a DDP hook conflict at worst.
+    logger.info("  Gradient checkpointing    : ENABLED (managed by Trainer)")
 
     return model
 
@@ -639,10 +651,12 @@ class MetricsCallback(TrainerCallback):
             )
             metrics["perplexity"] = perplexity
 
-        # Persist to JSONL
-        record = {"step": state.global_step, **metrics}
-        with open(self.METRICS_FILE, "a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record) + "\n")
+        # Persist to JSONL — only on the main process to avoid interleaved
+        # writes from all DDP ranks hitting the same file simultaneously.
+        if state.is_world_process_zero:
+            record = {"step": state.global_step, **metrics}
+            with open(self.METRICS_FILE, "a", encoding="utf-8") as fh:
+                fh.write(json.dumps(record) + "\n")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -664,10 +678,9 @@ class EpochReshuffleCallback(TrainerCallback):
         self._last_epoch: int = -1   # FIX #4: track last epoch to avoid duplicate reshuffles
 
     def on_epoch_begin(self, args, state, control, **kwargs):
-        # state.epoch is a float; cast to int for the seed offset.
-        # FIX #4: Guard against duplicate calls for the same epoch (e.g. epoch-0
-        # fired twice) and resume scenarios where epoch numbering restarts.
-        epoch = int(state.epoch)
+        # state.epoch is a float; round to nearest int to avoid truncation
+        # causing epoch 1.0 to be misidentified as epoch 0 (e.g., 0.999 → 0).
+        epoch = round(state.epoch)
         if epoch != self._last_epoch:
             self._last_epoch = epoch
             self.train_dataset.set_epoch(epoch)
@@ -692,9 +705,18 @@ def find_checkpoint(ckpt_dir: Path) -> Optional[str]:
     """
     last = get_last_checkpoint(str(ckpt_dir))
     if last:
-        logger.info(f"  Checkpoint resume         : RESUMING from '{last}'")
-    else:
-        logger.info("  Checkpoint resume         : STARTING FRESH (no checkpoint found)")
+        # Verify the checkpoint is complete (not mid-write from a crashed run).
+        state_file = Path(last) / "trainer_state.json"
+        if not state_file.exists():
+            logger.warning(
+                f"  Checkpoint '{last}' is missing trainer_state.json — "
+                f"likely a partial write from a crashed run.  Ignoring it."
+            )
+            last = None
+        else:
+            logger.info(f"  Checkpoint resume         : RESUMING from '{last}'")
+    if not last:
+        logger.info("  Checkpoint resume         : STARTING FRESH (no valid checkpoint found)")
     return last
 
 
@@ -888,7 +910,7 @@ def main():
     beta1       = cast(hp.get("beta1"),        default=0.9,   cast_fn=float)
     beta2       = cast(hp.get("beta2"),        default=0.95,  cast_fn=float)
     weight_decay= cast(hp.get("weight_decay"), default=0.1,   cast_fn=float)
-    adam_eps    = cast(hp.get("eps"),          default=1e-8,  cast_fn=float)
+    adam_eps    = cast(hp.get("eps"),          default=1e-6,  cast_fn=float)
     init_std    = cast(hp.get("init_std"),     default=0.02,  cast_fn=float)
 
     total_steps, grad_accum_steps = compute_total_steps(
@@ -896,11 +918,10 @@ def main():
     )
     warmup_steps = max(1, int(warmup_ratio * total_steps))
 
-    # FIX #5: More practical checkpoint/eval cadence for Kaggle sessions.
-    # Saving every 10 steps wastes significant I/O time on T4.
-    # 100-step intervals balance crash-safety with throughput.
-    eval_steps = 200
-    save_steps = 200
+    # Proportional checkpoint/eval cadence: ~5 % of total steps, clamped
+    # between 50 and 500 so small datasets still get at least one checkpoint.
+    eval_steps = max(1, min(50, total_steps // 20))
+    save_steps = eval_steps
 
     logger.info("TRAINING HYPERPARAMETERS")
     logger.info(f"  max_lr                    : {max_lr}")
@@ -983,6 +1004,7 @@ def main():
         # ── Precision ──────────────────────────────────────────────────
         fp16                  = True,             # FP16 mixed-precision
         bf16                  = False,            # T4 does not support BF16
+        gradient_checkpointing= True,             # managed here, not in build_model
 
         # ── Optimizer ──────────────────────────────────────────────────
         optim                 = "adamw_torch",    # native PyTorch AdamW
@@ -1001,12 +1023,14 @@ def main():
         # ── Checkpointing  (FIX #5) ────────────────────────────────────
         save_strategy         = "steps",
         save_steps            = save_steps,       # every 100 steps
+        # save_steps            = 5,       # every 5 steps for testing only
         save_total_limit      = 2,                # keep only last 2 checkpoints
         save_safetensors      = True,             # use safetensors format
 
         # ── Evaluation  (FIX #5) ───────────────────────────────────────
-        evaluation_strategy         = "steps",
+        eval_strategy         = "steps",
         eval_steps            = eval_steps,       # every 100 steps
+        # eval_steps            = 5,       # every 5 steps for testing only
 
         # ── Logging ────────────────────────────────────────────────────
         logging_strategy      = "steps",
