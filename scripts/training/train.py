@@ -1030,19 +1030,19 @@ def main():
 
         # ── Checkpointing  (FIX #5) ────────────────────────────────────
         save_strategy         = "steps",
-        save_steps            = save_steps,       # every 100 steps
-        # save_steps            = 5,       # every 5 steps for testing only
-        save_total_limit      = 2,                # keep only last 2 checkpoints
+        # save_steps            = save_steps,       # every 100 steps
+        save_steps            = 1000,       # every 2000 steps for testing only
+        save_total_limit      = 3,                # keep only last 2 checkpoints
         save_safetensors      = True,             # use safetensors format
 
         # ── Evaluation  (FIX #5) ───────────────────────────────────────
-        eval_strategy         = "steps",
-        eval_steps            = eval_steps,       # every 100 steps
-        # eval_steps            = 5,       # every 5 steps for testing only
+        eval_strategy         = "no",
+        # eval_steps            = eval_steps,       # every 100 steps
+        # eval_steps            = 2500,       # every 2500 steps for testing only
 
         # ── Logging ────────────────────────────────────────────────────
         logging_strategy      = "steps",
-        logging_steps         = 10,               # console log every 10 steps
+        # logging_steps         = 10,               # console log every 10 steps
         logging_first_step    = True,
         report_to             = "none",           # no W&B / MLflow on Kaggle
 
