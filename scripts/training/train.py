@@ -1032,7 +1032,7 @@ def main():
         save_strategy         = "steps",
         save_steps            = 1000,       # every 1000 steps for testing only
         save_total_limit      = 3,                # keep only last 3 checkpoints
-        save_safetensors      = True,             # use safetensors format
+        save_safetensors      = False,             # use safetensors format
 
         # ── Evaluation  (FIX #5) ───────────────────────────────────────
         eval_strategy         = "no",
@@ -1077,6 +1077,37 @@ def main():
         # Removed to keep TrainingArguments clean and avoid future surprises if
         # a transformers update starts honouring this metric for checkpoint pruning.
     )
+    logger.info("═" * 60)
+    logger.info("FINAL TRAININGARGUMENTS (ACTUAL RUNTIME VALUES)")
+    logger.info("═" * 60)
+
+    logger.info(f"  output_dir                : {training_args.output_dir}")
+
+    logger.info(f"  save_strategy             : {training_args.save_strategy}")
+    logger.info(f"  save_steps                : {training_args.save_steps}")
+    logger.info(f"  save_total_limit          : {training_args.save_total_limit}")
+
+    logger.info(f"  eval_strategy             : {training_args.eval_strategy}")
+    logger.info(f"  eval_steps                : {training_args.eval_steps}")
+
+    logger.info(f"  logging_strategy          : {training_args.logging_strategy}")
+    logger.info(f"  logging_steps             : {training_args.logging_steps}")
+
+    logger.info(f"  max_steps                 : {training_args.max_steps}")
+    logger.info(f"  num_train_epochs          : {training_args.num_train_epochs}")
+
+    logger.info(f"  per_device_train_batch    : {training_args.per_device_train_batch_size}")
+    logger.info(f"  grad_accumulation         : {training_args.gradient_accumulation_steps}")
+
+    logger.info(f"  learning_rate             : {training_args.learning_rate}")
+    logger.info(f"  warmup_steps              : {training_args.warmup_steps}")
+
+    logger.info(f"  fp16                      : {training_args.fp16}")
+    logger.info(f"  bf16                      : {training_args.bf16}")
+
+    logger.info(f"  resume_checkpoint         : {resume_from}")
+
+    logger.info("═" * 60)
 
     # ── 11.14  Trainer  (FIX #3) ─────────────────────────────────────────
     # Passing tokenizer= is deprecated in transformers >= 4.46.
@@ -1110,6 +1141,13 @@ def main():
         )
 
 
+    logger.info("═" * 60)
+    logger.info("TRAINER INTERNAL ARGS")
+    logger.info("═" * 60)
+    logger.info(f"trainer.args.save_steps     : {trainer.args.save_steps}")
+    logger.info(f"trainer.args.logging_steps  : {trainer.args.logging_steps}")
+    logger.info(f"trainer.args.eval_steps     : {trainer.args.eval_steps}")
+    logger.info("═" * 60)
     # ── 11.15  Train ──────────────────────────────────────────────────────
     logger.info("═" * 60)
     logger.info("STARTING TRAINING")
