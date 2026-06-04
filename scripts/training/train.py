@@ -928,8 +928,8 @@ def main():
 
     # Proportional checkpoint/eval cadence: ~5 % of total steps, clamped
     # between 50 and 500 so small datasets still get at least one checkpoint.
-    eval_steps = max(1, min(50, total_steps // 20))
-    save_steps = eval_steps
+    eval_steps = 1000
+    save_steps = 1000
 
     logger.info("TRAINING HYPERPARAMETERS")
     logger.info(f"  max_lr                    : {max_lr}")
@@ -1030,9 +1030,8 @@ def main():
 
         # ── Checkpointing  (FIX #5) ────────────────────────────────────
         save_strategy         = "steps",
-        # save_steps            = save_steps,       # every 100 steps
-        save_steps            = 1000,       # every 2000 steps for testing only
-        save_total_limit      = 3,                # keep only last 2 checkpoints
+        save_steps            = 1000,       # every 1000 steps for testing only
+        save_total_limit      = 3,                # keep only last 3 checkpoints
         save_safetensors      = True,             # use safetensors format
 
         # ── Evaluation  (FIX #5) ───────────────────────────────────────
@@ -1042,7 +1041,7 @@ def main():
 
         # ── Logging ────────────────────────────────────────────────────
         logging_strategy      = "steps",
-        # logging_steps         = 10,               # console log every 10 steps
+        logging_steps         = 50,               # console log every 10 steps
         logging_first_step    = True,
         report_to             = "none",           # no W&B / MLflow on Kaggle
 

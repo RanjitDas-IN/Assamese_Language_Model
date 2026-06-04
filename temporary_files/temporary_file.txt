@@ -75,3 +75,16 @@ GRAND TOTAL → 1,696,031,117 tokens
 
 
   0%|                                    | 33/40443 [09:10<190:59:30, 17.01s/it]
+8.3GiB
+
+          # ── Checkpointing  (FIX #5) ────────────────────────────────────
+        save_strategy         = "steps",
+        # save_steps            = save_steps,       # every 100 steps
+        save_steps            = 1000,       # every 1000 steps for testing only
+        save_total_limit      = 3,                # keep only last 2 checkpoints
+        save_safetensors      = True,             # use safetensors format
+
+        # ── Evaluation  (FIX #5) ───────────────────────────────────────
+        eval_strategy         = "no",
+        # eval_steps            = eval_steps,       # every 100 steps
+        # eval_steps            = 2500,       # every 2500 steps for testing only

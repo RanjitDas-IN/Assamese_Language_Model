@@ -1,0 +1,151 @@
+2026-06-04 12:04:35 | INFO     | Log file  : /kaggle/working/logs/train_20260604_120435.log
+2026-06-04 12:04:35 | INFO     | ════════════════════════════════════════════════════════════
+2026-06-04 12:04:35 | INFO     | ENVIRONMENT
+2026-06-04 12:04:35 | INFO     |   Python                    : 3.12.13
+2026-06-04 12:04:35 | INFO     |   PyTorch                   : 2.10.0+cu128
+2026-06-04 12:04:35 | INFO     |   Transformers              : 5.0.0
+2026-06-04 12:04:35 | INFO     |   CUDA available            : True
+2026-06-04 12:04:35 | INFO     |   GPU [0]  Tesla T4  14.6 GB VRAM  CC 7.5
+2026-06-04 12:04:35 | INFO     |   GPU [1]  Tesla T4  14.6 GB VRAM  CC 7.5
+2026-06-04 12:04:35 | INFO     |   SDPA attention available  : True
+2026-06-04 12:04:35 | INFO     |   Architecture              : LLaMA-style  (RMSNorm · RoPE · SDPA · MHA)
+2026-06-04 12:04:35 | INFO     |   Precision mode            : FP16 mixed-precision
+2026-06-04 12:04:35 | INFO     | ════════════════════════════════════════════════════════════
+2026-06-04 12:04:35 | INFO     | Global random seed set to  : 42
+2026-06-04 12:04:35 | INFO     | Loading hyperparameters from: /kaggle/working/hparams.txt
+2026-06-04 12:04:35 | INFO     |   Parsed 30 key-value pairs
+2026-06-04 12:04:35 | INFO     | Loading tokenizer from      : /kaggle/working/tokenizer.json
+2026-06-04 12:04:35 | WARNING  |   UNK token missing.
+2026-06-04 12:04:35 | INFO     |   BOS token id : 50000
+2026-06-04 12:04:35 | INFO     |   EOS token id : 50000
+2026-06-04 12:04:35 | INFO     |   PAD token id : 50000
+2026-06-04 12:04:35 | INFO     |   UNK token id : None
+2026-06-04 12:04:35 | INFO     |   Vocabulary size : 50,001
+2026-06-04 12:04:35 | INFO     | LlamaConfig built successfully.
+2026-06-04 12:04:35 | INFO     | Building training dataset …
+2026-06-04 12:04:35 | INFO     |   Found 3 shard(s) in '/kaggle/working/token_shards/train'
+2026-06-04 12:04:35 | WARNING  | Shard 'marged_002.bin' has 256 leftover tokens (not divisible by context_length=1024). These tokens will be ignored.
+2026-06-04 12:04:35 | INFO     |   Total chunks (samples): 1,294,152  | shard index RAM: 0 KB
+2026-06-04 12:04:35 | INFO     | Building validation dataset …
+2026-06-04 12:04:35 | INFO     |   Found 1 shard(s) in '/kaggle/working/token_shards/val'
+2026-06-04 12:04:35 | WARNING  | Shard 'val_000.bin' has 78 leftover tokens (not divisible by context_length=1024). These tokens will be ignored.
+2026-06-04 12:04:35 | INFO     |   Total chunks (samples): 181,081  | shard index RAM: 0 KB
+2026-06-04 12:04:35 | INFO     | TRAINING HYPERPARAMETERS
+2026-06-04 12:04:35 | INFO     |   max_lr                    : 0.0003
+2026-06-04 12:04:35 | INFO     |   min_lr                    : 3e-05
+2026-06-04 12:04:35 | INFO     |   warmup_ratio              : 0.01  (404 steps)
+2026-06-04 12:04:35 | INFO     |   effective_batch_size      : 32
+2026-06-04 12:04:35 | INFO     |   micro_batch_size          : 16
+2026-06-04 12:04:35 | INFO     |   gradient_accumulation     : 2 steps
+2026-06-04 12:04:35 | INFO     |   gradient_clip             : 1.0
+2026-06-04 12:04:35 | INFO     |   total_train_steps         : 40443
+2026-06-04 12:04:35 | INFO     |   eval every                : 50 steps
+2026-06-04 12:04:35 | INFO     |   save every                : 50 steps
+2026-06-04 12:04:35 | INFO     |   LR scheduler              : cosine_with_min_lr  (min_lr=3e-05)
+2026-06-04 12:04:35 | INFO     |   Checkpoint resume         : RESUMING from 'checkpoints/checkpoint-200'
+2026-06-04 12:04:35 | INFO     | Building LLaMA-style model  (RMSNorm · RoPE · SDPA) …
+2026-06-04 12:04:35 | WARNING  |   attn_implementation kwarg not supported by this transformers version.  Setting config._attn_implementation manually after construction.
+2026-06-04 12:04:38 | INFO     |   Attention implementation   : sdpa
+2026-06-04 12:04:38 | INFO     |   use_cache                 : False  (required for grad checkpointing)
+2026-06-04 12:04:39 | INFO     |   Weight initialisation std : 0.02
+2026-06-04 12:04:39 | INFO     |   Gradient checkpointing    : ENABLED (managed by Trainer)
+2026-06-04 12:04:39 | INFO     | ────────────────────────────────────────────────────────────
+2026-06-04 12:04:39 | INFO     | MODEL STATISTICS
+2026-06-04 12:04:39 | INFO     |   Total parameters          : 151,666,176
+2026-06-04 12:04:39 | INFO     |   Trainable parameters      : 151,666,176
+2026-06-04 12:04:39 | INFO     |   Estimated size (FP16)     : 289.3 MB
+2026-06-04 12:04:39 | INFO     |   Optimizer states (FP32 ×2): 1157.1 MB
+2026-06-04 12:04:39 | INFO     | ────────────────────────────────────────────────────────────
+2026-06-04 12:04:39 | INFO     |   DataLoader num_workers    : 4
+Traceback (most recent call last):
+  File "/kaggle/working/train.py", line 1149, in <module>
+    main()
+  File "/kaggle/working/train.py", line 995, in main
+    training_args = TrainingArguments(
+                    ^^^^^^^^^^^^^^^^^^
+TypeError: TrainingArguments.__init__() got an unexpected keyword argument 'save_safetensors'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+WARNING:__main__:  UNK token missing.
+WARNING:__main__:Shard 'marged_002.bin' has 256 leftover tokens (not divisible by context_length=1024). These tokens will be ignored.
+WARNING:__main__:Shard 'val_000.bin' has 78 leftover tokens (not divisible by context_length=1024). These tokens will be ignored.
+WARNING:__main__:  attn_implementation kwarg not supported by this transformers version.  Setting config._attn_implementation manually after construction.
+You are resuming training from a checkpoint trained with 5.0.0 of Transformers but your current version is 4.52.4. This is not recommended and could yield to errors or unwanted behaviors.
+There were missing keys in the checkpoint model loaded: ['lm_head.weight'].
+Warning: The following arguments do not match the ones in the `trainer_state.json` within the checkpoint directory: 
+	logging_steps: 500 (from args) != 10 (from trainer_state.json)
+	save_steps: 1000 (from args) != 50 (from trainer_state.json)
+	per_device_train_batch_size: 16 (from args) != 2 (from trainer_state.json)
+{'loss': 3.252, 'grad_norm': 131556.90625, 'learning_rate': 0.00015519801980198018, 'epoch': 0.0}
+{'loss': 3.2166, 'grad_norm': 114424.265625, 'learning_rate': 0.0001626237623762376, 'epoch': 0.0}
+{'loss': 3.1506, 'grad_norm': 140700.203125, 'learning_rate': 0.00017004950495049502, 'epoch': 0.0}
+{'loss': 3.2473, 'grad_norm': 139147.109375, 'learning_rate': 0.00017747524752475245, 'epoch': 0.0}
+{'loss': 3.2151, 'grad_norm': 134596.453125, 'learning_rate': 0.00018490099009900988, 'epoch': 0.0}
+{'loss': 3.1987, 'grad_norm': 108009.4453125, 'learning_rate': 0.0001923267326732673, 'epoch': 0.0}
+{'loss': 3.1862, 'grad_norm': 107978.6796875, 'learning_rate': 0.00019975247524752475, 'epoch': 0.0}
+{'loss': 3.267, 'grad_norm': 116828.546875, 'learning_rate': 0.00020717821782178215, 'epoch': 0.0}
+{'loss': 3.2213, 'grad_norm': 108323.5859375, 'learning_rate': 0.00021460396039603958, 'epoch': 0.0}
+{'loss': 3.3019, 'grad_norm': 128754.046875, 'learning_rate': 0.00022202970297029702, 'epoch': 0.0}
+{'loss': 3.1701, 'grad_norm': 94771.4296875, 'learning_rate': 0.00022945544554455445, 'epoch': 0.0}
+{'loss': 3.2067, 'grad_norm': 95821.859375, 'learning_rate': 0.00023688118811881188, 'epoch': 0.0}
+{'loss': 3.1865, 'grad_norm': 165633.0625, 'learning_rate': 0.0002443069306930693, 'epoch': 0.0}
+{'loss': 3.2319, 'grad_norm': 138732.296875, 'learning_rate': 0.0002517326732673267, 'epoch': 0.0}
+{'loss': 3.1774, 'grad_norm': 92591.515625, 'learning_rate': 0.00025915841584158415, 'epoch': 0.0}
+{'loss': 3.1333, 'grad_norm': 341287.78125, 'learning_rate': 0.0002665841584158416, 'epoch': 0.0}
+{'loss': 3.2481, 'grad_norm': 116249.5625, 'learning_rate': 0.000274009900990099, 'epoch': 0.0}
+{'loss': 3.0863, 'grad_norm': 83216.0546875, 'learning_rate': 0.0002814356435643564, 'epoch': 0.0}
+{'loss': 3.088, 'grad_norm': 104890.765625, 'learning_rate': 0.0002888613861386138, 'epoch': 0.0}
+{'loss': 3.1369, 'grad_norm': 86936.3671875, 'learning_rate': 0.00029628712871287126, 'epoch': 0.0}
+{'loss': 3.2096, 'grad_norm': 119206.9140625, 'learning_rate': 0.0002999999896109203, 'epoch': 0.0}
+{'loss': 3.1727, 'grad_norm': 73609.203125, 'learning_rate': 0.00029999990649829246, 'epoch': 0.0}
+{'loss': 3.2643, 'grad_norm': 69592.4765625, 'learning_rate': 0.000299999740273088, 'epoch': 0.0}
+{'loss': 3.2513, 'grad_norm': 65584.984375, 'learning_rate': 0.0002999994909354092, 'epoch': 0.0}
+{'loss': 3.1358, 'grad_norm': 76334.015625, 'learning_rate': 0.0002999991584854096, 'epoch': 0.0}
+{'loss': 3.164, 'grad_norm': 103116.9453125, 'learning_rate': 0.0002999987429232939, 'epoch': 0.0}
+{'loss': 3.0536, 'grad_norm': 70037.4296875, 'learning_rate': 0.0002999982442493178, 'epoch': 0.0}
+{'loss': 3.1388, 'grad_norm': 61697.01171875, 'learning_rate': 0.0002999976624637885, 'epoch': 0.0}
+{'loss': 3.1273, 'grad_norm': 84816.90625, 'learning_rate': 0.0002999969975670641, 'epoch': 0.0}
+{'loss': 3.0923, 'grad_norm': 105639.640625, 'learning_rate': 0.00029999624955955387, 'epoch': 0.0}
+{'loss': 3.0419, 'grad_norm': 164941.734375, 'learning_rate': 0.0002999954184417184, 'epoch': 0.0}
+{'loss': 3.0505, 'grad_norm': 61941.234375, 'learning_rate': 0.00029999450421406936, 'epoch': 0.0}
+{'loss': 3.1752, 'grad_norm': 69422.5390625, 'learning_rate': 0.00029999350687716955, 'epoch': 0.0}
+{'loss': 3.1002, 'grad_norm': 60604.671875, 'learning_rate': 0.00029999242643163307, 'epoch': 0.0}
+{'loss': 3.1951, 'grad_norm': 85199.78125, 'learning_rate': 0.00029999126287812497, 'epoch': 0.0}
+{'loss': 3.0636, 'grad_norm': 49125.44921875, 'learning_rate': 0.0002999900162173617, 'epoch': 0.0}
+{'loss': 3.1307, 'grad_norm': 52421.54296875, 'learning_rate': 0.0002999886864501106, 'epoch': 0.0}
+{'loss': 3.0735, 'grad_norm': 60708.8828125, 'learning_rate': 0.00029998727357719056, 'epoch': 0.0}
+{'loss': 3.2002, 'grad_norm': 54030.7578125, 'learning_rate': 0.00029998577759947137, 'epoch': 0.0}
+{'loss': 3.0007, 'grad_norm': 44852.84765625, 'learning_rate': 0.0002999841985178739, 'epoch': 0.0}
+{'loss': 3.2272, 'grad_norm': 79321.8203125, 'learning_rate': 0.0002999825363333704, 'epoch': 0.0}
+{'loss': 3.0303, 'grad_norm': 79020.1015625, 'learning_rate': 0.0002999807910469842, 'epoch': 0.0}
+{'loss': 3.0865, 'grad_norm': 48171.04296875, 'learning_rate': 0.0002999789626597897, 'epoch': 0.0}
+{'loss': 3.1071, 'grad_norm': 71392.7109375, 'learning_rate': 0.00029997705117291263, 'epoch': 0.0}
+{'loss': 3.1067, 'grad_norm': 50823.80859375, 'learning_rate': 0.0002999750565875298, 'epoch': 0.0}
+{'loss': 3.1725, 'grad_norm': 43152.28125, 'learning_rate': 0.0002999729789048691, 'epoch': 0.0}
+{'loss': 3.0013, 'grad_norm': 49589.86328125, 'learning_rate': 0.0002999708181262097, 'epoch': 0.0}
+{'loss': 3.0839, 'grad_norm': 45551.53125, 'learning_rate': 0.00029996857425288197, 'epoch': 0.0}
+{'loss': 2.9134, 'grad_norm': 39664.4609375, 'learning_rate': 0.00029996624728626713, 'epoch': 0.0}
+{'loss': 2.9746, 'grad_norm': 66264.5, 'learning_rate': 0.00029996383722779793, 'epoch': 0.0}
+{'loss': 2.9832, 'grad_norm': 47883.7109375, 'learning_rate': 0.00029996134407895815, 'epoch': 0.0}
+{'loss': 2.9324, 'grad_norm': 54460.30859375, 'learning_rate': 0.0002999587678412826, 'epoch': 0.0}
+  1%|▎| 365/40443 [06:01<25:08:00,  2.26s/it]
