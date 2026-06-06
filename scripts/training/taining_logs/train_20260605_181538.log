@@ -1,0 +1,59 @@
+2026-06-05 18:15:38 | INFO     | Log file  : /kaggle/working/logs/train_20260605_181538.log
+2026-06-05 18:15:38 | INFO     | ════════════════════════════════════════════════════════════
+2026-06-05 18:15:38 | INFO     | ENVIRONMENT
+2026-06-05 18:15:38 | INFO     |   Python                    : 3.12.13
+2026-06-05 18:15:38 | INFO     |   PyTorch                   : 2.10.0+cu128
+2026-06-05 18:15:38 | INFO     |   Transformers              : 5.0.0
+2026-06-05 18:15:38 | INFO     |   CUDA available            : True
+2026-06-05 18:15:38 | INFO     |   GPU [0]  Tesla T4  14.6 GB VRAM  CC 7.5
+2026-06-05 18:15:38 | INFO     |   GPU [1]  Tesla T4  14.6 GB VRAM  CC 7.5
+2026-06-05 18:15:38 | INFO     |   SDPA attention available  : True
+2026-06-05 18:15:38 | INFO     |   Architecture              : LLaMA-style  (RMSNorm · RoPE · SDPA · MHA)
+2026-06-05 18:15:38 | INFO     |   Precision mode            : FP16 mixed-precision
+2026-06-05 18:15:38 | INFO     | ════════════════════════════════════════════════════════════
+2026-06-05 18:15:38 | INFO     | Global random seed set to  : 42
+2026-06-05 18:15:38 | INFO     | Loading hyperparameters from: /kaggle/working/hparams.txt
+2026-06-05 18:15:38 | INFO     |   Parsed 30 key-value pairs
+2026-06-05 18:15:38 | INFO     | Loading tokenizer from      : /kaggle/working/tokenizer.json
+2026-06-05 18:15:38 | WARNING  |   UNK token missing.
+2026-06-05 18:15:38 | INFO     |   BOS token id : 50000
+2026-06-05 18:15:38 | INFO     |   EOS token id : 50000
+2026-06-05 18:15:38 | INFO     |   PAD token id : 50000
+2026-06-05 18:15:38 | INFO     |   UNK token id : None
+2026-06-05 18:15:38 | INFO     |   Vocabulary size : 50,001
+2026-06-05 18:15:38 | INFO     | LlamaConfig built successfully.
+2026-06-05 18:15:38 | INFO     | Building training dataset …
+2026-06-05 18:15:38 | INFO     |   Found 3 shard(s) in '/kaggle/working/token_shards/train'
+2026-06-05 18:15:38 | WARNING  | Shard 'marged_002.bin' has 256 leftover tokens (not divisible by context_length=1024). These tokens will be ignored.
+2026-06-05 18:15:38 | INFO     |   Total chunks (samples): 1,294,152  | shard index RAM: 0 KB
+2026-06-05 18:15:38 | INFO     | Building validation dataset …
+2026-06-05 18:15:38 | INFO     |   Found 1 shard(s) in '/kaggle/working/token_shards/val'
+2026-06-05 18:15:38 | WARNING  | Shard 'val_000.bin' has 78 leftover tokens (not divisible by context_length=1024). These tokens will be ignored.
+2026-06-05 18:15:38 | INFO     |   Total chunks (samples): 181,081  | shard index RAM: 0 KB
+2026-06-05 18:15:38 | INFO     | TRAINING HYPERPARAMETERS
+2026-06-05 18:15:38 | INFO     |   max_lr                    : 0.0003
+2026-06-05 18:15:38 | INFO     |   min_lr                    : 3e-05
+2026-06-05 18:15:38 | INFO     |   warmup_ratio              : 0.01  (404 steps)
+2026-06-05 18:15:38 | INFO     |   effective_batch_size      : 32
+2026-06-05 18:15:38 | INFO     |   micro_batch_size          : 16
+2026-06-05 18:15:38 | INFO     |   gradient_accumulation     : 1 steps
+2026-06-05 18:15:38 | INFO     |   gradient_clip             : 1.0
+2026-06-05 18:15:38 | INFO     |   total_train_steps         : 40443
+2026-06-05 18:15:38 | INFO     |   eval every                : 1000 steps
+2026-06-05 18:15:38 | INFO     |   save every                : 1000 steps
+2026-06-05 18:15:38 | INFO     |   LR scheduler              : cosine_with_min_lr  (min_lr=3e-05)
+2026-06-05 18:15:38 | INFO     |   Checkpoint resume         : RESUMING from 'checkpoints/checkpoint-17500'
+2026-06-05 18:15:38 | INFO     | Building LLaMA-style model  (RMSNorm · RoPE · SDPA) …
+2026-06-05 18:15:38 | WARNING  |   attn_implementation kwarg not supported by this transformers version.  Setting config._attn_implementation manually after construction.
+2026-06-05 18:15:41 | INFO     |   Attention implementation   : sdpa
+2026-06-05 18:15:41 | INFO     |   use_cache                 : False  (required for grad checkpointing)
+2026-06-05 18:15:42 | INFO     |   Weight initialisation std : 0.02
+2026-06-05 18:15:42 | INFO     |   Gradient checkpointing    : ENABLED (managed by Trainer)
+2026-06-05 18:15:42 | INFO     | ────────────────────────────────────────────────────────────
+2026-06-05 18:15:42 | INFO     | MODEL STATISTICS
+2026-06-05 18:15:42 | INFO     |   Total parameters          : 151,666,176
+2026-06-05 18:15:42 | INFO     |   Trainable parameters      : 151,666,176
+2026-06-05 18:15:42 | INFO     |   Estimated size (FP16)     : 289.3 MB
+2026-06-05 18:15:42 | INFO     |   Optimizer states (FP32 ×2): 1157.1 MB
+2026-06-05 18:15:42 | INFO     | ────────────────────────────────────────────────────────────
+2026-06-05 18:15:42 | INFO     |   DataLoader num_workers    : 4

@@ -791,8 +791,8 @@ def main():
     parser.add_argument(
         "--num_epochs",
         type=int,
-        default=1,
-        help="Number of training epochs  (default: 1)",
+        default=2,
+        help="Number of training epochs  (default: 2)",
     )
     parser.add_argument(
         "--seed",

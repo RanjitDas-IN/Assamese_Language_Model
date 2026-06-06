@@ -2,6 +2,7 @@ DB
 .env
 cc-100
 data/AsRED
+hf_download
 token_shards
 raw_song.txt
 raw_story.txt
@@ -26,6 +27,8 @@ data/nuralnets_multingual_tinystories
 MWire-Labs-assamese-monolingual-corpus
 data/kaggel_Assamese_Sentiments_Dataset
 temporary_files/assamese_llm_project_report_prompt.md
+scripts/training/taining_logs/8050_trainer_state.json
+scripts/training/taining_logs/9000_trainer_state.json
 
 
 backup_data.tar.zst
