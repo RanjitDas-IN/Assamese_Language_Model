@@ -76,63 +76,214 @@
 
 # #-------------------------------------------------------blind cleaning Script----------------------------------------------------------------------------------
 
+import re
+
+input_path = r"data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt"
+output_path = r"data/1B_assamese_Tokens_Quwn3/ultra_cleanned_1B_Quwn_tokens.txt"
+
+
+def clean_text(text: str) -> str:
+    # Remove wiki templates (non-nested)
+    text = re.sub(r"\{\{.*?\}\}", " ", text, flags=re.S)
+
+    # Remove image/file markup
+    text = re.sub(
+        r"\[\[(?:চিত্ৰ|ফাইল|file|image):[^\]]+\]\]",
+        " ",
+        text,
+        flags=re.I,
+    )
+
+    # Convert wiki links:
+    # [[A]] -> A
+    # [[A|B]] -> B
+    text = re.sub(
+        r"\[\[(?:[^\]|]+\|)?([^\]]+)\]\]",
+        r"\1",
+        text,
+    )
+
+    # Remove external links but keep label text
+    # [https://site.com label] -> label
+    text = re.sub(
+        r"\[(?:https?://|www\.)[^\s\]]+\s([^\]]+)\]",
+        r"\1",
+        text,
+        flags=re.I,
+    )
+
+    # Remove HTML tags
+    text = re.sub(r"<[^>]+>", " ", text)
+
+    # Remove English / Latin tokens
+    text = re.sub(
+        r"\b[A-Za-z]+(?:[-_][A-Za-z]+)*\b",
+        " ",
+        text,
+    )
+
+    # Remove Arabic-script text
+    text = re.sub(
+        r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]+",
+        " ",
+        text,
+    )
+
+    # Keep Assamese/Bengali chars, digits, and selected punctuation
+    text = re.sub(
+        r"[^\u0980-\u09FF0-9\s\.\,\;\:\!\?\-\(\)\'\"“”‘’/]",
+        " ",
+        text,
+    )
+
+    # Cleanup
+    text = re.sub(r"\s*\(\s*\)\s*", " ", text)
+    text = re.sub(r"\(\)", " ", text)
+    text = re.sub(r'"\s*"', " ", text)
+    text = re.sub(r"\s+\)", ")", text)
+    text = re.sub(r"\(\s+", "(", text)
+
+    # Normalize spaces while preserving newlines
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+
+    return text.strip()
+
+
+try:
+    line_count = 0
+    written_count = 0
+
+    with open(input_path, "r", encoding="utf-8") as fin, \
+         open(output_path, "w", encoding="utf-8") as fout:
+
+        for line in fin:
+            line_count += 1
+
+            cleaned = clean_text(line)
+
+            if cleaned:
+                fout.write(cleaned + "\n")
+                written_count += 1
+
+    print(
+        f"\nCleaning completed successfully."
+        f"\nInput lines   : {line_count}"
+        f"\nOutput lines  : {written_count}"
+        f"\nEdited lines  : {line_count-written_count}"
+        f"\nSaved to      : {output_path}"
+    )
+
+except FileNotFoundError as e:
+    print(f"\nFile not found:\n{e}")
+
+except PermissionError as e:
+    print(f"\nPermission error:\n{e}")
+
+except Exception as e:
+    print(f"\nUnexpected error:\n{e}")
+
+
+
+# #-------------------------------------------------------blind cleaning Script for all txt under a folder----------------------------------------------------------------------------------
 
 # import re
+# from pathlib import Path
 
-# input_path = r"first_100_lines_of_cleanned_1B_Quwn_tokens.txt"
-# output_path = r"Cleanned_1B_Quwn_tokens.txt"
-
-# try:
-#     with open(input_path,"r", encoding="utf-8") as f:
-#         text = f.read()
-#         # print(fff)
-# except:
-#     print("\n\nChange the file name        - Ranjit Das\n\n")
-    
+# BASE_DIR = Path("data/ai4bharat_sangraha_dataset/synthetic2")
 
 
+# def clean_text(text: str) -> str:
+#     text = re.sub(r"\{\{.*?\}\}", " ", text, flags=re.S)
 
-# try:
-#     # remove English letters, digits, and symbols
-#     cleaned = re.sub(r"[A-Za-z0-9…@#$+%':\-]", "", text)
-    
-#     # Remove all invisible unicode characters
-#     cleaned = re.sub(r"[‎]", "", cleaned)
-#     # remove empty parentheses like (), ( ), (   ) remove empty brackets and any space before them
-#     cleaned = re.sub(r"\s*\(\s*\)\s*", " ", cleaned)
-#     # optionally, also remove space before closing bracket ') ' → ')'
-#     cleaned = re.sub(r"\s+\)", ")", cleaned)
-#     # replace multiple spaces with a single space
-#     cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
-#     # replace space + two dots + space with nothing
-#     cleaned = re.sub(r"\s\.\.\s", "", cleaned)
-#     # remove 2 or more dots with optional spaces around them
-#     cleaned = re.sub(r"\s*\.{2,}\s*", " ", cleaned)
-#     # remove empty quotes like "   "
-#     cleaned = re.sub(r'"\s*"', "", cleaned)
-#     # replace '( ' with '('
-#     cleaned = re.sub(r"\(\s+", "(", cleaned)
-#     # replace '()' with ''
-#     cleaned = re.sub(r"\(\)", "", cleaned)
-#     cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
-#     # remove leading/trailing spaces per line + empty lines
-#     lines = [line.strip() for line in cleaned.splitlines() if line.strip()]
-#     final_text = "\n".join(lines)
+#     text = re.sub(
+#         r"\[\[(?:চিত্ৰ|ফাইল|file|image):[^\]]+\]\]",
+#         " ",
+#         text,
+#         flags=re.I,
+#     )
 
-# except:
-#     print("\nHello Honny, Name error in the first cleaning.       -Ranjit Das\n")
+#     text = re.sub(
+#         r"\[\[(?:[^\]|]+\|)?([^\]]+)\]\]",
+#         r"\1",
+#         text,
+#     )
+
+#     text = re.sub(
+#         r"\[(?:https?://|www\.)[^\s\]]+\s([^\]]+)\]",
+#         r"\1",
+#         text,
+#         flags=re.I,
+#     )
+
+#     text = re.sub(r"<[^>]+>", " ", text)
+
+#     text = re.sub(
+#         r"\b[A-Za-z]+(?:[-_][A-Za-z]+)*\b",
+#         " ",
+#         text,
+#     )
+
+#     text = re.sub(
+#         r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]+",
+#         " ",
+#         text,
+#     )
+
+#     text = re.sub(
+#         r"[^\u0980-\u09FF0-9\s\.\,\;\:\!\?\-\(\)\'\"“”‘’/]",
+#         " ",
+#         text,
+#     )
+
+#     text = re.sub(r"\s*\(\s*\)\s*", " ", text)
+#     text = re.sub(r"\(\)", " ", text)
+#     text = re.sub(r'"\s*"', " ", text)
+#     text = re.sub(r"\s+\)", ")", text)
+#     text = re.sub(r"\(\s+", "(", text)
+
+#     text = re.sub(r"[ \t]+", " ", text)
+#     text = re.sub(r"\n{3,}", "\n\n", text)
+
+#     return text.strip()
 
 
+# for idx in range(5, 18):  # 0005 -> 0017
 
+#     input_file = (
+#         BASE_DIR /
+#         f"cleanned_wiki_asm_Beng_{idx:04d}_of_0063.txt"
+#     )
 
-# try:
-#     # think append mode or write mode 
-#     with open(output_path,"w",encoding="utf-8") as f:
-#         f.write(final_text)
-#     print(f"\nCleaning process done\nAnd saved to \"{output_path}\"")
-# except:
-#     print("\nChange File name.       -Ranjit Das\n")
+#     output_file = (
+#         BASE_DIR /
+#         f"ultra_cleanned_wiki_asm_Beng_{idx:04d}_of_0063.txt"
+#     )
 
+#     if not input_file.exists():
+#         print(f"SKIP: {input_file.name} not found")
+#         continue
 
+#     line_count = 0
+#     written_count = 0
 
+#     with open(input_file, "r", encoding="utf-8") as fin, \
+#          open(output_file, "w", encoding="utf-8") as fout:
 
+#         for line in fin:
+#             line_count += 1
+
+#             cleaned = clean_text(line)
+
+#             if cleaned:
+#                 fout.write(cleaned + "\n")
+#                 written_count += 1
+
+#     print(
+#         f"✓ {input_file.name}\n"
+#         f"  Input  : {line_count}\n"
+#         f"  Output : {written_count}\n"
+#         f"  Saved  : {output_file.name}\n"
+#     )
+
+# print("\nAll files processed.")

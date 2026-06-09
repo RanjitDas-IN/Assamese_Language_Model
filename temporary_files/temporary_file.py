@@ -121,3 +121,107 @@
 # print(f"Output size    : {Path(OUTPUT).stat().st_size / (1024**2):.2f} MB")
 # print("=" * 50)
 
+# ---------------------------------------------------------Add [BOS], [EOS] Token at tha start and end of the lines of a txt-------------------------------------------------------------------
+
+input_file = ""
+output_file = "bos_eos.txt"
+
+with open(input_file, "r", encoding="utf-8") as fin, \
+     open(output_file, "w", encoding="utf-8") as fout:
+
+    for line in fin:
+        line = line.strip()
+
+        if not line:
+            continue
+
+        fout.write(f"[BOS]{line}[EOS]\n")
+
+print("Done:", output_file)
+
+
+
+# # --------------------------------------------------demo only--------------------------------------------------------------------
+
+# from pathlib import Path
+
+# input_file = "data/1B_assamese_Tokens_Quwn3/ultra_cleanned_1B_Quwn_tokens.txt"
+# output_file = "data/1B_assamese_Tokens_Quwn3/ultra_cleanned_1B_Quwn_tokens_bos_eos.txt"
+
+# with open(input_file, "r", encoding="utf-8") as f:
+#     lines = f.readlines()
+
+# docs = []
+# current_doc = []
+
+# for line in lines:
+#     if not line.strip():
+#         continue
+
+#     # New article = line does NOT start with a space
+#     if not line.startswith(" ") and current_doc:
+#         docs.append("".join(current_doc).strip())
+#         current_doc = []
+
+#     current_doc.append(line)
+
+# if current_doc:
+#     docs.append("".join(current_doc).strip())
+
+# with open(output_file, "w", encoding="utf-8") as f:
+#     for doc in docs:
+#         f.write("[BOS]\n")
+#         f.write(doc)
+#         f.write("\n[EOS]\n\n")
+
+# print(f"Documents found: {len(docs)}")
+
+
+
+# ---------------------------------------This is for ai4bharat_sangraha_dataset only WALK-IN TO ALL TXT--------------------------------------
+
+# from pathlib import Path
+
+# base_dir = Path("data/ai4bharat_sangraha_dataset/synthetic2")
+
+# for input_file in sorted(base_dir.glob("ultra_cleanned_wiki_asm_Beng_*_of_0063.txt")):
+
+#     # Skip already processed files
+#     if input_file.stem.endswith("_bos_eos"):
+#         continue
+
+#     output_file = input_file.with_name(
+#         f"{input_file.stem}_bos_eos.txt"
+#     )
+
+#     with open(input_file, "r", encoding="utf-8") as f:
+#         lines = f.readlines()
+
+#     docs = []
+#     current_doc = []
+
+#     for line in lines:
+#         if not line.strip():
+#             continue
+
+#         # New article = line does NOT start with a space
+#         if not line.startswith(" ") and current_doc:
+#             docs.append("".join(current_doc).strip())
+#             current_doc = []
+
+#         current_doc.append(line)
+
+#     if current_doc:
+#         docs.append("".join(current_doc).strip())
+
+#     with open(output_file, "w", encoding="utf-8") as f:
+#         for doc in docs:
+#             f.write("[BOS]\n")
+#             f.write(doc)
+#             f.write("\n[EOS]\n\n")
+
+#     print(
+#         f"Processed: {input_file.name} -> {output_file.name} | Documents found: {len(docs)}"
+#     )
+
+# print("\nDone.")
