@@ -3,6 +3,7 @@ DB
 cc-100
 data/AsRED
 hf_download
+data/wiki_p
 token_shards
 raw_song.txt
 raw_story.txt
@@ -16,6 +17,7 @@ detail_about_model.md
 asm_wikipedia_dump_2021
 data/personal_cards.txt
 After_cleaning_Song.txt
+data/aswiki_encyclopedia
 After_cleaning_Story.txt
 1B_assamese_Tokens_Quwn3
 rahular_varta_DailyHuntDataset
@@ -27,8 +29,6 @@ data/nuralnets_multingual_tinystories
 MWire-Labs-assamese-monolingual-corpus
 data/kaggel_Assamese_Sentiments_Dataset
 temporary_files/assamese_llm_project_report_prompt.md
-scripts/training/taining_logs/8050_trainer_state.json
-scripts/training/taining_logs/9000_trainer_state.json
 
 
 backup_data.tar.zst

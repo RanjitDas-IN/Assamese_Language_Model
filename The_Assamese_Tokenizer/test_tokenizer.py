@@ -29,3 +29,13 @@ print(type(output.ids[0]))
 
 print("\nTokens:")
 print(output.tokens)
+
+print("\nAll special Tokens:")
+
+
+
+
+print("Special tokens:")
+for tok in tokenizer.get_added_tokens_decoder().values():
+    if tok.special:
+        print(tok.content)
