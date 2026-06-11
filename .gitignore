@@ -21,6 +21,7 @@ data/aswiki_encyclopedia
 After_cleaning_Story.txt
 1B_assamese_Tokens_Quwn3
 rahular_varta_DailyHuntDataset
+data/personal_cards_bos_eos.txt
 data/ai4bharat_sangraha_dataset
 Fine-tuned LLM Evaluation.ipynb
 kaggel_Assamese_News_Article_Dataset
@@ -28,6 +29,7 @@ data/DailyHunt_Assamese_News_Dataset
 data/nuralnets_multingual_tinystories
 MWire-Labs-assamese-monolingual-corpus
 data/kaggel_Assamese_Sentiments_Dataset
+things_need_to_keep_in_next_pretraining.md
 temporary_files/assamese_llm_project_report_prompt.md
 
 

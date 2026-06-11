@@ -78,8 +78,8 @@
 
 import re
 
-input_path = r"data/1B_assamese_Tokens_Quwn3/cleanned_1B_Quwn_tokens.txt"
-output_path = r"data/1B_assamese_Tokens_Quwn3/ultra_cleanned_1B_Quwn_tokens.txt"
+input_path = r"data/AsRED/cleanned_Samanantar_Parallel_Corpus.txt"
+output_path = r"data/AsRED/ultra_cleanned_Samanantar_Parallel_Corpus.txt"
 
 
 def clean_text(text: str) -> str:

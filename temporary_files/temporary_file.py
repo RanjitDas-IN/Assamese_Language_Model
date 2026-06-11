@@ -123,13 +123,14 @@
 
 # ---------------------------------------------------------Add [BOS], [EOS] Token at tha start and end of the lines of a txt-------------------------------------------------------------------
 
-input_file = ""
-output_file = "bos_eos.txt"
+input_file = "data/personal_cards.txt"
+output_file = "data/personal_cards_bos_eos.txt"
 
 with open(input_file, "r", encoding="utf-8") as fin, \
      open(output_file, "w", encoding="utf-8") as fout:
 
     for line in fin:
+        print("EOS, BOS")
         line = line.strip()
 
         if not line:
@@ -225,3 +226,47 @@ print("Done:", output_file)
 #     )
 
 # print("\nDone.")
+
+# ---------------------------------------This is for data/AsRED only--------------------------------------
+
+# import re
+
+# INPUT_FILE = "data/rahular_varta_DailyHuntDataset/cleanned_val_as_shard_01.txt"
+# OUTPUT_FILE = "data/rahular_varta_DailyHuntDataset/Ultra_cleanned_val_as_shard_01.txt"
+
+# # Precompile regexes
+# START_HASH_RE = re.compile(r"^#")
+# PAREN_RE = re.compile(r"\([^)]*\)")
+# HASHTAG_WORD_RE = re.compile(r"\S*#\S*")
+# EN_NUM_RE = re.compile(r"[A-Za-z0-9]+")
+# MULTISPACE_RE = re.compile(r" +")
+# ASSAMESE_WORD_RE = re.compile(r"[\u0980-\u09FF]+")
+
+# with open(INPUT_FILE, "r", encoding="utf-8") as fin, \
+#      open(OUTPUT_FILE, "w", encoding="utf-8") as fout:
+
+#     for line in fin:
+
+#         # 1. Remove lines starting with #
+#         if START_HASH_RE.match(line):
+#             print("Clkeanning Processing")
+#             continue
+
+#         # 2. Apply cleaning
+#         line = PAREN_RE.sub("", line)
+#         line = HASHTAG_WORD_RE.sub("", line)
+#         line = EN_NUM_RE.sub("", line)
+#         line = line.replace("#", "")
+#         line = MULTISPACE_RE.sub(" ", line)
+#         line = line.strip()
+
+#         if not line:
+#             continue
+
+#         # 3. Keep only lines with >=25 Assamese/Bengali words
+#         words = ASSAMESE_WORD_RE.findall(line)
+
+#         if len(words) < 25:
+#             continue
+
+#         fout.write(line + "\n")
