@@ -10,7 +10,10 @@ from pathlib import Path
 root_dir = Path("data")
 
 # Find all .txt files recursively
-FILE_PATHS = list(root_dir.rglob("*.txt"))
+# FILE_PATHS = list(root_dir.rglob("*.txt"))
+FILE_PATHS = list(root_dir.rglob("*_bos_eos.txt"))
+print(f"Total Files: {len(FILE_PATHS)}")
+
 
 CHUNK_SIZE = 8 * 1024 * 1024  # 8 MB
 

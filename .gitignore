@@ -1,6 +1,6 @@
-DB
 .env
 cc-100
+FT_Data
 data/AsRED
 hf_download
 data/wiki_p
@@ -20,6 +20,7 @@ After_cleaning_Song.txt
 data/aswiki_encyclopedia
 After_cleaning_Story.txt
 1B_assamese_Tokens_Quwn3
+pretraining_shards.tar.zst
 rahular_varta_DailyHuntDataset
 data/personal_cards_bos_eos.txt
 data/ai4bharat_sangraha_dataset

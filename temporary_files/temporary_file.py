@@ -123,22 +123,22 @@
 
 # ---------------------------------------------------------Add [BOS], [EOS] Token at tha start and end of the lines of a txt-------------------------------------------------------------------
 
-input_file = "data/personal_cards.txt"
-output_file = "data/personal_cards_bos_eos.txt"
+# input_file = "data/personal_cards.txt"
+# output_file = "data/personal_cards_bos_eos.txt"
 
-with open(input_file, "r", encoding="utf-8") as fin, \
-     open(output_file, "w", encoding="utf-8") as fout:
+# with open(input_file, "r", encoding="utf-8") as fin, \
+#      open(output_file, "w", encoding="utf-8") as fout:
 
-    for line in fin:
-        print("EOS, BOS")
-        line = line.strip()
+#     for line in fin:
+#         print("EOS, BOS")
+#         line = line.strip()
 
-        if not line:
-            continue
+#         if not line:
+#             continue
 
-        fout.write(f"[BOS]{line}[EOS]\n")
+#         fout.write(f"[BOS]{line}[EOS]\n")
 
-print("Done:", output_file)
+# print("Done:", output_file)
 
 
 
@@ -270,3 +270,116 @@ print("Done:", output_file)
 #             continue
 
 #         fout.write(line + "\n")
+
+# ---------------------------------------This is for indicaqa_as_json only--------------------------------------
+
+# import json
+
+# input_path = r"FT_Data/indicaqa_as_json/indicqa.as.json"
+# output_path = r"FT_Data/indicaqa_as_json/indicqa_as_sft.jsonl"
+
+# with open(input_path, "r", encoding="utf-8") as f:
+#     data = json.load(f)
+
+# # IMPORTANT
+# articles = data["data"]
+
+# count = 0
+
+# with open(output_path, "w", encoding="utf-8") as fout:
+#     for article in articles:
+#         for paragraph in article["paragraphs"]:
+#             context = paragraph["context"].strip()
+
+#             for qa in paragraph["qas"]:
+#                 if qa["category"] != "SHORT":
+#                     continue
+
+#                 if len(qa["answers"]) == 0:
+#                     continue
+
+#                 answer = qa["answers"][0]["text"].strip()
+
+#                 if answer == "":
+#                     continue
+
+#                 question = qa["question"].strip()
+
+#                 sample = {
+#                     "messages": [
+#                         {
+#                             "role": "user",
+#                             "content": f"[BOS]প্ৰশ্ন: {question}[EOS]"
+#                         },
+#                         {
+#                             "role": "assistant",
+#                             "content": f"[BOS]{answer}[EOS]"
+#                         }
+#                     ]
+#                 }
+
+#                 fout.write(json.dumps(sample, ensure_ascii=False) + "\n")
+#                 count += 1
+
+# print("Examples written:", count)
+# ---------------------------------------Find duplicate--------------------------------------
+# import json
+# from collections import defaultdict
+
+# input_path = "FT_Data/indicaqa_as_json/indicqa.as.json"
+# output_path = "FT_Data/indic_align_instruct/OASST.jsonl"
+
+# # First pass: collect occurrences
+# occurrences = defaultdict(list)
+
+# with open(input_path, "r", encoding="utf-8") as fin:
+#     for line_num, line in enumerate(fin, 1):
+#         obj = json.loads(line)
+
+#         key = (
+#             obj["messages"][0]["content"],
+#             obj["messages"][1]["content"]
+#         )
+
+#         occurrences[key].append((line_num, line))
+
+# # Print duplicates
+# duplicate_count = 0
+# for key, lines in occurrences.items():
+#     if len(lines) > 1:
+#         duplicate_count += len(lines) - 1
+
+#         # print("\n" + "="*80)
+#         # print(f"Found {len(lines)} identical copies:")
+#         # print(key[0])  # user
+#         # print(key[1])  # assistant
+#         # print("Line numbers:", [x[0] for x in lines])
+
+# print("\nDuplicate lines:", duplicate_count)
+
+# # Ask user
+# choice = input("\nRemove duplicates? (y/n): ").strip().lower()
+
+# if choice == "y":
+#     seen = set()
+
+#     with open(input_path, "r", encoding="utf-8") as fin, \
+#          open(output_path, "w", encoding="utf-8") as fout:
+
+#         for line in fin:
+#             obj = json.loads(line)
+
+#             key = (
+#                 obj["messages"][0]["content"],
+#                 obj["messages"][1]["content"]
+#             )
+
+#             if key not in seen:
+#                 seen.add(key)
+#                 fout.write(line)
+
+#     print("Duplicates removed.")
+#     print("Saved to:", output_path)
+
+# else:
+#     print("No changes made.")
