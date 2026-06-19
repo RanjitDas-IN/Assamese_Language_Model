@@ -1,182 +1,162 @@
-#-------------------------find all .txt files inside nested folders-----------------------------
-# from pathlib import Path
-# root_dir = Path("data")
+# import pandas as pd
+# df = pd.read_csv("FT_Data/who_is_nisha.psv", sep = "|")
+# print(df.shape)
+# print(df.columns)
 
-
-# txt_files = [file.name for file in root_dir.rglob("*.txt")]
-# print("[")
-# for files in txt_files:
-#     print(f'"{files}",')
-# print("]")
-
-
-#-----------------------shards (.bin) testing (converting to original words)-------------------------------
-# import numpy as np
-# from tokenizers import Tokenizer
-
-# # Load tokenizer
-# tokenizer = Tokenizer.from_file(
-#     "The_Assamese_Tokenizer/assamese_tokenizer/tokenizer.json"
-# )
-
-# # Load token IDs
-# tokens = np.fromfile(
-#     "token_shards/test/test_001.bin",
-#     dtype=np.uint16
-# )
-# print(tokens[:100])
-# # Save token_id : decoded_token
-# with open("decoded_tokens.txt", "w", encoding="utf-8") as f:
-#     for token_id in tokens[:100]:
-#         token_text = tokenizer.decode([int(token_id)])
-#         f.write(f"{token_id}: {token_text}\n")
-
-# #-----------------------marge 2 .bin files-------------------------------
-# import numpy as np
-# from pathlib import Path
-
-# # ─────────────────────────────────────────────
-# # Config
-# # ─────────────────────────────────────────────
-# INPUT_2 = "token_shards/train/train_003.bin"
-# INPUT_1 = "token_shards/train/train_002.bin"
-
-# OUTPUT  = "token_shards/train/marged_002.bin"
-
-# UINT16_DTYPE = np.dtype(np.uint16)
-# UINT16_MAX   = np.iinfo(np.uint16).max
-# UINT16_BYTES = UINT16_DTYPE.itemsize
-
-# # ─────────────────────────────────────────────
-# # Total
-# # ─────────────────────────────────────────────
-
-# size_1 = Path(INPUT_1).stat().st_size
-# size_2 = Path(INPUT_2).stat().st_size
-
-# print(f"size of {INPUT_1} : {size_1 / (1024**2):.2f} MB")
-# print(f"size of {INPUT_2} : {size_2 / (1024**2):.2f} MB")
-
-# TOTAL_SIZE = size_1 + size_2
-
-# print(f"Expected total file size : {TOTAL_SIZE / (1024**2):.2f} MB")
-# print("=" * 50)
-
-
-# # ─────────────────────────────────────────────
-# # Validation
-# # ─────────────────────────────────────────────
-# for p in [INPUT_1, INPUT_2]:
-#     if not Path(p).exists():
-#         raise FileNotFoundError(f"Missing file: {p}")
-
-#     file_size = Path(p).stat().st_size
-
-#     if file_size % UINT16_BYTES != 0:
-#         raise ValueError(
-#             f"{p} is corrupted or not uint16-aligned "
-#             f"(size={file_size} bytes)"
-#         )
-
-# # ─────────────────────────────────────────────
-# # Load as uint16 token IDs
-# # ─────────────────────────────────────────────
-# tokens_1 = np.fromfile(INPUT_1, dtype=UINT16_DTYPE)
-# tokens_2 = np.fromfile(INPUT_2, dtype=UINT16_DTYPE)
-
-# # ─────────────────────────────────────────────
-# # Extra safety check
-# # ─────────────────────────────────────────────
-# if tokens_1.max() > UINT16_MAX:
-#     raise ValueError(f"{INPUT_1} contains invalid token IDs")
-
-# if tokens_2.max() > UINT16_MAX:
-#     raise ValueError(f"{INPUT_2} contains invalid token IDs")
-
-# # ─────────────────────────────────────────────
-# # Merge
-# # ─────────────────────────────────────────────
-# merged = np.concatenate([tokens_1, tokens_2])
-
-# # ─────────────────────────────────────────────
-# # Save
-# # ─────────────────────────────────────────────
-# Path(OUTPUT).parent.mkdir(parents=True, exist_ok=True)
-
-# merged.astype(UINT16_DTYPE).tofile(OUTPUT)
-
-# # ─────────────────────────────────────────────
-# # Info
-# # ─────────────────────────────────────────────
-# print("=" * 50)
-# print("MERGE COMPLETE")
-# print("=" * 50)
-
-# print(f"Input 1 tokens : {len(tokens_1):,}")
-# print(f"Input 2 tokens : {len(tokens_2):,}")
-# print(f"Total tokens   : {len(merged):,}")
-
-# print()
-# print(f"Saved to       : {OUTPUT}")
-# print(f"Output size    : {Path(OUTPUT).stat().st_size / (1024**2):.2f} MB")
-# print("=" * 50)
-
-# ---------------------------------------------------------Add [BOS], [EOS] Token at tha start and end of the lines of a txt-------------------------------------------------------------------
-
-# input_file = "data/personal_cards.txt"
-# output_file = "data/personal_cards_bos_eos.txt"
-
-# with open(input_file, "r", encoding="utf-8") as fin, \
-#      open(output_file, "w", encoding="utf-8") as fout:
-
-#     for line in fin:
-#         print("EOS, BOS")
-#         line = line.strip()
-
-#         if not line:
-#             continue
-
-#         fout.write(f"[BOS]{line}[EOS]\n")
-
-# print("Done:", output_file)
-
-
-
-# # --------------------------------------------------demo only--------------------------------------------------------------------
+import os
 import json
+import math
+import random
+from tqdm import tqdm
 
-input_path = r"FT_Data/AshwinSankar_Indic-Rag-Suite/assamese_civic_qa.jsonl"
-output_path = r"FT_Data/AshwinSankar_Indic-Rag-Suite/assamese_civic_qa_fixed.jsonl"
+ROOT_DIR = "FT_Data"
+NISHA_PATH = "data/who_is_nisha.jsonl"
+OUTPUT_PREFIX = "RN_"
+INSERT_FRACTION = 0.90
+SEED = 42
 
-count = 0
+random.seed(SEED)
 
-with open(input_path, "r", encoding="utf-8") as fin, \
-     open(output_path, "w", encoding="utf-8") as fout:
 
-    for line in fin:
-        obj = json.loads(line)
+def load_nisha_examples(path):
+    examples = []
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            raw = line.strip()
+            if not raw:
+                continue
+            try:
+                # Keep the full JSON line exactly as-is
+                json.loads(raw)
+                examples.append(raw)
+            except Exception:
+                continue
+    return examples
 
-        query = str(obj["query"]).strip()
-        response = str(obj["response"]).strip()
 
-        if not query or not response:
-            continue
+def iter_jsonl_files(root_dir):
+    nisha_abs = os.path.abspath(NISHA_PATH)
+    for dirpath, _, filenames in os.walk(root_dir):
+        for name in filenames:
+            if not name.lower().endswith(".jsonl"):
+                continue
+            if name.startswith(OUTPUT_PREFIX):
+                continue
+            full_path = os.path.abspath(os.path.join(dirpath, name))
+            if full_path == nisha_abs:
+                continue
+            yield full_path
 
-        sample = {
-            "messages": [
-                {
-                    "role": "user",
-                    "content": f"[BOS]{query}[EOS]"
-                },
-                {
-                    "role": "assistant",
-                    "content": f"[BOS]{response}[EOS]"
-                }
-            ]
-        }
 
-        fout.write(json.dumps(sample, ensure_ascii=False) + "\n")
-        count += 1
+def count_lines_fast(path):
+    total = 0
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            total += block.count(b"\n")
+    return total
 
-print("Written examples:", count)
-print("Saved to:", output_path)
+
+def make_insert_positions(total_lines, insert_count):
+    """
+    Spread inserts across the file with small randomness.
+    Positions mean: insert before original line index `pos`.
+    """
+    if insert_count <= 0:
+        return []
+
+    if total_lines <= 0:
+        return [0] * insert_count
+
+    # Evenly spaced base positions
+    base_positions = [
+        int(round(i * total_lines / insert_count))
+        for i in range(insert_count)
+    ]
+
+    # Add small jitter so it is not perfectly regular
+    jitter_window = max(1, total_lines // max(insert_count * 10, 1))
+    positions = []
+    for p in base_positions:
+        jitter = random.randint(-jitter_window, jitter_window)
+        pos = max(0, min(total_lines, p + jitter))
+        positions.append(pos)
+
+    positions.sort()
+    return positions
+
+
+def process_file(input_path, nisha_examples):
+    output_path = os.path.join(
+        os.path.dirname(input_path),
+        OUTPUT_PREFIX + os.path.basename(input_path)
+    )
+
+    total_lines = count_lines_fast(input_path)
+    insert_count = math.ceil(len(nisha_examples) * INSERT_FRACTION)
+
+    # Randomly choose at least 90% of Nisha examples for this file
+    chosen = random.sample(nisha_examples, k=insert_count)
+    random.shuffle(chosen)
+
+    insert_positions = make_insert_positions(total_lines, insert_count)
+
+    inserted = 0
+    kept = 0
+
+    with open(input_path, "r", encoding="utf-8") as fin, \
+         open(output_path, "w", encoding="utf-8") as fout:
+
+        pbar = tqdm(total=total_lines, desc=os.path.relpath(input_path, ROOT_DIR), unit="lines")
+
+        current_line_index = 0
+        insert_idx = 0
+
+        for line in fin:
+            # Insert all scheduled Nisha lines before this original line
+            while insert_idx < len(insert_positions) and insert_positions[insert_idx] <= current_line_index:
+                fout.write(chosen[insert_idx] + "\n")
+                inserted += 1
+                insert_idx += 1
+
+            fout.write(line)
+            kept += 1
+            current_line_index += 1
+            pbar.update(1)
+
+        # Insert anything remaining at the end
+        while insert_idx < len(insert_positions):
+            fout.write(chosen[insert_idx] + "\n")
+            inserted += 1
+            insert_idx += 1
+
+        pbar.close()
+
+    return output_path, kept, inserted
+
+
+def main():
+    nisha_examples = load_nisha_examples(NISHA_PATH)
+    if not nisha_examples:
+        print(f"No valid examples found in {NISHA_PATH}")
+        return
+
+    print(f"Loaded Nisha examples into RAM: {len(nisha_examples)}")
+
+    jsonl_files = list(iter_jsonl_files(ROOT_DIR))
+    if not jsonl_files:
+        print(f"No .jsonl files found under {ROOT_DIR}")
+        return
+
+    summary = []
+
+    for path in tqdm(jsonl_files, desc="Files", unit="file"):
+        out_path, kept, inserted = process_file(path, nisha_examples)
+        summary.append((path, out_path, kept, inserted))
+
+    print("\nDone.")
+    for src, dst, kept, inserted in summary:
+        print(f"{src} -> {dst} | kept={kept} inserted={inserted}")
+
+
+if __name__ == "__main__":
+    main()
