@@ -81,14 +81,16 @@ generation_kwargs = dict(
     temperature=1,
     top_p=0.75,
 )
----------------------------------------------------------------------------------------------------------------------------------------
 
-cd FT_Data/wiki_chat
+-----------------------------------------------------------------------Prompt----------------------------------------------------------------
 
-mkdir -p jsonl_folder parquet_folder
 
-find . -maxdepth 1 -type f -name "*.jsonl" -exec mv {} jsonl_folder/ \;
-find . -maxdepth 1 -type f -name "*.parquet" -exec mv {} parquet_folder/ \;
+## Gola: read file `FT_Data/Assamese.csv`
+## Unique columns: `Index(['Question', 'Answer', 'Domain'], dtype='object')`
+## goal: create `JSONL` 
+## Format: 
+# {"messages": [{"role": "user", "content": "[BOS]query[EOS]"}, {"role": "assistant", "content": "[BOS]response[EOS]"}]}
+
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 

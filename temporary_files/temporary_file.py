@@ -143,243 +143,40 @@
 
 
 # # --------------------------------------------------demo only--------------------------------------------------------------------
-
-# from pathlib import Path
-
-# input_file = "data/1B_assamese_Tokens_Quwn3/ultra_cleanned_1B_Quwn_tokens.txt"
-# output_file = "data/1B_assamese_Tokens_Quwn3/ultra_cleanned_1B_Quwn_tokens_bos_eos.txt"
-
-# with open(input_file, "r", encoding="utf-8") as f:
-#     lines = f.readlines()
-
-# docs = []
-# current_doc = []
-
-# for line in lines:
-#     if not line.strip():
-#         continue
-
-#     # New article = line does NOT start with a space
-#     if not line.startswith(" ") and current_doc:
-#         docs.append("".join(current_doc).strip())
-#         current_doc = []
-
-#     current_doc.append(line)
-
-# if current_doc:
-#     docs.append("".join(current_doc).strip())
-
-# with open(output_file, "w", encoding="utf-8") as f:
-#     for doc in docs:
-#         f.write("[BOS]\n")
-#         f.write(doc)
-#         f.write("\n[EOS]\n\n")
-
-# print(f"Documents found: {len(docs)}")
-
-
-
-# ---------------------------------------This is for ai4bharat_sangraha_dataset only WALK-IN TO ALL TXT--------------------------------------
-
-# from pathlib import Path
-
-# base_dir = Path("data/ai4bharat_sangraha_dataset/synthetic2")
-
-# for input_file in sorted(base_dir.glob("ultra_cleanned_wiki_asm_Beng_*_of_0063.txt")):
-
-#     # Skip already processed files
-#     if input_file.stem.endswith("_bos_eos"):
-#         continue
-
-#     output_file = input_file.with_name(
-#         f"{input_file.stem}_bos_eos.txt"
-#     )
-
-#     with open(input_file, "r", encoding="utf-8") as f:
-#         lines = f.readlines()
-
-#     docs = []
-#     current_doc = []
-
-#     for line in lines:
-#         if not line.strip():
-#             continue
-
-#         # New article = line does NOT start with a space
-#         if not line.startswith(" ") and current_doc:
-#             docs.append("".join(current_doc).strip())
-#             current_doc = []
-
-#         current_doc.append(line)
-
-#     if current_doc:
-#         docs.append("".join(current_doc).strip())
-
-#     with open(output_file, "w", encoding="utf-8") as f:
-#         for doc in docs:
-#             f.write("[BOS]\n")
-#             f.write(doc)
-#             f.write("\n[EOS]\n\n")
-
-#     print(
-#         f"Processed: {input_file.name} -> {output_file.name} | Documents found: {len(docs)}"
-#     )
-
-# print("\nDone.")
-
-# ---------------------------------------This is for data/AsRED only--------------------------------------
-
-# import re
-
-# INPUT_FILE = "data/rahular_varta_DailyHuntDataset/cleanned_val_as_shard_01.txt"
-# OUTPUT_FILE = "data/rahular_varta_DailyHuntDataset/Ultra_cleanned_val_as_shard_01.txt"
-
-# # Precompile regexes
-# START_HASH_RE = re.compile(r"^#")
-# PAREN_RE = re.compile(r"\([^)]*\)")
-# HASHTAG_WORD_RE = re.compile(r"\S*#\S*")
-# EN_NUM_RE = re.compile(r"[A-Za-z0-9]+")
-# MULTISPACE_RE = re.compile(r" +")
-# ASSAMESE_WORD_RE = re.compile(r"[\u0980-\u09FF]+")
-
-# with open(INPUT_FILE, "r", encoding="utf-8") as fin, \
-#      open(OUTPUT_FILE, "w", encoding="utf-8") as fout:
-
-#     for line in fin:
-
-#         # 1. Remove lines starting with #
-#         if START_HASH_RE.match(line):
-#             print("Clkeanning Processing")
-#             continue
-
-#         # 2. Apply cleaning
-#         line = PAREN_RE.sub("", line)
-#         line = HASHTAG_WORD_RE.sub("", line)
-#         line = EN_NUM_RE.sub("", line)
-#         line = line.replace("#", "")
-#         line = MULTISPACE_RE.sub(" ", line)
-#         line = line.strip()
-
-#         if not line:
-#             continue
-
-#         # 3. Keep only lines with >=25 Assamese/Bengali words
-#         words = ASSAMESE_WORD_RE.findall(line)
-
-#         if len(words) < 25:
-#             continue
-
-#         fout.write(line + "\n")
-
-# ---------------------------------------This is for indicaqa_as_json only--------------------------------------
-
-# import json
-
-# input_path = r"FT_Data/indicaqa_as_json/indicqa.as.json"
-# output_path = r"FT_Data/indicaqa_as_json/indicqa_as_sft.jsonl"
-
-# with open(input_path, "r", encoding="utf-8") as f:
-#     data = json.load(f)
-
-# # IMPORTANT
-# articles = data["data"]
-
-# count = 0
-
-# with open(output_path, "w", encoding="utf-8") as fout:
-#     for article in articles:
-#         for paragraph in article["paragraphs"]:
-#             context = paragraph["context"].strip()
-
-#             for qa in paragraph["qas"]:
-#                 if qa["category"] != "SHORT":
-#                     continue
-
-#                 if len(qa["answers"]) == 0:
-#                     continue
-
-#                 answer = qa["answers"][0]["text"].strip()
-
-#                 if answer == "":
-#                     continue
-
-#                 question = qa["question"].strip()
-
-#                 sample = {
-#                     "messages": [
-#                         {
-#                             "role": "user",
-#                             "content": f"[BOS]প্ৰশ্ন: {question}[EOS]"
-#                         },
-#                         {
-#                             "role": "assistant",
-#                             "content": f"[BOS]{answer}[EOS]"
-#                         }
-#                     ]
-#                 }
-
-#                 fout.write(json.dumps(sample, ensure_ascii=False) + "\n")
-#                 count += 1
-
-# print("Examples written:", count)
-# ---------------------------------------Find duplicate--------------------------------------
-# import json
-# from collections import defaultdict
-
-# input_path = "FT_Data/indicaqa_as_json/indicqa.as.json"
-# output_path = "FT_Data/indic_align_instruct/OASST.jsonl"
-
-# # First pass: collect occurrences
-# occurrences = defaultdict(list)
-
-# with open(input_path, "r", encoding="utf-8") as fin:
-#     for line_num, line in enumerate(fin, 1):
-#         obj = json.loads(line)
-
-#         key = (
-#             obj["messages"][0]["content"],
-#             obj["messages"][1]["content"]
-#         )
-
-#         occurrences[key].append((line_num, line))
-
-# # Print duplicates
-# duplicate_count = 0
-# for key, lines in occurrences.items():
-#     if len(lines) > 1:
-#         duplicate_count += len(lines) - 1
-
-#         # print("\n" + "="*80)
-#         # print(f"Found {len(lines)} identical copies:")
-#         # print(key[0])  # user
-#         # print(key[1])  # assistant
-#         # print("Line numbers:", [x[0] for x in lines])
-
-# print("\nDuplicate lines:", duplicate_count)
-
-# # Ask user
-# choice = input("\nRemove duplicates? (y/n): ").strip().lower()
-
-# if choice == "y":
-#     seen = set()
-
-#     with open(input_path, "r", encoding="utf-8") as fin, \
-#          open(output_path, "w", encoding="utf-8") as fout:
-
-#         for line in fin:
-#             obj = json.loads(line)
-
-#             key = (
-#                 obj["messages"][0]["content"],
-#                 obj["messages"][1]["content"]
-#             )
-
-#             if key not in seen:
-#                 seen.add(key)
-#                 fout.write(line)
-
-#     print("Duplicates removed.")
-#     print("Saved to:", output_path)
-
-# else:
-#     print("No changes made.")
+import json
+
+input_path = r"FT_Data/AshwinSankar_Indic-Rag-Suite/assamese_civic_qa.jsonl"
+output_path = r"FT_Data/AshwinSankar_Indic-Rag-Suite/assamese_civic_qa_fixed.jsonl"
+
+count = 0
+
+with open(input_path, "r", encoding="utf-8") as fin, \
+     open(output_path, "w", encoding="utf-8") as fout:
+
+    for line in fin:
+        obj = json.loads(line)
+
+        query = str(obj["query"]).strip()
+        response = str(obj["response"]).strip()
+
+        if not query or not response:
+            continue
+
+        sample = {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": f"[BOS]{query}[EOS]"
+                },
+                {
+                    "role": "assistant",
+                    "content": f"[BOS]{response}[EOS]"
+                }
+            ]
+        }
+
+        fout.write(json.dumps(sample, ensure_ascii=False) + "\n")
+        count += 1
+
+print("Written examples:", count)
+print("Saved to:", output_path)
