@@ -56,15 +56,15 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 # ─────────────────────────────────────────────────────────────────────────────
 # PATHS  —  edit these to match your Kaggle working-directory layout
 # ─────────────────────────────────────────────────────────────────────────────
-BASE_CHECKPOINT = "checkpoint-198680"          # pretrained weights; never modified
+BASE_CHECKPOINT = "/kaggle/working/outputs"         # pretrained weights; never modified
 TOKENIZER_PATH  = "tokenizer.json"             # Assamese HF tokenizer JSON
 SHARD_DIR       = "FT_token_shards"            # directory of .bin shard pairs
 MANIFEST_PATH   = f"{SHARD_DIR}/manifest.json" # shard inventory
 HPARAMS_PATH    = "hparams.txt"                # single source of truth for hp
 
-LOG_DIR  = Path("logs")
-CKPT_DIR = Path("checkpoints")
-OUT_DIR  = Path("outputs")
+LOG_DIR  = Path("sft_logs")
+CKPT_DIR = Path("sft_checkpoints")
+OUT_DIR = Path("sft_outputs")
 
 for _d in (LOG_DIR, CKPT_DIR, OUT_DIR):
     _d.mkdir(parents=True, exist_ok=True)
@@ -255,40 +255,63 @@ class SFTShardDataset(Dataset):
         if entries:
             for entry in entries:
                 if isinstance(entry, dict):
-                    iid = self.shard_dir / entry["input_ids"]
-                    lbl = self.shard_dir / entry["labels"]
-                    n   = (
-                        int(entry["num_samples"])
-                        if "num_samples" in entry
+                    iid = self.shard_dir / (
+                        entry.get("input_ids")
+                        or entry.get("input_file")
+                    )
+                    lbl = self.shard_dir / (
+                        entry.get("labels")
+                        or entry.get("label_file")
+                    )
+        
+                    n = (
+                        int(
+                            entry.get("num_samples")
+                            or entry.get("num_examples")
+                        )
+                        if (
+                            "num_samples" in entry
+                            or "num_examples" in entry
+                        )
                         else self._rows_from_file(iid, self.INPUT_DTYPE)
                     )
+        
                 elif isinstance(entry, str):
                     # Prefix form: "train_000000" → "train_000000_input_ids.bin"
                     iid = self.shard_dir / f"{entry}_input_ids.bin"
                     lbl = self.shard_dir / f"{entry}_labels.bin"
-                    n   = self._rows_from_file(iid, self.INPUT_DTYPE)
+                    n = self._rows_from_file(iid, self.INPUT_DTYPE)
+        
                 else:
-                    logger.warning(f"  Unrecognised manifest entry type: {type(entry)} — skipping")
+                    logger.warning(
+                        f"  Unrecognised manifest entry type: {type(entry)} — skipping"
+                    )
                     continue
-
+                
                 if iid.exists() and lbl.exists():
                     self._input_paths.append(iid)
                     self._label_paths.append(lbl)
                     self._n_per_shard.append(n)
                 else:
-                    logger.warning(f"  Shard file(s) missing: {iid} / {lbl} — skipping")
+                    logger.warning(
+                        f"  Shard file(s) missing: {iid} / {lbl} — skipping"
+                    )
+        
         else:
             # Glob fallback — sorted so shard order is deterministic across runs
             for iid in sorted(self.shard_dir.glob("*_input_ids.bin")):
                 stem = iid.name.replace("_input_ids.bin", "")
-                lbl  = iid.parent / f"{stem}_labels.bin"
+                lbl = iid.parent / f"{stem}_labels.bin"
+        
                 if lbl.exists():
                     n = self._rows_from_file(iid, self.INPUT_DTYPE)
                     self._input_paths.append(iid)
                     self._label_paths.append(lbl)
                     self._n_per_shard.append(n)
                 else:
-                    logger.warning(f"  No matching labels file for {iid.name} — skipping")
+                    logger.warning(
+                        f"  No matching labels file for {iid.name} — skipping"
+                    )
 
     def _rows_from_file(self, path: Path, dtype) -> int:
         """
