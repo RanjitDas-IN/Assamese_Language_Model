@@ -726,7 +726,7 @@ def main():
 
         # ── Checkpointing ───────────────────────────────────────────────
         save_strategy    = "steps",
-        save_steps       = save_steps,
+        save_steps       = 1000,
         save_total_limit = 3,          # keep the 3 most recent checkpoints
         save_safetensors = True,       # safetensors format; faster and safer
 
@@ -737,7 +737,7 @@ def main():
 
         # ── Logging ─────────────────────────────────────────────────────
         logging_strategy   = "steps",
-        logging_steps      = 10,       # console log every 10 optimiser steps
+        logging_steps      = 1000,       # console log every 10 optimiser steps
         logging_first_step = True,     # always log step 0 for diagnostics
         report_to          = "none",   # no WandB / MLflow
 

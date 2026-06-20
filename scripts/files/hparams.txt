@@ -38,7 +38,7 @@ kaggle free GPU's
 gradient_clip = 1.0
 batch_strategy = Gradient Accumulation
 effective_batch_size = 32
-micro_batch_size = 16
+micro_batch_size = 4
 
 # Initialization
 init_std = 0.02
