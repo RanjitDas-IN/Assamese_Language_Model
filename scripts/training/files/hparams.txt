@@ -46,3 +46,11 @@ init_std = 0.02
 # Loss
 CrossEntropyLoss
 ignore_index = -100
+
+# Precision
+
+dtype = FP16
+
+
+fp16=True
+bf16=False

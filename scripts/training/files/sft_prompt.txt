@@ -1,0 +1,321 @@
+You are an expert AI research engineer and large language model training specialist.
+
+Your task is to generate production-quality code for supervised fine-tuning (SFT) of an Assamese conversational language model named "নিশা" (Nisha).
+
+# Base Model
+
+Base checkpoint:
+
+checkpoint-198680
+
+This is a continuation fine-tuning run.
+
+Do NOT initialize a new model from scratch.
+
+Load weights from checkpoint-198680 and continue training.
+
+Tokenizer and vocabulary remain unchanged.
+
+# Framework
+
+Use:
+
+transformers==4.52.4
+
+Trainer:
+
+HuggingFace Trainer
+
+Target platform:
+
+Kaggle
+
+Hardware:
+
+2 × NVIDIA Tesla T4 GPUs
+
+Precision:
+
+FP16 mixed precision
+
+Do not assume BF16 support.
+
+Code should automatically utilize multiple GPUs through Trainer/DDP.
+
+# Hyperparameters
+
+A file named:
+
+hparams.txt
+
+is provided.
+
+Treat hparams.txt as the single source of truth.
+
+Extract all model architecture and training hyperparameters from hparams.txt instead of hardcoding them.
+
+This includes, but is not limited to:
+
+- model type
+- hidden size
+- number of layers
+- attention heads
+- head dimension
+- context length
+- feed-forward size
+- activation function
+- normalization settings
+- weight tying
+- optimizer settings
+- learning rates
+- warmup ratio
+- batch sizes
+- initialization
+- loss settings
+- ignore_index
+
+If values exist inside hparams.txt, do not hardcode them elsewhere.
+
+hparams.txt always takes precedence.
+
+Use reasonable defaults only when a parameter is absent.
+
+# Tokenizer
+
+Tokenizer path:
+
+`tokenizer.json`
+
+Load tokenizer from tokenizer.json and preserve all special token ids exactly.
+Never add or resize embeddings.
+demo:
+PAD = 1
+BOS = 2
+EOS = 3
+
+The tokenizer is Assamese-specific.
+
+Do not retrain or modify the tokenizer.
+
+# Dataset
+
+Token shards already exist.
+
+Directory:
+
+FT_token_shards/
+
+Example files:
+
+train_000000_input_ids.bin
+train_000000_labels.bin
+
+Manifest:
+
+FT_token_shards/manifest.json
+
+input_ids dtype:
+
+uint16
+
+labels dtype:
+
+int32
+
+Shape:
+
+(N,1024)
+
+Each row is already one complete training sample.
+
+Do NOT:
+
+- tokenize text again
+- recreate conversations
+- perform sequence packing
+- concatenate samples
+- dynamically pad samples
+- rebuild labels
+
+Use the existing shards directly.
+
+Prefer numpy memmap for reading.
+
+Never load all shards into RAM.
+
+Support arbitrary numbers of shards.
+
+Make the dataloader streaming-friendly and memory efficient.
+
+Be robust to shard boundaries.
+
+# Label Semantics
+
+Input format:
+
+[BOS]Question[EOS][BOS]Answer[EOS]
+
+labels.bin already contains:
+
+-100 for question tokens
+
+-100 for padding tokens
+
+Only answer tokens contribute to loss.
+
+Do NOT recompute masks.
+
+Do NOT shift labels manually.
+
+Do NOT recreate labels from input_ids.
+
+Use labels exactly as stored.
+
+CrossEntropyLoss(ignore_index=-100) should be used.
+
+LlamaForCausalLM performs causal shifting internally.
+
+# Assistant Identity
+
+Name:
+
+নিশা
+
+Nisha is an Assamese AI assistant.
+
+Users are expected to communicate primarily in Assamese.
+
+Responses should be natural and conversational.
+
+Tone:
+
+- warm
+- friendly
+- occasionally playful and slightly sassy
+- not robotic
+- not overly formal
+
+When uncertain, avoid hallucination.
+
+Examples:
+
+"এই বিষয়ে মোৰ তথ্য সীমিত।"
+
+"মোৰ উপলব্ধ তথ্য অনুসৰি..."
+
+"মই নিশ্চিত নহয়, কিন্তু..."
+
+Support:
+
+- normal conversation
+- creative writing
+- mathematics
+- logical reasoning
+
+# Training Duration
+
+Train for 2-3 epochs.
+
+Default to 3 epochs.
+
+Compute total training steps automatically from dataset size.
+
+Do not hardcode max_steps.
+
+# Checkpointing
+
+Training must be:
+
+- checkpoint-resume safe
+- crash tolerant
+- deterministic when practical
+
+Automatically detect and resume from the latest valid checkpoint.
+[start from checkpoint-198680.]
+Save checkpoints safely.
+
+Save using safetensors.
+
+Keep several recent checkpoints.
+
+# Logging
+
+Use:
+
+- logging
+- tqdm
+
+Do not use:
+
+- WandB
+- MLflow
+
+Save:
+
+logs/
+checkpoints/
+outputs/
+
+# Performance Requirements
+
+Code should be:
+
+- production quality
+- Linux friendly
+- memory efficient
+- high throughput
+- gradient accumulation friendly
+- multi-GPU friendly
+- resume-safe
+- deterministic
+- suitable for large datasets
+
+Prefer:
+
+- numpy memmap
+- lazy loading
+- minimal RAM usage
+- efficient DataLoader workers
+Demo:
+- pin_memory=True
+- persistent_workers=True
+- prefetch_factor=2
+- num_workers=2-4
+# Future Compatibility
+
+Design should remain compatible with future additions such as:
+
+- web search
+- calculator tools
+- external tools
+- multi-turn memory
+
+No tool calling is required currently.
+
+# Code Generation Requirements
+
+Generate a single self-contained train.py.
+
+Include:
+
+- imports
+- dataset class
+- memmap shard reader
+- model loading
+- TrainingArguments
+- Trainer
+- checkpoint resume logic
+- logging
+- final model saving
+
+Avoid:
+
+- toy examples
+- pseudocode
+- unnecessary abstractions
+
+Generate complete executable code.
+
+Favor correctness, robustness, and maintainability over excessive abstraction.
+
+Assume token shards already exist and focus on building a high-quality supervised fine-tuning infrastructure.

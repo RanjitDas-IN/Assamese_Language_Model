@@ -8,12 +8,14 @@ token_shards
 raw_song.txt
 raw_story.txt
 temporary_data
+FT_token_shards
 test_val.tar.zst
 data/xahitya_dump
 IndicCorpV2_AIBharat
 token_shards.tar.zst
 train_folder.tar.zst
 detail_about_model.md
+FT_token_shards.tar.zst
 asm_wikipedia_dump_2021
 data/personal_cards.txt
 After_cleaning_Song.txt
@@ -21,6 +23,7 @@ data/aswiki_encyclopedia
 After_cleaning_Story.txt
 1B_assamese_Tokens_Quwn3
 pretraining_shards.tar.zst
+data/general_conversations.psv
 rahular_varta_DailyHuntDataset
 data/personal_cards_bos_eos.txt
 data/ai4bharat_sangraha_dataset
